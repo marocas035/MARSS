@@ -1,5 +1,6 @@
 # MARSS
 Multi Agent Resource Scheduling System - VERSION 1.0 
+
 To see VERSION 0.0 go to github.com/granales/MARSS
 
 This program provides real time resource scheduling with short reaction times to disruptions such as machinery faults. Reaction times to reschedule becomes feasible taking minutes.
