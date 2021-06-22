@@ -268,7 +268,8 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
     agents_df = agents_df.loc[agents_df['Name'] == agent_full_name]
     agents_df = agents_df.reset_index(drop=True)
     if agent_name == 'ca':
-        agent_data = agent_data.reindex(columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'T1', 'T2', 'T3', 'T4', 'T5', 'q>        agent_data = ca_parameters(agent_data, agents_df, agent_name)
+        agent_data = agent_data.reindex(columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'T1', 'T2', 'T3', 'T4', 'T5', 'q'])
+        agent_data = ca_parameters(agent_data, agents_df, agent_name)
     elif agent_name == "wh":
         agent_data.at[0, 'location'] = agents_df.loc[0, 'Location']
         agent_data.at[0, 'capacity'] = agents_df.loc[0, 'Capacity']
@@ -277,7 +278,8 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
             columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'coil_in', 'coil_out', 'rack', 'capacity', 'load'])
     elif agent_name == "coil":
         agent_data = agent_data.reindex(
-            columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'to_do', 'entered_auction', 'int_fab', 'bid', 'bid_status', 'coil_length', >        agent_data = coil_parameters(agent_data, agents_df, agent_name)
+            columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'to_do', 'entered_auction', 'int_fab', 'bid', 'bid_status', 'coil_length', 'coil_width', 'coil_thickness', 'coil_weight', 'setup_speed', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'ship_date'])
+        agent_data = coil_parameters(agent_data, agents_df, agent_name)
     elif agent_name == "tc":
         agent_data.at[0, 'location'] = agents_df.loc[0, 'Location']
     elif agent_name == "launcher":
@@ -308,7 +310,7 @@ def ca_parameters(agent_data, agents_df, agent_name):
     agent_data.at[0, 'location'] = agents_df.loc[0, 'Location']
     agent_data.at[0, 'T1'] = 250 + (rn * 100)  # between 250-350
     agent_data.at[0, 'T2'] = 550 + (rn * 100)  # between 550-650
-  GNU nano 4.8                                                                                  operative_functions.py                                                                                                 agent_data.at[0, 'T3'] = 800 + (rn * 100)  # between 800-900
+    agent_data.at[0, 'T3'] = 800 + (rn * 100)  # between 800-900
     agent_data.at[0, 'T4'] = 600 + (rn * 100)  # between 600-700
     agent_data.at[0, 'T5'] = 300 + (rn * 100)  # between 300-400
     agent_data.at[0, 'q'] = 0.5 + (rn / 10)  # between 05-0.6
@@ -431,14 +433,16 @@ def slot_to_minutes(agent_df):
         slot_1_start = agent_df['slot_1_start']
         slot_1_end = agent_df['slot_1_end']
         # transform datetime to minute of the day
-        slot_1_start_min = math.floor((int(agent_df.loc[0, 'slot_1_start'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_1_start'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_1_start'].strftime("%S")) / >        slot_1_end_min = math.ceil((int(agent_df.loc[0, 'slot_1_end'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_1_end'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_1_end'].strftime("%S")) / 60))
+        slot_1_start_min = math.floor((int(agent_df.loc[0, 'slot_1_start'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_1_start'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_1_start'].strftime("%S")) / 60))
+        slot_1_end_min = math.ceil((int(agent_df.loc[0, 'slot_1_end'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_1_end'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_1_end'].strftime("%S")) / 60))
         slot_range = list(range(slot_1_start_min, slot_1_end_min+1))
     elif agent_df.loc[0, 'slot'] == 2:
         # transform data to datetime type
         agent_df['slot_2_start'] = pd.to_datetime(agent_df['slot_2_start'], unit='ms')
         agent_df['slot_2_end'] = pd.to_datetime(agent_df['slot_2_end'], unit='ms')
         # transform datetime to minute of the day
-        slot_2_start_min = math.floor((int(agent_df.loc[0, 'slot_2_start'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_2_start'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_2_start'].strftime("%S")) / >        slot_2_end_min = math.ceil((int(agent_df.loc[0, 'slot_2_end'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_2_end'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_2_end'].strftime("%S")) / 60))
+        slot_2_start_min = math.floor((int(agent_df.loc[0, 'slot_2_start'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_2_start'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_2_start'].strftime("%S")) / 60))
+        slot_2_end_min = math.ceil((int(agent_df.loc[0, 'slot_2_end'].strftime("%H")) * 60) + (int(agent_df.loc[0, 'slot_2_end'].strftime("%M"))) + (int(agent_df.loc[0, 'slot_2_end'].strftime("%S")) / 60))
         # create a list with the slot_ranges that need to be pre-booked
         slot_range = list(range(slot_2_start_min, slot_2_end_min))
     return slot_range
@@ -523,7 +527,8 @@ def estimate_tr_slot(br_data_df, fab_started_at, leeway, agent_df):
         #if br_data_df.loc[0, 'AVG(tr_op_time)'] == 3.5:  # if these 2 conditions are met, with high prob we are in first ever auction.
             #fab_started_at = datetime.datetime.now()
             #auction_total_time = 2  # auction estimated total time = 2 min
-            # slot_1_start = datetime.datetime.now() + datetime.timedelta(minutes=int(auction_total_time)) - datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)'])) - leeway  # time when on going fab started + mean ca processing time - mean tr operation time - margin.
+            # slot_1_start = datetime.datetime.now() + datetime.timedelta(minutes=int(auction_total_time)) - datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)'])) - leeway  
+            # time when on going fab started + mean ca processing time - mean tr operation time - margin.
             # slot_1_end = slot_1_start + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)']))   # time when on going fab started + mean tr operation time
             # slot_2_start = ca_estimated_end + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(ca_op_time)'])) - leeway  # time when on going fab started + mean ca processing time - margin
             # slot_2_end = slot_2_start + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)']))  # time when on going fab started + mean ca processing time + mean tr operation time
@@ -538,7 +543,9 @@ def estimate_tr_slot(br_data_df, fab_started_at, leeway, agent_df):
     slot_1_start = ca_estimated_end - datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)'])) - (leeway / 2)
     slot_1_end = ca_estimated_end + (leeway / 2)
     slot_2_start = ca_estimated_end + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(ca_op_time)'])) - datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)']/2)) - (leeway / 2)
-    slot_2_end = ca_estimated_end + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(ca_op_time)'])) + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)']/2)) + (leeway / 2)  # time when on>    ca_to_tr_df = pd.DataFrame([], columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'action', 'time', 'slot_1_start', 'slot_1_end', 'slot_2_start', 'slot_2_end', '>    ca_to_tr_df.at[0, 'id'] = agent_df.loc[0, 'id']
+    slot_2_end = ca_estimated_end + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(ca_op_time)'])) + datetime.timedelta(minutes=int(br_data_df.loc[0, 'AVG(tr_op_time)']/2)) + (leeway / 2)  # time when on going fab started + mean ca processing time + mean tr operation time
+    ca_to_tr_df = pd.DataFrame([], columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'action', 'time', 'slot_1_start', 'slot_1_end', 'slot_2_start', 'slot_2_end', 'slot'])
+    ca_to_tr_df.at[0, 'id'] = agent_df.loc[0, 'id']
     ca_to_tr_df.at[0, 'agent_type'] = agent_df.loc[0, 'agent_type']
     ca_to_tr_df.at[0, 'location_1'] = agent_df.loc[0, 'location_1']
     ca_to_tr_df.at[0, 'location_2'] = agent_df.loc[0, 'location_2']
@@ -785,7 +792,7 @@ def br_get_requested_df(agent_name, *args):
     """Returns a df in which calculations can be done"""
     df = pd.DataFrame()
     if args == "coils":
-        search_str = '{"id":{"0":"' + "coil" + '_'  # tiene que encontrar todas las coil que quieran fabricarse y como mucho los       ltimos 1000 registros.
+        search_str = '{"id":{"0":"' + "coil" + '_'  # tiene que encontrar todas las coil que quieran fabricarse y como mucho los últimos 1000 registros.
     else:
         search_str = "activation_time"  # takes every record with this. Each agent is sending that info while alive communicating to log.
     l = []
@@ -931,7 +938,7 @@ def ca_auction_df():
 
 
 def ca_assigned_auction_df():
-    agent_data = pd.DataFrame([], columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'bid_status', 'bid>
+    agent_data = pd.DataFrame([], columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'bid_status', 'bid', ])
 
 def ca_to_coils_initial_df(agent_df, plc_temp_df):
     """Builds df to send to coils with auction information made by agent_df and last plc temperatures"""
@@ -1011,7 +1018,7 @@ def coil_bid(ca_agent_df, agent_df, agent_status_var):
             auction_level_bid = 0.15 * budget  # extra 15% if it is in final state of auction
         elif ca_agent_df.loc[0, 'auction_level'] == 2:
             auction_level_bid = 0.3 * budget  # extra 15% if it is in final state of auction
-        elif ca_agent_df.loc[0, 'auction_level'] == 3:#this does no make sense but a bug appears when it receives the message where it shoudn      t.
+        elif ca_agent_df.loc[0, 'auction_level'] == 3:#this does no make sense but a bug appears when it receives the message where it shoudnt.
             auction_level_bid = 0.3 * budget  # extra 15% if it is in final state of auction
         if agent_df.loc[0, 'int_fab'] == 1:
             int_fab_bid = 0.15 * budget
@@ -1026,10 +1033,12 @@ def coil_bid(ca_agent_df, agent_df, agent_status_var):
 
 def auction_bid_evaluation(coil_msgs_df, agent_df):
     """Evaluates coils and their bids and returns a df with an extra column with rating to coils proposal"""
-    ev_df = coil_msgs_df[['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'coil_length', 'coil_width', 'coil_thickness', 'coil_weight', 'setup_speed', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q'>    ev_df = ev_df.reset_index(drop=True)
+    ev_df = coil_msgs_df[['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'coil_length', 'coil_width', 'coil_thickness', 'coil_weight', 'setup_speed', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'ship_date']]
+    ev_df = ev_df.reset_index(drop=True)
     # Ship_date evaluation. Extra column with ship date rating
     sd_ev_df = coil_msgs_df[['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'budget', 'ship_date']]
-    sd_ev_df = sd_ev_df.reindex(columns=['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'coil_length', 'coil_width', 'coil_thickness', 'coil_weight', 'setup_speed', 'budget', 'ship_date', 'ship>    sd_ev_df['ship_date'] = pd.to_datetime(sd_ev_df['ship_date']) #, unit='ms'
+    sd_ev_df = sd_ev_df.reindex(columns=['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'coil_length', 'coil_width', 'coil_thickness', 'coil_weight', 'setup_speed', 'budget', 'ship_date', 'ship_date_seconds', 'ship_date_rating'])
+    sd_ev_df['ship_date'] = pd.to_datetime(sd_ev_df['ship_date']) #, unit='ms'
     sd_ev_df = sd_ev_df.reset_index(drop=True)
     for i in range(len(sd_ev_df['ship_date'].tolist())):
         date = sd_ev_df.loc[i, 'ship_date'].timestamp()
@@ -1051,7 +1060,8 @@ def auction_bid_evaluation(coil_msgs_df, agent_df):
     # Temp evaluation. Extra column with temp match rating
     t_ev_df = coil_msgs_df[['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q']]
     current_t_df = agent_df[['id', 'agent_type', 'location_1', 'bid_status', 'T1', 'T2', 'T3', 'T4', 'T5', 'q']]
-    t_ev_df = t_ev_df.reindex(columns=['id', 'agent_type', 'location_1', 'bid', 'bid_status', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'T1dif', 'T2dif', 'T3dif', 'T4dif', 'T5dif', 'total_temp_dif', 'temp_ra>    t_ev_df = t_ev_df.reset_index(drop=True)
+    t_ev_df = t_ev_df.reindex(columns=['id', 'agent_type', 'location_1', 'bid', 'bid_status', 'budget', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'T1dif', 'T2dif', 'T3dif', 'T4dif', 'T5dif', 'total_temp_dif', 'temp_rating'])
+    t_ev_df = t_ev_df.reset_index(drop=True)
     for i in range(len(t_ev_df['T1'].tolist())):
         temp_dif_T1 = abs(t_ev_df.loc[i, 'T1'] - current_t_df.loc[0, 'T1'])
         temp_dif_T2 = abs(t_ev_df.loc[i, 'T2'] - current_t_df.loc[0, 'T2'])
@@ -1125,7 +1135,8 @@ def auction_bid_evaluation(coil_msgs_df, agent_df):
     #sum all and provide final rating.
 
     ev_df = ev_df.reindex(
-        columns=['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'budget', 'ship_date', 'ship_date_seconds', 'ship_date_rating', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'T1dif', 'T2dif', 'T3dif', 'T4>                 'total_temp_dif',
+        columns=['id', 'agent_type', 'location', 'int_fab', 'bid', 'bid_status', 'budget', 'ship_date', 'ship_date_seconds', 'ship_date_rating', 'T1', 'T2', 'T3', 'T4', 'T5', 'q', 'T1dif', 'T2dif', 'T3dif', 'T4dif', 'T5dif',
+                 'total_temp_dif',
                  'temp_rating', 'bid_rating', 'int_fab_priority', 'int_fab_rating', 'rating', 'rating_dif', 'negotiation'])
     ev_df['rating'] = ev_df['ship_date_rating'] + ev_df['temp_rating'] + ev_df['bid_rating'] + ev_df['int_fab_rating']
     ev_df = ev_df.sort_values(by=['rating'], ascending=False)
@@ -1282,7 +1293,9 @@ def gantt(auction_kpis_df):
     df = pd.DataFrame([], columns=['task_id', 'task_name', 'duration', 'start', 'resource', 'complete'])
     task_id = [1, 2, 3, 4, 5]
     task_name = ['pre_auction', 'auction', 'tr_slot1', 'processing', 'tr_slot2']
-    duration = [auction_kpis_df.loc[0, 'pre_auction_duration'], auction_kpis_df.loc[0, 'auction_duration'], auction_kpis_df.loc[0, 'slot_1_end'] - auction_kpis_df.loc[0, 'slot_1_start'], auction_kpis_df.loc[0, >    start = [auction_kpis_df.loc[0, 'pre_auction_start'], auction_kpis_df.loc[0, 'auction_start'], auction_kpis_df.loc[0, 'slot_1_start'], auction_kpis_df.loc[0, 'fab_start'], auction_kpis_df.loc[0, 'slot_2_sta>    finish = [auction_kpis_df.loc[0, 'auction_start'], auction_kpis_df.loc[0, 'auction_finish'], auction_kpis_df.loc[0, 'slot_1_end'], auction_kpis_df.loc[0, 'fab_end'], auction_kpis_df.loc[0, 'slot_2_end']]
+    duration = [auction_kpis_df.loc[0, 'pre_auction_duration'], auction_kpis_df.loc[0, 'auction_duration'], auction_kpis_df.loc[0, 'slot_1_end'] - auction_kpis_df.loc[0, 'slot_1_start'], auction_kpis_df.loc[0, 'AVG(ca_op_time)'], auction_kpis_df.loc[0, 'slot_2_end'] - auction_kpis_df.loc[0, 'slot_2_start']]
+    start = [auction_kpis_df.loc[0, 'pre_auction_start'], auction_kpis_df.loc[0, 'auction_start'], auction_kpis_df.loc[0, 'slot_1_start'], auction_kpis_df.loc[0, 'fab_start'], auction_kpis_df.loc[0,'slot_2_start']]
+    finish = [auction_kpis_df.loc[0, 'auction_start'], auction_kpis_df.loc[0, 'auction_finish'], auction_kpis_df.loc[0, 'slot_1_end'], auction_kpis_df.loc[0, 'fab_end'], auction_kpis_df.loc[0, 'slot_2_end']]
     resource = [auction_kpis_df.loc[0, 'id'], auction_kpis_df.loc[0, 'id'], auction_kpis_df.loc[0, 'name_tr_slot_1'], auction_kpis_df.loc[0, 'id'], auction_kpis_df.loc[0, 'name_tr_slot_2']]
     complete = [100, 100, 100, 100, 100]
     df['task_id'] = task_id
