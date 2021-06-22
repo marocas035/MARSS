@@ -62,7 +62,8 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=60, help='wait_msg_time: time in seconds to wait for a msg')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Writte depending on your case: oc (order_code),sg(steel_grade),at(average_thickness), wi(width_>    #DATOS DE PEDIDO:
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Writte depending on your case: oc (order_code),sg(steel_grade),at(average_thickness), wi((width_coils), ic(id_coil), so(string_operations), date.Example: --search oc = 987')
+    #DATOS DE PEDIDO:
     parser.add_argument('-oc', '--order_code', type=str, metavar='',required=False, default='No', help='Specify the number code of the order. Write between "x"')
     parser.add_argument('-sg', '--steel_grade', type=str, metavar='', required=False, default='1', help='Number which specifies the type of steel used for coils in an order.Write between "x"')
     parser.add_argument('-at', '--average_thickness', type=float, metavar='', required=False, default='0.4',help='Specify the thickness for coils ordered')
