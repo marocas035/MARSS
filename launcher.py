@@ -67,7 +67,7 @@ if __name__ == "__main__":
     parser.add_argument('-nc', '--number_coils', type=int, metavar='', required=False, default='1', help='Number of coils involved in the order')
     parser.add_argument('-lc', '--list_coils', type=str, metavar='', required=False, default='No', help='List of codes of coils involved in the order.Write between "x"')
     parser.add_argument('-po', '--price_order', type=float, metavar='', required=False, default='1', help='Price given to the order')
-    parser.add_argument('-so', '--string_operations', type=str, metavar='', required=False, default='No', help='Sequence of operations needed.Write between "x".Format:"BZA|TD[2]|ENT[2|3]|HO[1|2]|NWW[1|4]|VA*[9|>
+    parser.add_argument('-so', '--string_operations', type=str, metavar='', required=False, default='No', help='Sequence of operations needed.Write between "x".Format:"BZA|TD[2]|ENT[2|3]|HO[1|2]|NWW[1|4]|VA*[9|10|11]"')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
