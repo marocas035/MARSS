@@ -40,7 +40,7 @@ class BrowserAgent(Agent):
                     br_msg_log = opf.msg_to_log(br_msg_log_body, my_dir)
                     await self.send(br_msg_log)
                     print(br_msg_log_body)
-                msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
+                msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                 if msg:
                     single = msg.body.split(':')
                     #print(single)
