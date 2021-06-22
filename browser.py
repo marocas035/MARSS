@@ -168,8 +168,7 @@ class BrowserAgent(Agent):
 
 if __name__ == "__main__":
     """Parser parameters"""
-    parser = argparse.ArgumentParser(description='wh parser')
-    parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
+    parser = argparse.ArgumentParser(description='br parser')
     parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=60, help='wait_msg_time: time in seconds to wait for a msg')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
