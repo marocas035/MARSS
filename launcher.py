@@ -58,6 +58,7 @@ class LaunchAgent(Agent):
 if __name__ == "__main__":
     """Parser parameters"""
     parser = argparse.ArgumentParser(description='la parser')
+    parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Writte depending on your case: oc (order_code),sg(steel_grade),at(average_thickness), wi((width_coils), ic(id_coil), so(string_operations), date.Example: --search oc = 987')
     #DATOS DE PEDIDO:
     parser.add_argument('-oc', '--order_code', type=str, metavar='',required=False, default='No', help='Specify the number code of the order. Write between "x"')
