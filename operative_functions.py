@@ -167,16 +167,13 @@ def agent_passwd(agent_directory, agent_full_name):
     password = agents_df['Password'].iloc[-1]
     return password
 
-
 def my_full_name(agent_name, agent_number):
     decimal = ""
     if agent_name == "coil":
         if len(str(agent_number)) == 1:
             decimal = str("00")
         elif len(str(agent_number)) == 2:
-            decimal = str(0)
-  GNU nano 4.8                                                                                  operative_functions.py                                                                                                     elif len(str(agent_number)) == 2:
-            decimal = str(0)
+            decimal = str(0)                                               
         full_name = str(agent_name) + str("_") + decimal + str(agent_number)
     elif agent_name == "log":
         full_name = agent_name
