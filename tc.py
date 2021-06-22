@@ -106,7 +106,7 @@ if __name__ == "__main__":
     """Parser parameters"""
     parser = argparse.ArgumentParser(description='tc parser')
     parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
-    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg')
+    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade), at(average_thickness), wi(width>#    parser.add_argument('-do', '--delete_order', type=str, metavar='', required=False, default='No', help='Order to delete')
