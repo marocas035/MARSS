@@ -24,9 +24,9 @@ class CoilAgent(Agent):
             coil_msg_log = opf.msg_to_log(coil_activation_json, my_dir)
             await self.send(coil_msg_log)
             "Ask browser to search" #todo 20/05
-            if co_search != "No":
-                co_search_browser = opf.order_to_search(co_search, my_full_name, my_dir)
-                await self.send(co_search_browser)
+            if (coil_search != "No")&(datetime.datetime.now() < searching_time):
+                coil_search_browser = opf.order_to_search(coil_search, my_full_name, my_dir)
+                await self.send(coil_search_browser)
             msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
             if msg:
                 single = msg.body.split(':')
