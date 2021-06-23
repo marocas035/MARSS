@@ -20,7 +20,7 @@ class BrowserAgent(Agent):
             br_activation_json = opf.activation_df(my_full_name, br_started_at)
             br_msg_log = opf.msg_to_log(br_activation_json, my_dir)
             await self.send(br_msg_log)
-            if args.search != "No":
+            if (br_search != "No")&(datetime.datetime.now() < searching_time):
                 br_search_browser = opf.order_to_search(br_search, my_full_name, my_dir)
                 await self.send(br_search_browser)
             if br_status_var == "on":
@@ -177,6 +177,7 @@ if __name__ == "__main__":
     parser.add_argument('-cn', '--coil_number_interrupted_fab', type=str, metavar='', required=False, default='no', help='agent_number interrupted fab: specify which coil number fab was interrupted: 1,2,3,4.')
 #
     parser.add_argument('-se','--search',type=str,metavar='',required=False,default='No',help='Search order by code. Writte depending on your case: oc (order_code),sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations),date.Example: --search oc = 987date.Example: --search oc = 987')
+    parser.add_argument('-set', '--search_time', type=float, metavar='', required=False, default=0.3, help='search_time: time in seconds where agent is searching by code')
     args = parser.parse_args()
     my_dir = os.getcwd()
     agents = opf.agents_data()
@@ -190,6 +191,7 @@ if __name__ == "__main__":
     coil_agent_name = "coil"
     coil_agent_number = args.coil_number_interrupted_fab
     br_coil_name_int_fab = opf.my_full_name(coil_agent_name, coil_agent_number)
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     br_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
