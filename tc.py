@@ -22,7 +22,7 @@ class TransportAgent(Agent):
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
             await self.send(wh_msg_log)
             "Ask browser to search" #todo 20/05
-            if tr_search != "No":
+            if (tr_search != "No")&(datetime.datetime.now() < searching_time):
                 tr_search_browser = opf.order_to_search(tr_search, my_full_name, my_dir)
                 await self.send(tr_search_browser)
             msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
@@ -109,7 +109,9 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade), at(average_thickness), wi(width>#    parser.add_argument('-do', '--delete_order', type=str, metavar='', required=False, default='No', help='Order to delete')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
+    parser.add_argument('-do', '--delete_order', type=str, metavar='', required=False, default='No', help='Order to delete')
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')                    
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -119,7 +121,7 @@ if __name__ == "__main__":
     tr_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     tr_status_var = args.status
     tr_search = args.search
-#    tr_delete_order = args.delete_order
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)                   
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     opf.tr_create_booking_register(my_dir, my_full_name)  # register to store bookings
