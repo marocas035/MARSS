@@ -103,6 +103,7 @@ if __name__ == "__main__":
     while datetime.datetime.now() < stop_time:
         time.sleep(1)
     else:
+        print("Search failed")
         la_status_var = "off"
         la_agent.stop()
         quit_spade()
