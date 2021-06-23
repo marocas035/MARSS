@@ -22,7 +22,7 @@ class WarehouseAgent(Agent):
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
             await self.send(wh_msg_log)
             "Ask browser to search"  #18-05
-            if wh_search != "No":
+            if (wh_search != "No")&(datetime.datetime.now() < searching_time):
                 wh_search_browser = opf.order_to_search(wh_search, my_full_name, my_dir)
                 await self.send(wh_search_browser)
             msg = await self.receive(timeout=wait_msg_time)
@@ -110,6 +110,7 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade), at(average_thickness),wi(width_>    args = parser.parse_args()
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
     my_full_name = opf.my_full_name(my_name, args.agent_number)
@@ -118,6 +119,7 @@ if __name__ == "__main__":
     wh_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     wh_status_var = args.status
     wh_search = args.search
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     #opf.wh_create_register(my_dir, my_full_name)  # register to store entrance and exit
