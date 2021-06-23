@@ -17,13 +17,14 @@ import os
 class ContinuousAnnealingAgent(Agent):
     class CABehav(PeriodicBehaviour):
         async def run(self):
-            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to>            """inform log of status"""
+            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to_tr_df
+            """inform log of status"""
             print(f'op_times_df: {op_times_df}')
             ca_activation_json = opf.activation_df(my_full_name, ca_status_started_at, op_times_df)
             ca_msg_log = opf.msg_to_log(ca_activation_json, my_dir)
             await self.send(ca_msg_log)
             "Ask browser to search"  #18-05
-            if ca_search != "No":
+            if (ca_search != "No")&(datetime.datetime.now() < searching_time):
                 ca_search_browser = opf.order_to_search(ca_search, my_full_name, my_dir)
                 await self.send(ca_search_browser)
             msg = await self.receive(timeout=wait_msg_time)
@@ -63,7 +64,8 @@ class ContinuousAnnealingAgent(Agent):
                             ca_to_tr_json = ca_to_tr_df.to_json()  # json to send to tr with slots to prebook
                             #print(f'br_data_df: {br_data_df}')
                             closest_tr_df = opf.get_tr_list(slot, br_data_df, my_full_name, my_dir)
-                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done. If not available, send message to next available >                            jid_list = closest_tr_df['User name'].tolist()
+                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done. If not available, send message to next available tr                            
+                            jid_list = closest_tr_df['User name'].tolist()
                             auction_df.at[0, 'active_tr_slot_1'] = [closest_tr_df.to_dict()]  # save to auction df
                             ca_msg_to_tr = opf.ca_msg_to(ca_to_tr_json)
                             tr_occupied = []
@@ -574,7 +576,9 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('-sab', '--start_auction_before', type=int, metavar='', required=False, default=10, help='start_auction_before: seconds to start auction prior to current fab ends')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_c>    args = parser.parse_args()
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
+    args = parser.parse_args()                    
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
     my_full_name = opf.my_full_name(my_name, args.agent_number)
@@ -584,6 +588,7 @@ if __name__ == "__main__":
     ca_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     ca_status_var = args.status
     start_auction_before = args.start_auction_before
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     ca_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
