@@ -213,7 +213,7 @@ class CoilAgent(Agent):
                                                     ca_id = ca_coil_msg_df.loc[0, 'id']
                                                     ca_bid_status = ca_coil_msg_df.at[0, 'bid_status']
                                                     ca_auction_level = ca_coil_msg_df.at[0, 'auction_level']
-                                                    coil_msg_log_body = f'{my_full_name} received wrong message from {ca_id} in final acceptance. ca_auction_level: {ca_auction_level}!= 3 or ca_bid_status: {ca_b>                                                    coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
+                                                    coil_msg_log_body = f'{my_full_name} received wrong message from {ca_id} in final acceptance. ca_auction_level: {ca_auction_level}!= 3 or ca_bid_status: {ca_bid_status} != accepted'                                                    coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                     await self.send(coil_msg_log)
                                                     print(coil_msg_log_body)
                                             else:
@@ -324,8 +324,10 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, off')
     parser.add_argument('-b', '--budget', type=int, metavar='', required=False, default=100, help='budget: in case of needed, budget can be increased')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_>    parser.add_argument('-ci', '--coil_id', type=str, metavar='', required=False, default='No', help='')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
+    parser.add_argument('-ci', '--coil_id', type=str, metavar='', required=False, default='No', help='')
     parser.add_argument('-ns', '--new_status', type=str, metavar='', required=False, default='No', help='')
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -333,10 +335,11 @@ if __name__ == "__main__":
     wait_msg_time = args.wait_msg_time
     coil_started_at = datetime.datetime.now().time()
     coil_status_var = args.status
-    co_search = args.search
+    coil_search = args.search
     new_coil = args.new_status
     coil_id = args.coil_id
     refresh_time = datetime.datetime.now() + datetime.timedelta(seconds=1)
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     coil_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
