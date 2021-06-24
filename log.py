@@ -25,6 +25,7 @@ class LogAgent(Agent):
                 if msg:
                     print(f"received msg number {self.counter}")
                     self.counter += 1
+                    logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
                     #
