@@ -17,7 +17,6 @@ class LaunchAgent(Agent):
             la_activation_json = opf.activation_df(my_full_name, la_started_at)
             la_msg_log = opf.msg_to_log(la_activation_json, my_dir)
             await self.send(la_msg_log)
-            print("RegisterBehav running")
             """Send new order to log"""
             if order_code != "No":
                 la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, string_operations)
