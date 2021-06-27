@@ -98,6 +98,29 @@ def update_coil_status(coil_id, status):
     df = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
     df.loc[(df.ID_coil.isin([coil_id])), 'coil_status'] = status
     df.to_csv('RegisterOrders.csv', index = False)
+ 
+def active_agents(id, *code):
+    if code:
+       name = code
+    else:
+        name = "-"
+    lista_total = []
+    lista_total.append({
+        'agent_id': id,
+        'agent_name': name
+    })
+    columns = ['agent_id', 'agent_name']
+    df = pd.DataFrame(lista_total, columns=columns)
+    #df = df.drop_duplicates(keep='first')
+    with open('ActiveAgents.csv', 'a') as f:
+        if os.path.getsize('ActiveAgents.csv') == 0:
+            df.to_csv(f, header=True, index=False)
+        else:
+            df.to_csv(f, header=False, index=False)
+    dff = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
+    dff = dff.drop_duplicates(keep='first')
+    dff.to_csv('ActiveAgents.csv', index = False)
+
 #
 def agents_data():
     """This is a file from which all functions read information. It contains crucial information of the system:
