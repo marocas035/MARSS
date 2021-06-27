@@ -19,6 +19,7 @@ class LaunchAgent(Agent):
             await self.send(la_msg_log)
             """Send new order to log"""
             if order_code != "No":
+                 print("RegisterBehav running")
                 la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, string_operations)
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
@@ -30,10 +31,10 @@ class LaunchAgent(Agent):
     class ReceiverBehav(OneShotBehaviour):
         async def run(self):
             await self.agent.b.join()
+            print("InformBehav running")
             """Receive message"""
             msg = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
             if msg:
-                print("InformBehav running")
                 print(msg)
             else:
                 print("msg not received")
