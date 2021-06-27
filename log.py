@@ -28,6 +28,8 @@ class LogAgent(Agent):
                     logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
+                    msg_sender_jid2 = msg_sender_jid0[:-9]
+                    opf.active_agents(msg_sender_jid2)
                     #
                     x = re.search("won auction to process", msg.body)
                     if x:                                     #update  coil status
