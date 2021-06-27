@@ -51,8 +51,12 @@ class BrowserAgent(Agent):
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
                         register = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
+                        active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
-                        if type_code_to_search == 'oc':
+                        if type_code_to_search == 'aa':
+                            column = 'agent_id'
+                            code_to_search = c[1]
+                        elif type_code_to_search == 'oc':
                             column = 'Order_code'
                             code_to_search = int(c[1])
                         elif type_code_to_search == 'sg':
@@ -80,7 +84,10 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         print(f'Code to search: {code_to_search}')
-                        filter= register.loc[register[column] == code_to_search]
+                        if column == 'agent_id':
+                            filter= active_agents.loc[register[column] == code_to_search]
+                        else:
+                            filter= register.loc[register[column] == code_to_search]
                         if  len(filter)==0:
                             print('Code to search not found')
                         else:
