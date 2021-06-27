@@ -36,8 +36,7 @@ class LaunchAgent(Agent):
             if msg:
                 print("InformBehav running")
                 print(msg)
-                #order = pd.read_json(msg)
-                #print(order)
+                print("Off")
 
         async def on_end(self):
             await self.agent.stop()
@@ -103,7 +102,6 @@ if __name__ == "__main__":
     while datetime.datetime.now() < stop_time:
         time.sleep(1)
     else:
-        print("Off")
         la_status_var = "off"
         la_agent.stop()
         quit_spade()
