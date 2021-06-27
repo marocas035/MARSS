@@ -36,7 +36,7 @@ class LaunchAgent(Agent):
                 print("InformBehav running")
                 print(msg)
             else:
-                print("off")
+                print("msg not received")
 
         async def on_end(self):
             await self.agent.stop()
