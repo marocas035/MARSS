@@ -109,7 +109,7 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade), at(average_thickness),wi(width_>    args = parser.parse_args()
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa(specific active_agent), type(type agents active=ca, coil...),oc(order_code), sg(steel_grade), at(average_thickness),wi(width_>    args = parser.parse_args()
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
