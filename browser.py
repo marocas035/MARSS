@@ -88,7 +88,7 @@ class BrowserAgent(Agent):
                             code_to_search = c[1]
                         print(f'Code to search: {code_to_search}')
                         if (column == 'agent_id')or(column == 'type'):
-                            filter= active_agents.loc[register[column] == code_to_search]
+                            filter= active_agents.loc[active_agents[column] == code_to_search]
                         else:
                             filter= register.loc[register[column] == code_to_search]
                         if  len(filter)==0:
