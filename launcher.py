@@ -19,7 +19,7 @@ class LaunchAgent(Agent):
             await self.send(la_msg_log)
             """Send new order to log"""
             if order_code != "No":
-                 print("RegisterBehav running")
+                print("RegisterBehav running")
                 la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, string_operations)
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
@@ -41,9 +41,10 @@ class LaunchAgent(Agent):
 
         async def on_end(self):
             await self.agent.stop()
-
+            
         async def on_start(self):
             self.counter = 1
+            
     async def setup(self):
         self.b = self.LABehav()
         template = Template()
