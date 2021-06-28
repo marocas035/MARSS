@@ -60,8 +60,8 @@ if __name__ == "__main__":
     """Parser parameters"""
     parser = argparse.ArgumentParser(description='la parser')
     parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
-    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=15, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
-    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=20, help='stop_time: time in seconds where agent isnt asleep')
+    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=10, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
+    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=10, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Writte depending on your case:aa(specific active_agent), type(type agents active=ca, coil...), oc(order_code),sg(steel_grade),at(average_thickness), wi((width_coils), ic(id_coil), so(string_operations), date.Example: --search oc = 987')
     #DATOS DE PEDIDO:
