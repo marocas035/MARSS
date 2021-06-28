@@ -116,6 +116,8 @@ def active_agents(id, *code):
         s = "wh"
     elif type[:-2] == "tc":
         s = "tc"
+    elif type[:-2] == "launch":
+        s = "launcher"
     else:
         s = "coil"
     lista_total = []
