@@ -104,14 +104,28 @@ def active_agents(id, *code):
        name = code
     else:
         name = "-"
+    t = id.split('@')
+    type = t[0]
+    if type[:-2] == "l":
+        s = "log"
+    elif type[:-2] == "brows":
+        s = "browser"
+    elif type[:-2] == "ca":
+        s = "ca"
+    elif type[:-2] == "wh":
+        s = "wh"
+    elif type[:-2] == "tc":
+        s = "tc"
+    else:
+        s = "coil"
     lista_total = []
     lista_total.append({
         'agent_id': id,
-        'agent_name': name
+        'agent_name': name,
+        'type': s
     })
-    columns = ['agent_id', 'agent_name']
+    columns = ['agent_id', 'agent_name', 'type']
     df = pd.DataFrame(lista_total, columns=columns)
-    #df = df.drop_duplicates(keep='first')
     with open('ActiveAgents.csv', 'a') as f:
         if os.path.getsize('ActiveAgents.csv') == 0:
             df.to_csv(f, header=True, index=False)
@@ -119,7 +133,7 @@ def active_agents(id, *code):
             df.to_csv(f, header=False, index=False)
     dff = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
     dff = dff.drop_duplicates(keep='first')
-    dff.to_csv('ActiveAgents.csv', index = False)
+    dff.to_csv('ActiveAgents.csv', header = True, index = False)
 
 #
 def agents_data():
