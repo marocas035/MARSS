@@ -56,6 +56,9 @@ class BrowserAgent(Agent):
                         if type_code_to_search == 'aa':
                             column = 'agent_id'
                             code_to_search = c[1]
+                        elif type_code_to_search == 'ty':
+                            column = 'type'
+                            code_to_search =c[1]
                         elif type_code_to_search == 'oc':
                             column = 'Order_code'
                             code_to_search = int(c[1])
@@ -84,7 +87,7 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         print(f'Code to search: {code_to_search}')
-                        if column == 'agent_id':
+                        if (column == 'agent_id')or(column == 'type'):
                             filter= active_agents.loc[register[column] == code_to_search]
                         else:
                             filter= register.loc[register[column] == code_to_search]
