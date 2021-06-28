@@ -324,7 +324,7 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, off')
     parser.add_argument('-b', '--budget', type=int, metavar='', required=False, default=100, help='budget: in case of needed, budget can be increased')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case:aa(specific active_agent), type(type agents active=ca, coil...), oc(order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
     parser.add_argument('-ci', '--coil_id', type=str, metavar='', required=False, default='No', help='')
     parser.add_argument('-ns', '--new_status', type=str, metavar='', required=False, default='No', help='')
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
