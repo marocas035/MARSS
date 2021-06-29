@@ -48,7 +48,7 @@ def save_order(msg):
     price =s[16].split('}')
     dat =msg.split('"')
     string_operations = s[18].split('"')
-    status = string_operations[1].split('|')
+    status = string_operations[1].split(';')
     i = 0
     n = int(num[0])
     while (i<n):
