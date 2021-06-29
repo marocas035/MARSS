@@ -37,7 +37,7 @@ class LaunchAgent(Agent):
             if msg:
                 print(msg)
             else:
-                print("msg not received")
+                print("msg not received. Search failed")
 
         async def on_end(self):
             await self.agent.stop()
