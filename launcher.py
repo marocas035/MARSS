@@ -101,9 +101,11 @@ if __name__ == "__main__":
     la_agent.b2.join()
     """Counter"""
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
-    while datetime.datetime.now() < stop_time:
-        time.sleep(1)
-    else:
-        la_status_var = "off"
-        la_agent.stop()
-        quit_spade()
+    while la_agent.is_alive():
+        try:
+            time.sleep(1)
+        except KeyboardInterrupt:
+            la_status_var = "off"
+            la_agent.stop()
+            quit_spade()
+
