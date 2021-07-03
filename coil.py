@@ -30,7 +30,11 @@ class CoilAgent(Agent):
             msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
             if msg:
                 single = msg.body.split(':')
-                if single[0] == "Order searched":
+                if single[0] == "Alive":
+                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{coil_started_at}'
+                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
+                    await self.send(response_active)
+                elif single[0] == "Order searched":
                     print(msg.body)
             if coil_status_var == "auction":
                 """inform log of status"""
