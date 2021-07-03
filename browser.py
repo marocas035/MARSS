@@ -44,7 +44,11 @@ class BrowserAgent(Agent):
                 if msg:
                     single = msg.body.split(':')
                     #print(single)
-                    if single[0] == 'Search':
+                    if single[0] == "Alive":
+                        msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
+                        response_active = opf.msg_to_log(msg_aa_response, my_dir)
+                        await self.send(response_active)
+                    elif single[0] == 'Search':
                         print(msg)
                         search = single[1]
                         c = search.split('=')
@@ -97,8 +101,7 @@ class BrowserAgent(Agent):
                             print(filter)
                             searched = filter.to_json()
                             br_msg_la = opf.order_searched(searched, agent_search_request, my_dir)
-                            await self.send(br_msg_la)
-                             
+                            await self.send(br_msg_la)                            
                     else:
                         id = single[4].split('"')
                         if id[1] == 'ca':
