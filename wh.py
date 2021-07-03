@@ -29,7 +29,8 @@ class WarehouseAgent(Agent):
             if msg:
                 single = msg.body.split(":")
                 if single[0] == "Alive":
-                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{wh_status_>                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
+                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{wh_status_started_at}'                    
+                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
                     await self.send(response_active)
                 elif single[0] == "Order searched":
                     print(msg.body)
