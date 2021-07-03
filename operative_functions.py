@@ -147,6 +147,40 @@ def active_agents(id, *code):
     msg_la.set_metadata("performative", "inform")
     return msg_la
 
+def aa_type(id):
+    t = id.split('@')
+    type = t[0]
+    if type[:-2] == "l":
+        s = "log"
+    elif type[:-2] == "brows":
+        s = "browser"
+    elif type[:-2] == "ca":
+        s = "ca"
+    elif type[:-2] == "wh":
+        s = "wh"
+    elif type[:-2] == "tc":
+        s = "tc"
+    elif type[:-2] == "launch":
+        s = "launcher"
+    else:
+        s = "coil"
+    return s
+
+def checkFileExistance():
+    try:
+        with open('ActiveAgents.csv', 'r') as f:
+            return True
+    except FileNotFoundError as e:
+        return False
+    except IOError as e:
+        return False
+
+def alive_agent(agent_jid):
+    msg_alive = Message(to=agent_jid)
+    #print(f'msg_body:{msg_body}')
+    msg_alive.body = "Alive: Agent"
+    msg_alive.set_metadata("performative", "inform")
+    return msg_alive
 
 #
 def agents_data():
