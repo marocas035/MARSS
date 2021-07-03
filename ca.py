@@ -30,7 +30,11 @@ class ContinuousAnnealingAgent(Agent):
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
                 single = msg.body.split(":")
-                if single[0] == "Order searched":
+                if single[0] == "Alive":
+                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{ca_status_started_at}'
+                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
+                    await self.send(response_active)
+                elif single[0] == "Order searched":
                     print(msg.body)
             if ca_status_var == "pre-auction":
                 pre_auction_start = datetime.datetime.now()
