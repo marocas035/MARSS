@@ -25,11 +25,15 @@ class TransportAgent(Agent):
             if (tr_search != "No")&(datetime.datetime.now() < searching_time):
                 tr_search_browser = opf.order_to_search(tr_search, my_full_name, my_dir)
                 await self.send(tr_search_browser)
-            msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
-            if msg:
-                single = msg.body.split(':')
-                if single[0] == "Order searched":
-                    print(msg.body)
+            msg2 = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
+            if msg2:
+                single = msg2.body.split(':')
+                if single[0] == "Alive":
+                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{tr_status__started_at}'                 
+                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
+                    await self.send(response_active)               
+                elif single[0] == "Order searched":
+                    print(msg2.body)
             if tr_status_var == "on":
                 """inform log of status"""
                 wh_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
