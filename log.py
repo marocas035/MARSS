@@ -20,7 +20,32 @@ class LogAgent(Agent):
     class LogBehav(CyclicBehaviour):
         async def run(self):
             global wait_msg_time, logger, log_status_var
+            active_agents = pd.DataFrame()
             if log_status_var =="on":
+                "Active Agents"
+                r= opf.checkFileExistance()
+                if r == True:
+                    agent_id = []
+                    agent_name = []
+                    agent_type = []
+                    activation_time = []
+                    a = pd.read_csv('ActiveAgents.csv', header=0, delimiter=",", engine='python')
+                    if len(a) != 0:
+                        for line in a.index:
+                            agent_jid = a.loc[line, 'agent_id']
+                            alive_agent_msg = opf.alive_agent(agent_jid)
+                            await self.send(alive_agent_msg)
+                            msg2 = await self.receive(timeout=wait_msg_time)  # wait for a message for 3 seconds
+                            if msg2:
+                                logger.info(msg2.body)
+                                msg2_sender_jid0 = str(msg2.sender)
+                                msg2_sender_jid2 = msg2_sender_jid0[:-9]
+                                m = msg2.body.split(':')
+                                typeaa = opf.aa_type(msg2_sender_jid2)
+                                nueva_fila = {'agent_id': msg2_sender_jid2, 'agent_name': m[2] , 'agent_type': typeaa, 'activation_time': m[4] }
+                                active_agents = active_agents.append(nueva_fila, ignore_index = True)
+                        remove('ActiveAgents.csv')
+                        del a               
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     print(f"received msg number {self.counter}")
@@ -29,8 +54,11 @@ class LogAgent(Agent):
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
-                    opf.active_agents(msg_sender_jid2)
-                    #
+                    #opf.active_agents(msg_sender_jid2)
+                    agent_type = opf.aa_type(msg_sender_jid2)
+                    nueva_fila2 = {'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': : agent_type, 'activation_time': datetime.datetime.now() }                  
+                    active_agents = active_agents.append(nueva_fila2, ignore_index = True)
+                    active_agents = active_agents.drop_duplicates(keep='first')
                     x = re.search("won auction to process", msg.body)
                     if x:                                     #update  coil status
                         auction = msg.body.split(" ")
@@ -61,6 +89,7 @@ class LogAgent(Agent):
                 logger.debug(f"Log agent status: {log_status_var}")
 
         async def on_end(self):
+            active_agents.to_csv('ActiveAgents.csv', header = True, index = False)
             await self.agent.stop()
 
         async def on_start(self):
