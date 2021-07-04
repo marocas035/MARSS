@@ -35,12 +35,12 @@ class LaunchAgent(Agent):
             """Receive message"""
             msg = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
             if msg:
+                print(msg.body)
                 single = msg.body.split(":")
                 if single[0] == "Alive":
                     msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{la_started_at}'
                     response_active = opf.msg_to_log(msg_aa_response, my_dir)
                     await self.send(response_active)
-                print(msg)
             else:
                 print("msg not received. Search failed")
 
