@@ -67,7 +67,7 @@ class LogAgent(Agent):
                         opf.update_coil_status(coil_id, status)
                         logger.info(msg.body)
                         print("Coil status updated")
-                    elif msg_sender_jid == "launch":
+                    elif msg_sender_jid == "launcher":
                         single = msg.body.split(':')
                         id = single[4].split('"')
                         if id[3] == 'steel_grade':  #Save order
