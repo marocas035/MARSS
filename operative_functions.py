@@ -137,13 +137,13 @@ def active_agents(id, *code):
     dff = dff.drop_duplicates(keep='first')
     dff.to_csv('ActiveAgents.csv', header = True, index = False)
     
- def msg_to_launcher(msg_body):
+ def msg_to_launcher(msg , agent_directory):
     """Returns msg object to send to launcher agent"""
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "launcher"]
     jid = agents_df['User name'].iloc[-1]
     msg_la = Message(to=jid)
-    msg_la.body = msg_body
+    msg_la.body = msg
     msg_la.set_metadata("performative", "inform")
     return msg_la
 
