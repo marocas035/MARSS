@@ -137,7 +137,7 @@ def active_agents(id, *code):
     dff = dff.drop_duplicates(keep='first')
     dff.to_csv('ActiveAgents.csv', header = True, index = False)
     
- def msg_to_launcher(msg, agent_directory):
+def msg_to_launcher(msg, agent_directory):
     """Returns msg object to send to launcher agent"""
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "launcher"]
