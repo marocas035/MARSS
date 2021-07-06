@@ -75,9 +75,10 @@ class LogAgent(Agent):
                         if id[3] == 'steel_grade':  #Save order
                             opf.save_order(msg.body)
                             logger.info(msg.body)
-                            m = "Order successfully saved"
+                            m = "Status: Order successfully saved"
                             log_msg_la = opf.msg_to_launcher(m, my_dir)
                             await self.send(log_msg_la)
+                            logger.info(log_msg_la)
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
             elif log_status_var == "stand-by":
