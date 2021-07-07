@@ -66,7 +66,9 @@ class LogAgent(Agent):
                         auction = msg.body.split(" ")
                         coil_id = auction[0]
                         status = auction[6]
-                        opf.update_coil_status(coil_id, status)
+                        o = opf.checkFile2Existance()
+                        if o == True:
+                            opf.update_coil_status(coil_id, status)
                         logger.info(msg.body)
                         print("Coil status updated")
                     elif msg_sender_jid == "launcher":
