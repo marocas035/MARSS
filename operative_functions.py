@@ -174,6 +174,16 @@ def checkFileExistance():
         return False
     except IOError as e:
         return False
+    
+
+def checkFile2Existance():
+    try:
+        with open('RegisterOrders.csv', 'r') as f:
+            return True
+    except FileNotFoundError as e:
+        return False
+    except IOError as e:
+        return False
 
 def alive_agent(agent_jid):
     msg_alive = Message(to=agent_jid)
