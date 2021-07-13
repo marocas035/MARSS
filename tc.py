@@ -29,10 +29,10 @@ class TransportAgent(Agent):
             if msg2:
                 single = msg2.body.split(':')
                 if single[0] == "Alive":
-                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{tr_status__started_at}'                 
+                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{tr_status_started_at}'
                     response_active = opf.msg_to_log(msg_aa_response, my_dir)
-                    await self.send(response_active)               
-                elif single[0] == "Order searched":
+                    await self.send(response_active)
+                if single[0] == "Order searched":
                     print(msg2.body)
             if tr_status_var == "on":
                 """inform log of status"""
@@ -42,7 +42,7 @@ class TransportAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
                 if msg:
                     single = msg.body.split(':') #todo 20/05
-                    if single[0] != "Order searched":
+                    if single[0] != ("Order searched")and("Alive"):
                         ca_data_df = pd.read_json(msg.body)
                         if ca_data_df.loc[0, 'action'] == "pre-book":
                             """Prepare reply to ca of availability"""
@@ -75,7 +75,7 @@ class TransportAgent(Agent):
                     tr_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s'
                     tr_msg_log = opf.msg_to_log(tr_msg_log_body, my_dir)
                     await self.send(tr_msg_log)
-            elif tr_status_var == "stand-by":  # stand-by status for TR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it won't change to stand-by.
+            elif tr_status_var == "stand-by":  # stand-by status for TR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it wont change to stand-by.
                 """inform log of status"""
                 tr_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
                 tr_msg_log = opf.msg_to_log(tr_inform_json, my_dir)
@@ -93,6 +93,8 @@ class TransportAgent(Agent):
                 tr_msg_log = opf.msg_to_log(tr_inform_json, my_dir)
                 await self.send(tr_msg_log)
                 tr_status_var = "stand-by"
+
+
         async def on_end(self):
             print({self.counter})
 
@@ -108,14 +110,13 @@ class TransportAgent(Agent):
 
 if __name__ == "__main__":
     """Parser parameters"""
-    parser = argparse.ArgumentParser(description='tc parser')
+    parser = argparse.ArgumentParser(description='wh parser')
     parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
-    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
-    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
+    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg')
+    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case:oc(order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
-    parser.add_argument('-do', '--delete_order', type=str, metavar='', required=False, default='No', help='Order to delete')
-    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')                    
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa(specific active_agent), ty(type agents active=ca, coil...), oc(order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')    
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -125,7 +126,7 @@ if __name__ == "__main__":
     tr_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     tr_status_var = args.status
     tr_search = args.search
-    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)                   
+    searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     opf.tr_create_booking_register(my_dir, my_full_name)  # register to store bookings
@@ -143,3 +144,5 @@ if __name__ == "__main__":
         tr_status_var = "off"
         tr_agent.stop()
         quit_spade()
+                        
+                        
