@@ -23,7 +23,7 @@ class ContinuousAnnealingAgent(Agent):
             ca_activation_json = opf.activation_df(my_full_name, ca_status_started_at, op_times_df)
             ca_msg_log = opf.msg_to_log(ca_activation_json, my_dir)
             await self.send(ca_msg_log)
-            "Ask browser to search"  #18-05
+            "Ask browser to search"  
             if (ca_search != "No")&(datetime.datetime.now() < searching_time):
                 ca_search_browser = opf.order_to_search(ca_search, my_full_name, my_dir)
                 await self.send(ca_search_browser)
@@ -273,7 +273,7 @@ class ContinuousAnnealingAgent(Agent):
                 #  Builds msg to br
                 ca_request_type = "coils"
                 ca_msg_br_body = opf.req_active_users_loc_times(ca_data_df, ca_request_type)  # returns a json with request info to browser
-                 ca_msg_br = opf.msg_to_br(ca_msg_br_body, my_dir)
+                ca_msg_br = opf.msg_to_br(ca_msg_br_body, my_dir)
                 # returns a msg object with request info to browser and message setup
                 await self.send(ca_msg_br)
                 br_msg = await self.receive(timeout=wait_msg_time)
@@ -548,6 +548,7 @@ class ContinuousAnnealingAgent(Agent):
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {ca_status_var}'
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
+                    
             elif ca_status_var == "stand-by": # stand-by status for CA is very useful. It changes to pre-auction, when there are 3 minutes left to the end of current processing.
                 """inform log of status"""
                 ca_inform_json = opf.inform_log_df(my_full_name, ca_status_started_at, ca_status_var).to_json()
