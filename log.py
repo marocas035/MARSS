@@ -52,7 +52,7 @@ class LogAgent(Agent):
                     self.counter += 1
                     logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
-                    msg_sender_jid = msg_sender_jid0[:-33]
+                    msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     #opf.active_agents(msg_sender_jid2)
                     agent_type = opf.aa_type(msg_sender_jid2)
