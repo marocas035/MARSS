@@ -181,7 +181,7 @@ class ContinuousAnnealingAgent(Agent):
                                                                             auction_df.at[0, 'wh_location'] = opf.get_agent_location(delivered_to_wh)
                                                                             """inform log of wh booking"""
                                                                             ca_msg_log_json = opf.confirm_wh_booking_to_log(ca_to_wh_df, wh_assigned, my_dir, closest_wh_df)
-                                                                             ca_msg_log = opf.msg_to_log(ca_msg_log_json, my_dir)
+                                                                            ca_msg_log = opf.msg_to_log(ca_msg_log_json, my_dir)
                                                                             await self.send(ca_msg_log)
                                                                             auction_df.at[0, 'wh_booking_confirmation_at'] = datetime.datetime.now()  # Save information to auction df
                                                                             """change of status"""
