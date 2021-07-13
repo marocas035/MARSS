@@ -17,7 +17,7 @@ import os
 class ContinuousAnnealingAgent(Agent):
     class CABehav(PeriodicBehaviour):
         async def run(self):
-            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to_tr_df
+            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to_tr_df           
             """inform log of status"""
             print(f'op_times_df: {op_times_df}')
             ca_activation_json = opf.activation_df(my_full_name, ca_status_started_at, op_times_df)
@@ -57,7 +57,7 @@ class ContinuousAnnealingAgent(Agent):
                         br_jid = opf.br_jid(my_dir)
                         msg_sender_jid = str(br_msg.sender)
                         msg_sender_jid = msg_sender_jid[:-9]
-                        if msg_sender_jid == br_jid:  # ca may receive many msgs from different agents, at this point only msgs from br enables to continue.
+                        if msg_sender_jid == br_jid:  # ca may receive many msgs from different agents, at this point only msg      s from br enables to continue.
                             auction_df.at[0, 'brAVG(tr_op_time)'] = br_data_df.loc[0, 'AVG(tr_op_time)']  # save to auction df
                             auction_df.at[0, 'brAVG(ca_op_time)'] = br_data_df.loc[0, 'AVG(ca_op_time)']  # save to auction df
                             """Estimation of when CA needs TR"""
@@ -68,7 +68,7 @@ class ContinuousAnnealingAgent(Agent):
                             ca_to_tr_json = ca_to_tr_df.to_json()  # json to send to tr with slots to prebook
                             #print(f'br_data_df: {br_data_df}')
                             closest_tr_df = opf.get_tr_list(slot, br_data_df, my_full_name, my_dir)
-                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done. If not available, send message to next available tr                            
+                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done.If not available, send message to next available tr.
                             jid_list = closest_tr_df['User name'].tolist()
                             auction_df.at[0, 'active_tr_slot_1'] = [closest_tr_df.to_dict()]  # save to auction df
                             ca_msg_to_tr = opf.ca_msg_to(ca_to_tr_json)
@@ -100,7 +100,7 @@ class ContinuousAnnealingAgent(Agent):
                                             ca_to_tr_json = ca_to_tr_df.to_json()  # json to send to tr with slots to prebook
                                             closest_tr_df = opf.get_tr_list(slot, br_data_df, my_full_name, my_dir)
                                             auction_df.at[0, 'active_tr_slot_2'] = [closest_tr_df.to_dict()]  # save to auction dfdelivered_to_wh
-                                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done. If not available, send message to next available tr. 
+                                            # Create a loop to ask for availability. First loop: message to closest tr, receive answer and if available break and pre-book done. If not available, send message to next available tr.                                            
                                             jid_list = closest_tr_df['User name'].tolist()
                                             ca_msg_to_tr = opf.ca_msg_to(ca_to_tr_json)
                                             for z in jid_list:
@@ -181,7 +181,7 @@ class ContinuousAnnealingAgent(Agent):
                                                                             auction_df.at[0, 'wh_location'] = opf.get_agent_location(delivered_to_wh)
                                                                             """inform log of wh booking"""
                                                                             ca_msg_log_json = opf.confirm_wh_booking_to_log(ca_to_wh_df, wh_assigned, my_dir, closest_wh_df)
-                                                                            ca_msg_log = opf.msg_to_log(ca_msg_log_json, my_dir)
+                                                                             ca_msg_log = opf.msg_to_log(ca_msg_log_json, my_dir)
                                                                             await self.send(ca_msg_log)
                                                                             auction_df.at[0, 'wh_booking_confirmation_at'] = datetime.datetime.now()  # Save information to auction df
                                                                             """change of status"""
@@ -214,6 +214,7 @@ class ContinuousAnnealingAgent(Agent):
                                                             else:
                                                                 continue
                                                             break
+                                                            
                                                         else:
                                                             """inform log of issue"""
                                                             ca_msg_log_body = f'{tr_msg.sender} did not set a correct msg.body: {tr_msg.body} in communication with {my_full_name} for slot_2'
@@ -263,8 +264,8 @@ class ContinuousAnnealingAgent(Agent):
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {ca_status_var}'
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
+                    
             elif ca_status_var == "auction":
-
                 auction_df.at[0, 'auction_start'] = auction_start # Save information to auction df
                 print(f'auction_start: {auction_start}')
                 # NOW THAT WH AND TR ARE BOOKED. ENTERS AUCTION FOR COILS.
@@ -272,7 +273,7 @@ class ContinuousAnnealingAgent(Agent):
                 #  Builds msg to br
                 ca_request_type = "coils"
                 ca_msg_br_body = opf.req_active_users_loc_times(ca_data_df, ca_request_type)  # returns a json with request info to browser
-                ca_msg_br = opf.msg_to_br(ca_msg_br_body, my_dir)
+                 ca_msg_br = opf.msg_to_br(ca_msg_br_body, my_dir)
                 # returns a msg object with request info to browser and message setup
                 await self.send(ca_msg_br)
                 br_msg = await self.receive(timeout=wait_msg_time)
@@ -382,6 +383,7 @@ class ContinuousAnnealingAgent(Agent):
                                             ca_msg_log = opf.msg_to_log(ca_msg_log_body, my_dir)
                                             await self.send(ca_msg_log)
                                             print(ca_msg_log_body)
+                                            
                                     if not coil_msgs_df.empty:
                                         """Evaluate extra bids and give a rating"""
                                         ca_data_df.at[0, 'auction_level'] = 3  # third level
@@ -456,6 +458,7 @@ class ContinuousAnnealingAgent(Agent):
                                         ca_msg_log = opf.msg_to_log(ca_msg_log_body, my_dir)
                                         await self.send(ca_msg_log)
                                         print(ca_msg_log_body)
+                                        
                                 elif len(ca_counter_bid_df['coil_jid']) == 1:  # if there is a strong winner
                                     """Inform coil of assignation"""
                                     ca_data_df.at[0, 'bid_status'] = 'acceptedbid'
@@ -490,7 +493,7 @@ class ContinuousAnnealingAgent(Agent):
                                                 print(bids_ev_df.to_string())
                                                 process_df = opf.process_df(process_df, ca_counter_bid_df, ca_to_tr_df)
                                                 """Inform log of assignation and auction KPIs"""
-                                                ca_msg_log_body = opf.auction_kpis(ca_data_df, bids_ev_df, auction_df, process_df, ca_counter_bid_df)  # in this case, counterbid_df only contains 1 row with winner info
+                                                ca_msg_log_body = opf.auction_kpis(ca_data_df, bids_ev_df, auction_df, process_df, ca_counter_bid_df)  # in this case, counterbid_df only contains 1 row with winner info                                                
                                                 ca_msg_log = opf.msg_to_log(ca_msg_log_body.to_json(), my_dir)
                                                 op_times_df.at[0, 'AVG(ca_op_time)'] = ca_msg_log_body.loc[0, 'AVG(ca_op_time)']
                                                 op_times_df.at[0, 'AVG(tr_op_time)'] = ca_msg_log_body.loc[0, 'AVG(tr_op_time)']
@@ -578,13 +581,13 @@ if __name__ == "__main__":
     """Parser parameters"""
     parser = argparse.ArgumentParser(description='ca parser')
     parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
-    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
-    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
+    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg')
+    parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('-sab', '--start_auction_before', type=int, metavar='', required=False, default=10, help='start_auction_before: seconds to start auction prior to current fab ends')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: oc(order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')    
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
-    args = parser.parse_args()                    
+    args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
     my_full_name = opf.my_full_name(my_name, args.agent_number)
@@ -621,4 +624,11 @@ if __name__ == "__main__":
         ca_status_var = "off"
         ca_agent.stop()
         quit_spade()
-
+                                            
+                                            
+                            
+                            
+                            
+                            
+                            
+                        
