@@ -81,6 +81,8 @@ class LogAgent(Agent):
                             log_msg_la = opf.msg_to_launcher(m, my_dir)
                             await self.send(log_msg_la)
                             logger.info(log_msg_la)
+                    elif msg_sender_jid == "browser":
+                        
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
             elif log_status_var == "stand-by":
