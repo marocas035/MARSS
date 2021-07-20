@@ -58,8 +58,12 @@ class BrowserAgent(Agent):
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
                         if type_code_to_search == 'aa':
-                            column = 'agent_id'
-                            code_to_search = c[1]
+                            aa = 'Search: Request active agents list'
+                            request_aa = opf.msg_to_log(aa, my_dir)
+                            await self.send(request_aa)
+                            msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds #TAL VEZ PONER UN TIEMPO MAS PEQUEÑO
+                            if msg_aa:
+                                #opf.response aa list --- mandar a agente que lo ha pedido FIN                          
                         elif type_code_to_search == 'ty':
                             column = 'type'
                             code_to_search =c[1]
@@ -91,14 +95,12 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         print(f'Code to search: {code_to_search}')
-                        #if (column == 'agent_id')or(column == 'type'):
-                        #    filter= active_agents.loc[active_agents[column] == code_to_search]
-                        #else:
-                        filter= register.loc[register[column] == code_to_search]
-                        if  len(filter)==0:
-                            print('Code to search not found')
-                        else:
-                            print(filter)
+                        if column: 
+                            filter= register.loc[register[column] == code_to_search]
+                            if  len(filter)==0:
+                                print('Code to search not found')
+                            else:
+                                print(filter)
                             searched = filter.to_json()
                             br_msg_la = opf.order_searched(searched, agent_search_request, my_dir)
                             await self.send(br_msg_la)                            
