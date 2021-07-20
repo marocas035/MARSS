@@ -69,7 +69,7 @@ class LogAgent(Agent):
                         o = opf.checkFile2Existance()
                         if o == True:
                             opf.update_coil_status(coil_id, status)
-                        logger.info(msg.body)
+                        #logger.info(msg.body)
                         print("Coil status updated")
                     elif msg_sender_jid == "launcher":
                         single = msg.body.split(':')
