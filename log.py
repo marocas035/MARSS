@@ -77,12 +77,19 @@ class LogAgent(Agent):
                         if id[3] == 'steel_grade':  #Save order
                             opf.save_order(msg.body)
                             logger.info(msg.body)
-                            m = "Status: Order successfully saved"
-                            log_msg_la = opf.msg_to_launcher(m, my_dir)
+                            ackO = "Status: Order successfully saved"
+                            log_msg_la = opf.msg_to_launcher(ackO, my_dir)
                             await self.send(log_msg_la)
                             logger.info(log_msg_la)
                     elif msg_sender_jid == "browser":
-                        
+                        single = msg.body.split(':')
+                        aa = single[0].split('"')
+                        if aa[0] == 'SearchAA':  #Active agents list requested
+                            opf.save_order(msg.body)
+                            logger.info(msg.body)
+                            list_AA = active_agents.to_json
+                            log_msg_br = opf.msg_to_launcher(list_AA, my_dir)
+                            await self.send(log_msg_br)                        
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
             elif log_status_var == "stand-by":
