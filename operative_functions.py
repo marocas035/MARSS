@@ -88,8 +88,8 @@ def order_to_search(search_body,agent_full_name , agent_directory):
 def order_searched(filter,agent_request,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent_request]
-    launcher_jid = agents_df['User name'].iloc[-1]
-    order_searched_msg = Message(to=launcher_jid)
+    agent_jid = agents_df['User name'].iloc[-1]
+    order_searched_msg = Message(to=agent_jid)
     order_searched_msg.body = 'Order searched:'+ filter
     order_searched_msg.set_metadata("performative","inform")
     return order_searched_msg
