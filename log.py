@@ -85,7 +85,6 @@ class LogAgent(Agent):
                         single = msg.body.split(':')
                         aa = single[0].split('"')
                         if aa[0] == 'SearchAA':  #Active agents list requested
-                            opf.save_order(msg.body)
                             logger.info(msg.body)
                             list_AA = active_agents.to_json
                             log_msg_br = opf.msg_to_launcher(list_AA, my_dir)
