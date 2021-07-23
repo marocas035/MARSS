@@ -54,16 +54,20 @@ class BrowserAgent(Agent):
                         c = search.split('=')
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
+                        msg_sender_jid0 = str(msg.sender)
+                        msg_sender_jid = msg_sender_jid0[:-31]
                         register = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
-                        if type_code_to_search == 'aa':
+                        if type_code_to_search == 'aa': 
                             aa = 'SearchAA: Request active agents list'
                             request_aa = opf.msg_to_log(aa, my_dir)
                             await self.send(request_aa)
                             msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds #TAL VEZ PONER UN TIEMPO MAS PEQUEÑO
                             if msg_aa:
-                                #opf.response aa list --- mandar a agente que lo ha pedido FIN                          
+                                list_aa = msg_aa.body
+                                br_msg_aa= opf.order_searched(list_aa, agent_search_request, my_dir)
+                                await self.send(br_msg_aa)
                         elif type_code_to_search == 'ty':
                             column = 'type'
                             code_to_search =c[1]
@@ -102,8 +106,8 @@ class BrowserAgent(Agent):
                             else:
                                 print(filter)
                             searched = filter.to_json()
-                            br_msg_la = opf.order_searched(searched, agent_search_request, my_dir)
-                            await self.send(br_msg_la)                            
+                            br_msg_search = opf.order_searched(searched, agent_search_request, my_dir)
+                            await self.send(br_msg_search)                            
                     else:
                         id = single[4].split('"')
                         if id[1] == 'ca':
