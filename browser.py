@@ -49,7 +49,7 @@ class BrowserAgent(Agent):
                         response_active = opf.msg_to_log(msg_aa_response, my_dir)
                         await self.send(response_active)
                     elif single[0] == 'Search':
-                        print(msg)
+                        #print(msg)
                         search = single[1]
                         c = search.split('=')
                         type_code_to_search = c[0]
@@ -63,7 +63,7 @@ class BrowserAgent(Agent):
                             aa = 'SearchAA: Request active agents list'
                             request_aa = opf.msg_to_log(aa, my_dir)
                             await self.send(request_aa)
-                            msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds #TAL VEZ PONER UN TIEMPO MAS PEQUEÑO
+                            msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds 
                             if msg_aa:
                                 list_aa = msg_aa.body
                                 br_msg_aa= opf.order_searched(list_aa, agent_search_request, my_dir, aa)
