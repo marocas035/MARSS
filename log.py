@@ -87,7 +87,7 @@ class LogAgent(Agent):
                         aa = single[0].split('"')
                         if aa[0] == 'SearchAA':  #Active agents list requested
                             logger.info(msg.body)
-                            list_AA = active_agents.to_string
+                            list_AA = str(active_agents)
                             print(list_AA)
                             #list_AA_dict = str(list_AA)
                             #list_AA_string = json.dumps(list_AA_dict)
