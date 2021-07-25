@@ -60,8 +60,8 @@ class BrowserAgent(Agent):
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
                         if type_code_to_search == 'aa': 
-                            aa = 'SearchAA: Request active agents list'
-                            request_aa = opf.msg_to_log(aa, my_dir)
+                            a = 'SearchAA: Request active agents list'
+                            request_aa = opf.msg_to_log(a, my_dir)
                             await self.send(request_aa)
                             msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds 
                             if msg_aa:
@@ -98,8 +98,8 @@ class BrowserAgent(Agent):
                         else:
                             column = 'Date'
                             code_to_search = c[1]
-                        print(f'Code to search: {code_to_search}')
-                        if column: 
+                        if column:
+                            print(f'Code to search: {code_to_search}')
                             filter= register.loc[register[column] == code_to_search]
                             if  len(filter)==0:
                                 print('Code to search not found')
