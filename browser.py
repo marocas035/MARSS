@@ -59,7 +59,8 @@ class BrowserAgent(Agent):
                         register = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
-                        if type_code_to_search == 'aa': 
+                        if type_code_to_search == 'aa':
+                            column = 'Null'
                             a = 'SearchAA: Request active agents list'
                             request_aa = opf.msg_to_log(a, my_dir)
                             await self.send(request_aa)
@@ -98,7 +99,7 @@ class BrowserAgent(Agent):
                         else:
                             column = 'Date'
                             code_to_search = c[1]
-                        if column:
+                        if column != 'Null':
                             print(f'Code to search: {code_to_search}')
                             filter= register.loc[register[column] == code_to_search]
                             if  len(filter)==0:
