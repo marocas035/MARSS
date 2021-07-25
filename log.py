@@ -88,9 +88,9 @@ class LogAgent(Agent):
                         if aa[0] == 'SearchAA':  #Active agents list requested
                             logger.info(msg.body)
                             list_AA = active_agents.to_json
-                            list_AA_dict = str(list_AA)
+                            #list_AA_dict = str(list_AA)
                             #list_AA_string = json.dumps(list_AA_dict)
-                            log_msg_br = opf.msg_to_br(list_AA, my_dir)
+                            log_msg_br = opf.msg_aa_to_br(list_AA, my_dir)
                             await self.send(log_msg_br)                        
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
