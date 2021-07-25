@@ -195,6 +195,16 @@ def alive_agent(agent_jid):
     msg_alive.set_metadata("performative", "inform")
     return msg_alive
 
+def msg_aa_to_br(msg_body, agent_directory):
+    """Returns msg object to send to browser agent"""
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == "browser"]
+    jid = agents_df['User name'].iloc[-1]
+    msg_br = Message(to=jid)
+    msg_br.body = str(msg_body)
+    msg_br.set_metadata("performative", "inform")
+    return msg_br
+
 #
 def agents_data():
     """This is a file from which all functions read information. It contains crucial information of the system:
