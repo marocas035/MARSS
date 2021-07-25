@@ -1,4 +1,5 @@
 from spade import quit_spade
+import json
 import time
 import datetime
 from datetime import date
@@ -86,7 +87,8 @@ class LogAgent(Agent):
                         aa = single[0].split('"')
                         if aa[0] == 'SearchAA':  #Active agents list requested
                             logger.info(msg.body)
-                            list_AA = string(active_agents.to_json)
+                            list_AA = active_agents.to_json
+                            list_AA_string = json.dumps(list_AA)
                             log_msg_br = opf.msg_to_br(list_AA, my_dir)
                             await self.send(log_msg_br)                        
                 else:
