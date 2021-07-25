@@ -58,7 +58,7 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     new_line2 = {'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type, 'activation_time': datetime.datetime.now() }                  
                     active_agents = active_agents.append(new_line2, ignore_index = True)
-                    active_agents = active_agents.drop_duplicates(keep='first')
+                    #active_agents = active_agents.drop_duplicates(keep='first')
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
                     x = re.search("won auction to process", msg.body)
