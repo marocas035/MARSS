@@ -45,6 +45,7 @@ class LogAgent(Agent):
                                 typeaa = opf.aa_type(msg2_sender_jid2)
                                 new_line = {'agent_id': msg2_sender_jid2, 'agent_name': m[2] , 'agent_type': typeaa, 'activation_time': m[4] }
                                 active_agents = active_agents.append(new_line, ignore_index = True)
+                                print(active_agents)
                         remove('ActiveAgents.csv')
                         del a               
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
