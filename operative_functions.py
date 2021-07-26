@@ -206,16 +206,27 @@ def msg_aa_to_br(msg_body, agent_directory):
     return msg_br
 
 def list_active_agents(agent_id, agent_name, agent_type, activation_time):
-    list = []
-    list.append({
-        'agent_id': agent_id,
-        'agent_name': agent_name,
-        'agent_type': agent_type,
-        'activation_time': activation_time
-    })
-    columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
-    list_aa = pd.DataFrame(list, columns=columns)    
-    list_aa = list_aa.drop_duplicates(keep='first')
+    if list_aa.empty:
+        list = []
+        list.append({
+            'agent_id': agent_id,
+            'agent_name': agent_name,
+            'agent_type': agent_type,
+            'activation_time': activation_time
+        })
+        columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
+        list_aa = pd.DataFrame(list, columns=columns)    
+        list_aa = list_aa.drop_duplicates(keep='first')
+    else:
+        list.append({
+            'agent_id': agent_id,
+            'agent_name': agent_name,
+            'agent_type': agent_type,
+            'activation_time': activation_time
+        })
+        columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
+        list_aa = pd.DataFrame(list, columns=columns)    
+        list_aa = list_aa.drop_duplicates(keep='first')       
     return list_aa
 
 #
