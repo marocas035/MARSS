@@ -205,29 +205,26 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br.set_metadata("performative", "inform")
     return msg_br
 
-def list_active_agents(agent_id, agent_name, agent_type, activation_time):
-    list_aa = pd.DataFrame()
-    if list_aa.empty:
+def list_active_agents(active_agents, agent_id, agent_name, agent_type, activation_time):
+    if active_agents.empty:
         list = []
         list.append({
-            'agent_id': agent_id,
-            'agent_name': agent_name,
-            'agent_type': agent_type,
-            'activation_time': activation_time
+        'agent_id': agent_id,
+        'agent_name': agent_name,
+        'agent_type': agent_type,
+        'activation_time': activation_time
         })
         columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
         list_aa = pd.DataFrame(list, columns=columns)    
-        list_aa = list_aa.drop_duplicates(keep='first')
+        list_aa = list_aa.drop_duplicates(keep='first')   
     else:
         list.append({
-            'agent_id': agent_id,
-            'agent_name': agent_name,
-            'agent_type': agent_type,
-            'activation_time': activation_time
+        'agent_id': agent_id,
+        'agent_name': agent_name,
+        'agent_type': agent_type,
+        'activation_time': activation_time
         })
-        columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
-        list_aa = pd.DataFrame(list, columns=columns)    
-        list_aa = list_aa.drop_duplicates(keep='first')       
+    list_aa = list_aa.drop_duplicates(keep='first') 
     return list_aa
 
 #
