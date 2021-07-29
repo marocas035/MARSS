@@ -206,6 +206,7 @@ def msg_aa_to_br(msg_body, agent_directory):
     return msg_br
 
 def list_active_agents(agent_id, agent_name, agent_type, activation_time):
+    list_aa = pd.Dataframe()
     if list_aa.empty:
         list = []
         list.append({
