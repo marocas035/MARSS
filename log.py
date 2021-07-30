@@ -22,7 +22,6 @@ class LogAgent(Agent):
         async def run(self):
             global wait_msg_time, logger, log_status_var
             if log_status_var =="on":
-                active_agents = pd.DataFrame()
                 "Active Agents"
                 r= opf.checkFileExistance()
                 if r == True:
@@ -51,14 +50,15 @@ class LogAgent(Agent):
                 if msg:
                     print(f"received msg number {self.counter}")
                     self.counter += 1
+                    print(self.counter)
                     logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     #new_line2 = {'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type, 'activation_time': 
-                    time= datetime.datetime.now()                  
-                    active_agents = opf.list_active_agents(active_agents, msg_sender_jid2, msg_sender_jid, agent_type, time)
+                    time= datetime.datetime.now()
+                    active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter)
                     #active_agents = active_agents.append(new_line2, ignore_index = True)
                     #active_agents = active_agents.drop_duplicates(keep='first')
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
