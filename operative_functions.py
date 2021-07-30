@@ -218,6 +218,7 @@ def list_active_agents(agent_id, agent_name, agent_type, activation_time, counte
         list_aa = pd.DataFrame(list, columns=columns)    
         list_aa = list_aa.drop_duplicates(keep='first')   
     else:
+        list = []
         list.append({
         'agent_id': agent_id,
         'agent_name': agent_name,
