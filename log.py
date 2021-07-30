@@ -60,6 +60,7 @@ class LogAgent(Agent):
                     #new_line2 = {'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type, 'activation_time': 
                     time= datetime.datetime.now()
                     if counter ==2:
+                        active_agents = pd.DataFrame()
                         active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter)
                     else:
                         active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
