@@ -206,7 +206,7 @@ def msg_aa_to_br(msg_body, agent_directory):
     return msg_br
 
 def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter):
-    if counter == 1:
+    if counter == 2:
         list = []
         list.append({
         'agent_id': agent_id,
