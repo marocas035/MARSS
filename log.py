@@ -103,10 +103,10 @@ class LogAgent(Agent):
                             await self.send(log_msg_br)                        
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
-                if row != null:
+                if row:
                         active_agents = list_aa.append(row, ignore_index= True)
                         active_agents = active_agents.drop_duplicates(keep='first')
-                    print(active_agents)
+                print(active_agents)
             elif log_status_var == "stand-by":
                 print(log_status_var)
                 logger.debug(f"Log agent status: {log_status_var}")
