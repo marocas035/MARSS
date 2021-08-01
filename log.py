@@ -45,12 +45,12 @@ class LogAgent(Agent):
                                 #new_line = {'agent_id': msg2_sender_jid2, 'agent_name': m[2] , 'agent_type': typeaa, 'activation_time': m[4] }
                                 active_agents = opf.list_active_agents(msg2_sender_jid2, m[2],typeaa,m[4])
                         remove('ActiveAgents.csv')
-                        del a               
+                        del a 
+                row = []
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     print(f"received msg number {self.counter}")
                     self.counter += 1
-                    print(self.counter)
                     counter = int(self.counter)
                     logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
@@ -58,12 +58,19 @@ class LogAgent(Agent):
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     time= datetime.datetime.now()
-                    if counter ==2:
-                        df = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
-                        active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, df)
-                    else:
-                        active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
-                    print(active_agents)
+                    row.append({
+                        'agent_id':msg_sender_jid2,
+                        'agent_name': msg_sender_jid,
+                        'agent_type': agent_type,
+                        'activation_time':time
+                        })
+                    #print(row)
+                    #if counter ==2:
+                     #   df = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
+                      #  active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, df)
+                    #else:
+                     #   active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
+                    #print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
                     x = re.search("won auction to process", msg.body)
@@ -96,6 +103,15 @@ class LogAgent(Agent):
                             await self.send(log_msg_br)                        
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
+                if row != null:
+                    if counter ==2:
+                        list_aa = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
+                        active_agents = list_aa.append(row, ignore_index= True)
+                        active_agents = active_agents.drop_duplicates(keep='first')
+                    else:
+                        active_agents = list_aa.append(row, ignore_index= True)
+                        active_agents = active_agents.drop_duplicates(keep='first')
+                    print(active_agents)
             elif log_status_var == "stand-by":
                 print(log_status_var)
                 logger.debug(f"Log agent status: {log_status_var}")
