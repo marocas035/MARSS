@@ -50,7 +50,7 @@ class LogAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     print(f"received msg number {self.counter}")
-                    print({list_aa})
+                    #print({list_aa})
                     self.counter += 1
                     counter = int(self.counter)
                     logger.info(msg.body)
@@ -105,8 +105,9 @@ class LogAgent(Agent):
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
                 if row:
-                        active_agents = list_aa.append(row, ignore_index= True)
-                        active_agents = active_agents.drop_duplicates(keep='first')
+                    a = self.list_aa
+                    active_agents = a.append(row, ignore_index= True)
+                    active_agents = active_agents.drop_duplicates(keep='first')
                 #print(active_agents)
             elif log_status_var == "stand-by":
                 print(log_status_var)
