@@ -205,29 +205,35 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br.set_metadata("performative", "inform")
     return msg_br
 
-def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, *list_aa):
-    if counter == 2:
-        list = []
-        list.append({
-        'agent_id': agent_id,
-        'agent_name': agent_name,
-        'agent_type': agent_type,
-        'activation_time': activation_time
-        })
-        columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
-        list_aa = pd.DataFrame(list, columns=columns)    
-        list_aa = list_aa.drop_duplicates(keep='first')   
-    else:
-        list = []
-        list.append({
-        'agent_id': agent_id,
-        'agent_name': agent_name,
-        'agent_type': agent_type,
-        'activation_time': activation_time
-        })
-        list_aa = list_aa.append(list)
-        list_aa = list_aa.drop_duplicates(keep='first') 
+def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, active_agents):
+    row = {'agent_id': agent_id, 'agent_name': agent_name, 'agent_type':agent_type, 'activation_time':activation_time}
+    list_aa = active_agents.append(row, index = False)
+    list_aa = list_aa.drop_duplicates(keep='first')
     return list_aa
+    
+#def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, *list_aa):
+ #   if counter == 2:
+  #      list = []
+   #     list.append({
+    #    'agent_id': agent_id,
+     #   'agent_name': agent_name,
+      #  'agent_type': agent_type,
+       # 'activation_time': activation_time
+        #})
+        #columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
+      #  list_aa = pd.DataFrame(list, columns=columns)    
+       # list_aa = list_aa.drop_duplicates(keep='first')   
+    #else:
+     #   list = []
+      #  list.append({
+       # 'agent_id': agent_id,
+        #'agent_name': agent_name,
+       # 'agent_type': agent_type,
+        #'activation_time': activation_time
+        #})
+       # list_aa = list_aa.append(list)
+       # list_aa = list_aa.drop_duplicates(keep='first') 
+    #return list_aa
 
 #
 def agents_data():
