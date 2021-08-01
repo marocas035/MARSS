@@ -104,11 +104,6 @@ class LogAgent(Agent):
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
                 if row != null:
-                    if counter ==2:
-                        list_aa = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
-                        active_agents = list_aa.append(row, ignore_index= True)
-                        active_agents = active_agents.drop_duplicates(keep='first')
-                    else:
                         active_agents = list_aa.append(row, ignore_index= True)
                         active_agents = active_agents.drop_duplicates(keep='first')
                     print(active_agents)
@@ -129,7 +124,8 @@ class LogAgent(Agent):
 
         async def on_start(self):
             self.counter = 1
-
+            list_aa = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
+            
     async def setup(self):
         b = self.LogBehav()
         template = Template()
