@@ -207,7 +207,7 @@ def msg_aa_to_br(msg_body, agent_directory):
 
 def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, active_agents):
     row = {'agent_id': agent_id, 'agent_name': agent_name, 'agent_type':agent_type, 'activation_time':activation_time}
-    list_aa = active_agents.append(row, index = False)
+    list_aa = active_agents.append(row, ignore_index = True)
     list_aa = list_aa.drop_duplicates(keep='first')
     return list_aa
     
