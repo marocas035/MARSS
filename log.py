@@ -13,6 +13,7 @@ import logging
 import argparse
 import operative_functions as opf
 import os
+from os import remove
 import logging.handlers as handlers
 import re
 
