@@ -203,40 +203,7 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br = Message(to=jid)
     msg_br.body = str(msg_body)
     msg_br.set_metadata("performative", "inform")
-    return msg_br
-
-def list_active_agents(agent_id, agent_name, agent_type, activation_time, dataframe=None):
-    my_list = [{'agent_id': agent_id, 'agent_name': agent_name, 'agent_type':agent_type, 'activation_time':activation_time}]
-    if dataframe == None:
-        list_aa = pd.DataFrame(my_list)
-    else:
-        list_aa = active_agents.append(my_list, ignore_index = True)
-    list_aa = list_aa.drop_duplicates(keep='first')
-    return list_aa
-    
-#def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, *list_aa):
- #   if counter == 2:
-  #      list = []
-   #     list.append({
-    #    'agent_id': agent_id,
-     #   'agent_name': agent_name,
-      #  'agent_type': agent_type,
-       # 'activation_time': activation_time
-        #})
-        #columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']
-      #  list_aa = pd.DataFrame(list, columns=columns)    
-       # list_aa = list_aa.drop_duplicates(keep='first')   
-    #else:
-     #   list = []
-      #  list.append({
-       # 'agent_id': agent_id,
-        #'agent_name': agent_name,
-       # 'agent_type': agent_type,
-        #'activation_time': activation_time
-        #})
-       # list_aa = list_aa.append(list)
-       # list_aa = list_aa.drop_duplicates(keep='first') 
-    #return list_aa
+    return msg_br    
 
 #
 def agents_data():
