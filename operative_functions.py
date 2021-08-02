@@ -90,10 +90,9 @@ def order_searched(filter,agent_request,agent_directory, aa = 'Null'):
     agents_df = agents_df.loc[agents_df['Name'] == agent_request]
     agent_jid = agents_df['User name'].iloc[-1]
     order_searched_msg = Message(to=agent_jid)
-    if aa != 'Null':
-        order_searched_msg.body = 'Active Agent List:'+ str(filter)
-    else:
-        order_searched_msg.body = 'Order searched:'+ filter
+    #if aa != 'Null':
+     #   order_searched_msg.body = 'Active Agent List:'+ str(filter)
+    order_searched_msg.body = 'Search requested:'+ filter
     order_searched_msg.set_metadata("performative","inform")
     return order_searched_msg
 
