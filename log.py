@@ -61,10 +61,10 @@ class LogAgent(Agent):
                     my_list = [{'agent_id':msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type,'activation_time': time}]
                     if (counter ==2):
                         active_agents = pd.DataFrame([], columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time'])
-                        active_agents = active_agents.append(my_list, ignore_index = True)
+                        active_agents = active_agents.append(my_list, index = False)
                     else:
-                        active_agents = active_agents.append(my_list, ignore_index = True)
-                        active_agents = active_agents.drop_duplicates(active_agents.columns[~active_agents.columns.isin(['agent_id'])],keep = 'first')
+                        active_agents = active_agents.append(my_list, index = False)
+                        active_agents = active_agents.drop_duplicates(active_agents.columns[~active_agents.columns.isin(['agent_name'])],keep = 'first')
                     print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
