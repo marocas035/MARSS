@@ -43,6 +43,8 @@ class BrowserAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                 if msg:
                     single = msg.body.split(':')
+                    msg_sender_jid0 = str(msg.sender)
+                    msg_sender_jid = msg_sender_jid0[:-33]
                     #print(single)
                     if single[0] == "Alive":
                         msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
@@ -54,7 +56,7 @@ class BrowserAgent(Agent):
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
                         msg_sender_jid0 = str(msg.sender)
-                        msg_sender_jid = msg_sender_jid0[:-31]
+                        msg_sender_jid = msg_sender_jid0[:-33]
                         register = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
@@ -110,8 +112,7 @@ class BrowserAgent(Agent):
                             br_msg_search = opf.order_searched(searched, agent_search_request, my_dir)
                             await self.send(br_msg_search)                            
                     else:
-                        id = single[4].split('"')
-                        if id[1] == 'ca':
+                        if msg_sender_jid == 'ca':
                             print(f'ca_br_msg: {msg.body}')
                             ca_data_df = pd.read_json(msg.body)
                             """Prepare reply"""
