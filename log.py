@@ -20,7 +20,7 @@ import re
 class LogAgent(Agent):
     class LogBehav(CyclicBehaviour):
         async def run(self):
-            global wait_msg_time, logger, log_status_var
+            global wait_msg_time, logger, log_status_var, active_agents
             if log_status_var =="on":
                 "Active Agents"
                 r= opf.checkFileExistance()
@@ -46,7 +46,6 @@ class LogAgent(Agent):
                                 active_agents = opf.list_active_agents(msg2_sender_jid2, m[2],typeaa,m[4])
                         remove('ActiveAgents.csv')
                         del a 
-                row = []
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     print(f"received msg number {self.counter}")
@@ -59,19 +58,13 @@ class LogAgent(Agent):
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     time= datetime.datetime.now()
-                    row.append({
-                        'agent_id':msg_sender_jid2,
-                        'agent_name': msg_sender_jid,
-                        'agent_type': agent_type,
-                        'activation_time':time
-                        })
                     #print(row)
                     #if counter ==2:
                      #   df = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
-                      #  active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, df)
+                    active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time)
                     #else:
                      #   active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
-                    #print(active_agents)
+                    print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
                     x = re.search("won auction to process", msg.body)
