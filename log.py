@@ -21,7 +21,7 @@ import re
 class LogAgent(Agent):
     class LogBehav(CyclicBehaviour):
         async def run(self):
-            global wait_msg_time, logger, log_status_var, active_agents=None
+            global wait_msg_time, logger, log_status_var, active_agents
             if log_status_var =="on":
                 "Active Agents"
                 r= opf.checkFileExistance()
@@ -70,6 +70,12 @@ class LogAgent(Agent):
                         }]
                         active_agents = active_agents.append(my_list, ignore_index = True)
                     else:
+                        my_list = [{
+                            'agent_id':msg_sender_jid2,
+                            'agent_name': msg_sender_jid,
+                            'agent_type': agent_type,
+                            'activation_time': time
+                        }]
                         active_agents = active_agents.append(my_list, ignore_index = True)
                         active_agents = active_agents.drop_duplicates(keep = 'first')
                     #active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time)
