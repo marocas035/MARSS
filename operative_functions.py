@@ -205,9 +205,12 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br.set_metadata("performative", "inform")
     return msg_br
 
-def list_active_agents(agent_id, agent_name, agent_type, activation_time, counter, active_agents):
-    row = {'agent_id': agent_id, 'agent_name': agent_name, 'agent_type':agent_type, 'activation_time':activation_time}
-    list_aa = active_agents.append(row, ignore_index = True)
+def list_active_agents(agent_id, agent_name, agent_type, activation_time, dataframe=None):
+    my_list = [{'agent_id': agent_id, 'agent_name': agent_name, 'agent_type':agent_type, 'activation_time':activation_time}]
+    if dataframe == None:
+        list_aa = pd.DataFrame(my_list)
+    else:
+        list_aa = active_agents.append(my_list, ignore_index = True)
     list_aa = list_aa.drop_duplicates(keep='first')
     return list_aa
     
