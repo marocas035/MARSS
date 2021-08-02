@@ -62,7 +62,6 @@ class LogAgent(Agent):
                     if (counter ==2):
                         active_agents = pd.DataFrame([], columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time'])
                         active_agents = active_agents.append(my_list, ignore_index = True)
-                        active_agents = active_agents.drop_duplicates(active_agents.columns[~active_agents.isin(['agent_name'])],keep = 'first')
                     else:
                         active_agents = active_agents.append(my_list, ignore_index = True)
                         active_agents = active_agents.drop_duplicates(active_agents.columns[~active_agents.isin(['agent_name'])],keep = 'first')
