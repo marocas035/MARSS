@@ -50,7 +50,6 @@ class LogAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     print(f"received msg number {self.counter}")
-                    #print({list_aa})
                     self.counter += 1
                     counter = int(self.counter)
                     logger.info(msg.body)
@@ -59,28 +58,13 @@ class LogAgent(Agent):
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     time= datetime.datetime.now()
-                    #print(row)
-                    if (counter ==2) and (active_agents != None):
+                    my_list = [{'agent_id':msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type,'activation_time': time}]
+                    if (counter ==2):
                         active_agents = pd.DataFrame([], columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time'])
-                        my_list = [{
-                            'agent_id':msg_sender_jid2,
-                            'agent_name': msg_sender_jid,
-                            'agent_type': agent_type,
-                            'activation_time': time
-                        }]
                         active_agents = active_agents.append(my_list, ignore_index = True)
                     else:
-                        my_list = [{
-                            'agent_id':msg_sender_jid2,
-                            'agent_name': msg_sender_jid,
-                            'agent_type': agent_type,
-                            'activation_time': time
-                        }]
                         active_agents = active_agents.append(my_list, ignore_index = True)
-                        active_agents = active_agents.drop_duplicates(keep = 'first')
-                    #active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time)
-                    #else:
-                     #   active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
+                        active_agents = active_agents.drop_duplicates(active_agents.columns[~active_agents.columns.isin(['agent_id'])],keep = 'first')
                     print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
@@ -92,8 +76,7 @@ class LogAgent(Agent):
                         o = opf.checkFile2Existance()
                         if o == True:
                             opf.update_coil_status(coil_id, status)
-                        #logger.info(msg.body)
-                        print("Coil status updated")
+                            n = f'Coil: {coil_id} updated status'
                     elif msg_sender_jid == "launcher":
                         single = msg.body.split(':')
                         id = single[4].split('"')
@@ -113,7 +96,7 @@ class LogAgent(Agent):
                             log_msg_br = opf.msg_aa_to_br(list_AA, my_dir)
                             await self.send(log_msg_br)                        
                 else:
-                    logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") ####corregir, wait_msg_time es muy poco tiempo
+                    logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") 
             elif log_status_var == "stand-by":
                 print(log_status_var)
                 logger.debug(f"Log agent status: {log_status_var}")
