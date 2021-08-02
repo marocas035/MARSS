@@ -43,8 +43,9 @@ class LogAgent(Agent):
                                 msg2_sender_jid2 = msg2_sender_jid0[:-9]
                                 m = msg2.body.split(':')
                                 typeaa = opf.aa_type(msg2_sender_jid2)
-                                #new_line = {'agent_id': msg2_sender_jid2, 'agent_name': m[2] , 'agent_type': typeaa, 'activation_time': m[4] }
-                                active_agents = opf.list_active_agents(msg2_sender_jid2, m[2],typeaa,m[4])
+                                my_list1 = {'agent_id': msg2_sender_jid2, 'agent_name': m[2] , 'agent_type': typeaa, 'activation_time': m[4] }
+                                active_agents = active_agents.append(my_list1, ignore_index = True)
+                                active_agents = active_agents.drop_duplicates(['agent_id','agent_name'],keep = 'first')
                         remove('ActiveAgents.csv')
                         del a 
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
