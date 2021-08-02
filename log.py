@@ -21,7 +21,7 @@ import re
 class LogAgent(Agent):
     class LogBehav(CyclicBehaviour):
         async def run(self):
-            global wait_msg_time, logger, log_status_var, active_agents
+            global wait_msg_time, logger, log_status_var, active_agents=None
             if log_status_var =="on":
                 "Active Agents"
                 r= opf.checkFileExistance()
@@ -60,9 +60,19 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     time= datetime.datetime.now()
                     #print(row)
-                    #if counter ==2:
-                     #   df = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
-                    active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time)
+                    if (counter ==2) and (active_agents != None):
+                        active_agents = pd.DataFrame([], columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time'])
+                        my_list = [{
+                            'agent_id':msg_sender_jid2,
+                            'agent_name': msg_sender_jid,
+                            'agent_type': agent_type,
+                            'activation_time': time
+                        }]
+                        active_agents = active_agents.append(my_list, ignore_index = True)
+                    else:
+                        active_agents = active_agents.append(my_list, ignore_index = True)
+                        active_agents = active_agents.drop_duplicates(keep = 'first')
+                    #active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time)
                     #else:
                      #   active_agents = opf.list_active_agents(msg_sender_jid2, msg_sender_jid, agent_type, time, self.counter, active_agents)
                     print(active_agents)
