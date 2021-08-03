@@ -39,7 +39,7 @@ class LaunchAgent(Agent):
                     msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{la_started_at}'
                     response_active = opf.msg_to_log(msg_aa_response, my_dir)
                     await self.send(response_active)
-                
+            print('Off')    
                 
         async def on_end(self):
             await self.agent.stop()
@@ -91,9 +91,7 @@ if __name__ == "__main__":
     each_coil_price = round((args.price_order/args.number_coils),2)
     list_coils = args.list_coils
     string_operations = args.string_operations
-    """Save to csv who I am"""
-    opf.set_agent_parameters(my_dir, my_name, my_full_name)
-    la_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
+
     """XMPP info"""
     la_jid = opf.agent_jid(my_dir, my_full_name)
     la_passwd = opf.agent_passwd(my_dir, my_full_name)
