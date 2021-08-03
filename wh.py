@@ -21,10 +21,15 @@ class WarehouseAgent(Agent):
             wh_activation_json = opf.activation_df(my_full_name, wh_status_started_at)
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
             await self.send(wh_msg_log)
-            "Ask browser to search"  #18-05
+            "Ask browser to search"  
             if (wh_search != "No")&(datetime.datetime.now() < searching_time):
                 wh_search_browser = opf.order_to_search(wh_search, my_full_name, my_dir)
                 await self.send(wh_search_browser)
+            "Ask browser to delete order in register"
+            if (wh_delete != "No")&(datetime.datetime.now() < searching_time):
+                wh_delete_order = opf.order_to_erase(wh_delete, my_full_name, my_dir)
+                await self.send(wh_delete_order)
+            "Register as active agent"    
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
                 single = msg.body.split(":")
@@ -115,6 +120,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade), at(average_thickness),wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
+    parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     args = parser.parse_args()                     
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -124,6 +130,7 @@ if __name__ == "__main__":
     wh_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     wh_status_var = args.status
     wh_search = args.search
+    wh_delete = args.delete
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
