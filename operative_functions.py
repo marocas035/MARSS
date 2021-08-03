@@ -6,10 +6,11 @@ from random import randrange
 from spade.message import Message
 import math
 import json
+import csv
 from random import random
 import numpy as np
 """General Functions"""
-#hola
+
 
 def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price,string_operations):
     order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price','string_operations','date'])
@@ -175,7 +176,6 @@ def checkFileExistance():
     except IOError as e:
         return False
     
-
 def checkFile2Existance():
     try:
         with open('RegisterOrders.csv', 'r') as f:
@@ -200,8 +200,19 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br = Message(to=jid)
     msg_br.body = str(msg_body)
     msg_br.set_metadata("performative", "inform")
-    return msg_br    
+    return msg_br
 
+def delete_order(code):
+    with open('RegisterOrders.csv', 'rb') as inp:
+        data = list(csv.reader(inp))  
+    with open('new.csv','wb') as out:
+        writer = csv.writer(out)
+        for row in data:
+            if row[0] != code:
+                writer.writerow(row)
+    os.remove('RegisterOrders.csv')
+    os.rename('new.csv', 'RegisterOrders.csv')
+    
 #
 def agents_data():
     """This is a file from which all functions read information. It contains crucial information of the system:
