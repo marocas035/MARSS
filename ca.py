@@ -586,7 +586,7 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('-sab', '--start_auction_before', type=int, metavar='', required=False, default=10, help='start_auction_before: seconds to start auction prior to current fab ends')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')    
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: aa=list (list active agents), oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')    
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     args = parser.parse_args()
     my_dir = os.getcwd()
