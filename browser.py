@@ -45,7 +45,6 @@ class BrowserAgent(Agent):
                     single = msg.body.split(':')
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
-                    #print(single)
                     if single[0] == "Alive":
                         msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
                         response_active = opf.msg_to_log(msg_aa_response, my_dir)
@@ -55,8 +54,6 @@ class BrowserAgent(Agent):
                         c = search.split('=')
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
-                        msg_sender_jid0 = str(msg.sender)
-                        msg_sender_jid = msg_sender_jid0[:-33]
                         register = pd.read_csv('RegisterOrders.csv',header=0,delimiter=",",engine='python')
                         #active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
                         filter = pd.DataFrame()
