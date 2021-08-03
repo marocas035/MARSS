@@ -66,7 +66,7 @@ class LogAgent(Agent):
                     else:
                         active_agents = active_agents.append(my_list, ignore_index = True)
                         active_agents = active_agents.drop_duplicates(['agent_id','agent_name'],keep = 'first')
-                    print(active_agents)
+                    #print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
                     x = re.search("won auction to process", msg.body)
