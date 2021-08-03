@@ -86,6 +86,16 @@ def order_to_search(search_body,agent_full_name , agent_directory):
     search_msg.set_metadata("performative", "inform")
     return search_msg
 
+def order_to_erase(code_to_erase,agent_full_name , agent_directory):
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == "browser"]
+    browser_jid = agents_df['User name'].iloc[-1]
+    erase_order_msg = Message(to=browser_jid)
+    print(f'Delete order: {code_to_erase}: {agent_full_name}')
+    search_msg.body = 'Delete order:' + code_to_erase + ':' +agent_full_name
+    search_msg.set_metadata("performative", "inform")
+    return erase_order_msg
+
 def order_searched(filter,agent_request,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent_request]
