@@ -115,7 +115,6 @@ class LogAgent(Agent):
 
         async def on_start(self):
             self.counter = 1
-            self.list_aa = pd.DataFrame(columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time']) 
             
     async def setup(self):
         b = self.LogBehav()
