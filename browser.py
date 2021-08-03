@@ -75,7 +75,7 @@ class BrowserAgent(Agent):
                             code_to_search =c[1]
                         elif type_code_to_search == 'oc':
                             column = 'Order_code'
-                            code_to_search = int(c[1])
+                            code_to_search = c[1]
                         elif type_code_to_search == 'sg':
                             column = 'Steel_grade'
                             code_to_search = c[1]
