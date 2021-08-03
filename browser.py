@@ -52,7 +52,7 @@ class BrowserAgent(Agent):
                     elif single[0] == 'Delete order':
                         code_to_erase = single[1]
                         opf.delete_order(code_to_erase)
-                        ack_change = f'Order has been deleted sucessfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now}'
+                        ack_change = f'Order has been deleted sucessfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
                         change_register = opf.msg_to_log(
                     elif single[0] == 'Search':
                         search = single[1]
