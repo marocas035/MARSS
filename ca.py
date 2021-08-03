@@ -27,6 +27,11 @@ class ContinuousAnnealingAgent(Agent):
             if (ca_search != "No")&(datetime.datetime.now() < searching_time):
                 ca_search_browser = opf.order_to_search(ca_search, my_full_name, my_dir)
                 await self.send(ca_search_browser)
+            "Ask browser to delete order in register"
+            if (ca_delete != "No")&(datetime.datetime.now() < searching_time):
+                ca_delete_order = opf.order_to_erase(ca_delete, my_full_name, my_dir)
+                await self.send(ca_delete_order)
+            "Register as active agent" 
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
                 single = msg.body.split(":")
@@ -588,6 +593,7 @@ if __name__ == "__main__":
     parser.add_argument('-sab', '--start_auction_before', type=int, metavar='', required=False, default=10, help='start_auction_before: seconds to start auction prior to current fab ends')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code.Write depending on your case: aa=list (list active agents), oc (order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations) , date.Example: --search oc=987')    
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
+    parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -597,6 +603,7 @@ if __name__ == "__main__":
     ca_status_started_at = datetime.datetime.now().time()
     ca_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     ca_status_var = args.status
+    ca_delete = args.delete
     start_auction_before = args.start_auction_before
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
