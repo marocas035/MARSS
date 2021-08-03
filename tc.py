@@ -25,6 +25,11 @@ class TransportAgent(Agent):
             if (tr_search != "No")&(datetime.datetime.now() < searching_time):
                 tr_search_browser = opf.order_to_search(tr_search, my_full_name, my_dir)
                 await self.send(tr_search_browser)
+            "Ask browser to delete order in register"
+            if (tr_delete != "No")&(datetime.datetime.now() < searching_time):
+                tr_delete_order = opf.order_to_erase(tr_delete, my_full_name, my_dir)
+                await self.send(wh_delete_order)
+            "Register as active agent" 
             msg2 = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
             if msg2:
                 single = msg2.body.split(':')
@@ -117,6 +122,7 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')    
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
+    parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -126,6 +132,7 @@ if __name__ == "__main__":
     tr_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     tr_status_var = args.status
     tr_search = args.search
+    tc_delete = args.delete
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
