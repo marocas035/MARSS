@@ -23,6 +23,11 @@ class BrowserAgent(Agent):
             if (br_search != "No")&(datetime.datetime.now() < searching_time):
                 br_search_browser = opf.order_to_search(br_search, my_full_name, my_dir)
                 await self.send(br_search_browser)
+            if (br_delete != "No")&(datetime.datetime.now() < searching_time):
+                opf.delete_order(br_delete)
+                ack_change = f'Order has been deleted sucessfully: Code given to erase register is {br_delete} at {datetime.datetime.now()}'
+                change_register = opf.msg_to_log(ack_change, my_dir)                        
+                await self.send(change_register)
             if br_status_var == "on":
                 """inform log of status"""
                 br_inform_json = opf.inform_log_df(my_full_name, br_started_at, br_status_var).to_json()
@@ -53,7 +58,8 @@ class BrowserAgent(Agent):
                         code_to_erase = single[1]
                         opf.delete_order(code_to_erase)
                         ack_change = f'Order has been deleted sucessfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
-                        change_register = opf.msg_to_log(
+                        change_register = opf.msg_to_log(ack_change, my_dir)                        
+                        await self.send(change_register)
                     elif single[0] == 'Search':
                         search = single[1]
                         c = search.split('=')
@@ -200,6 +206,7 @@ if __name__ == "__main__":
 #
     parser.add_argument('-se','--search',type=str,metavar='',required=False,default='No',help='Search order by code. Writte depending on your case: oc (order_code),sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations),date.Example: --search oc = 987date.Example: --search oc = 987')
     parser.add_argument('-set', '--search_time', type=float, metavar='', required=False, default=0.3, help='search_time: time in seconds where agent is searching by code')
+    parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     args = parser.parse_args()
     my_dir = os.getcwd()
     agents = opf.agents_data()
@@ -211,6 +218,7 @@ if __name__ == "__main__":
     br_int_fab = args.interrupted_fab
     br_search = args.search
     coil_agent_name = "coil"
+    br_delete = args.delete
     coil_agent_number = args.coil_number_interrupted_fab
     br_coil_name_int_fab = opf.my_full_name(coil_agent_name, coil_agent_number)
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
