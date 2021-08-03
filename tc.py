@@ -132,7 +132,7 @@ if __name__ == "__main__":
     tr_status_refresh = datetime.datetime.now() + datetime.timedelta(seconds=5)
     tr_status_var = args.status
     tr_search = args.search
-    tc_delete = args.delete
+    tr_delete = args.delete
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
