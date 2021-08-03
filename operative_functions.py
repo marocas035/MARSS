@@ -213,7 +213,7 @@ def msg_aa_to_br(msg_body, agent_directory):
     return msg_br
 
 def delete_order(code):
-    with open('RegisterOrders.csv', 'rb') as inp:
+    with open('RegisterOrders.csv', 'rt') as inp:
         data = list(csv.reader(inp))  
     with open('new.csv','wb') as out:
         writer = csv.writer(out)
