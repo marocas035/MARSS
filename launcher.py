@@ -26,7 +26,8 @@ class LaunchAgent(Agent):
                 await self.send(la_order_log)
                 
                 """Suscribe coil agents to contact list"""
-                
+                contact = pd.read_json(la_order_log)
+                #funcion
                 
             """Send searching code to browser"""
             if la_search != "No":
