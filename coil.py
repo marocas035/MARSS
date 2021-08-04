@@ -18,7 +18,7 @@ import os
 class CoilAgent(Agent):
     class CoilBehav(PeriodicBehaviour):
         async def run(self):
-            global my_full_name, my_dir, wait_msg_time, coil_status_var, coil_started_at, stop_time, refresh_time, coil_agent, coil_data_df, bid_register_df, ca_coil_msg_sender, not_entered_auctions
+            global my_full_name, my_dir, wait_msg_time, coil_status_var, coil_started_at, stop_time, refresh_time, coil_agent, coil_data_df, bid_register_df, ca_coil_msg_sender, not_entered_auctions, ip_machine
             """inform log of status"""
             coil_activation_json = opf.activation_df(my_full_name, coil_started_at)
             coil_msg_log = opf.msg_to_log(coil_activation_json, my_dir)
@@ -348,6 +348,7 @@ if __name__ == "__main__":
     coil_delete = args.delete
     refresh_time = datetime.datetime.now() + datetime.timedelta(seconds=1)
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
+    
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     coil_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
@@ -356,6 +357,12 @@ if __name__ == "__main__":
     print(f'budget:{budget}')
     bid_register_df = opf.bid_register(my_name, my_full_name)
     not_entered_auctions = int(0)
+    
+    "IP"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_machine = s.getsockname()[0]
+    
     """XMPP info"""
     coil_jid = opf.agent_jid(my_dir, my_full_name)
     coil_passwd = opf.agent_passwd(my_dir, my_full_name)
