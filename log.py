@@ -16,6 +16,8 @@ import os
 from os import remove
 import logging.handlers as handlers
 import re
+import json
+import socket
 
 
 class LogAgent(Agent):
