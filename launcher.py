@@ -25,7 +25,7 @@ class LaunchAgent(Agent):
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
                 
-                """Active coil agents"""
+                """Suscribe coil agents to contact list"""
                 
                 
             """Send searching code to browser"""
