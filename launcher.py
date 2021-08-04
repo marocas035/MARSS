@@ -24,6 +24,10 @@ class LaunchAgent(Agent):
                 la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, list_ware, string_operations)
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
+                
+                """Active coil agents"""
+                
+                
             """Send searching code to browser"""
             if la_search != "No":
                 la_search_browser = opf.order_to_search(la_search, my_full_name, my_dir)
