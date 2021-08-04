@@ -224,6 +224,36 @@ def delete_order(code):
     os.remove('RegisterOrders.csv')
     os.rename('new.csv', 'RegisterOrders.csv')
     
+    
+def coil_to_contact_list(contact):
+    va = launcher_df.loc[0, 'list_ware'].split(',')
+    lc = launcher_df.loc[0, 'list_coils'].split(','
+    j = 0
+    my_dir = os.getcwd()
+    for z in lc:
+        number = 1
+        name = 'coil_00' + str(number)
+        for i in range(11):
+            if df.loc[df.Name == name, 'Code'].isnull().any().any():
+                df.loc[df.Name == name, 'location'] = va[j]
+                df.loc[df.Name == name, 'Code'] = z
+                df.to_csv(f'{my_dir}''/''agents.csv', index=False, header=True)
+                                                
+                cmd = f'python3 coil.py -an {str(number)}'
+                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                break
+            elif df.loc[df.Name == name, 'Code'].values == z:
+                df.loc[df.Name == name, 'location'] = va[j]
+                df.to_csv(f'{my_dir}''/''agents.csv', index=False, header=True)
+                cmd = f'python3 coil.py -an {str(number)}'
+                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                break
+            else:
+                number = number + 1
+                name = 'coil_00' + str(number)
+        time.sleep(3)
+        j = j + 1
+    
 #
 def agents_data():
     """This is a file from which all functions read information. It contains crucial information of the system:
