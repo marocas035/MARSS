@@ -75,9 +75,7 @@ class BrowserAgent(Agent):
                             await self.send(request_aa)
                             msg_aa = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds 
                             if msg_aa:
-                                list_aa = pd.read_json(msg_aa.body)
-                                print(list_aa)
-                                br_msg_aa= opf.order_searched(list_aa, agent_search_request, my_dir)
+                                br_msg_aa= opf.order_searched(msg_aa.body, agent_search_request, my_dir)
                                 await self.send(br_msg_aa)
                         elif type_code_to_search == 'ty':
                             column = 'type'
