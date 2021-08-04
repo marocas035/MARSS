@@ -11,13 +11,15 @@ import logging
 import argparse
 import operative_functions as opf
 import os
+import socket
+import json
 
 
 # CA
 class ContinuousAnnealingAgent(Agent):
     class CABehav(PeriodicBehaviour):
         async def run(self):
-            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to_tr_df           
+            global process_df, ca_status_var, my_full_name, ca_status_started_at, stop_time, my_dir, wait_msg_time, ca_data_df, plc_temp_df, auction_df, fab_started_at, leeway, op_times_df, auction_start, ca_to_tr_df, ip_machine           
             """inform log of status"""
             print(f'op_times_df: {op_times_df}')
             ca_activation_json = opf.activation_df(my_full_name, ca_status_started_at, op_times_df)
@@ -618,12 +620,19 @@ if __name__ == "__main__":
     op_times_df = pd.DataFrame([], columns=['AVG(ca_op_time)', 'AVG(tr_op_time)'])
     auction_start = ""
     ca_to_tr_df = pd.DataFrame()
+    
     """XMPP info"""
     ca_jid = opf.agent_jid(my_dir, my_full_name)
     ca_passwd = opf.agent_passwd(my_dir, my_full_name)
     ca_agent = ContinuousAnnealingAgent(ca_jid, ca_passwd)
     future = ca_agent.start(auto_register=True)
     future.result()
+    
+    "IP"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_machine = s.getsockname()[0]
+    
     """Counter"""
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
     while datetime.datetime.now() < stop_time:
