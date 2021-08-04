@@ -13,7 +13,7 @@ import numpy as np
 
 
 def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price,string_operations):
-    order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price','string_operations','date'])
+    order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price', 'list_ware', 'string_operations','date'])
     order_msg_log.at[0,'id'] = agent_full_name
     order_msg_log.at[0,'order_code'] = order_code
     order_msg_log.at[0,'steel_grade'] = steel_grade
@@ -22,6 +22,7 @@ def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_
     order_msg_log.at[0,'num_coils'] = num_coils
     order_msg_log.at[0,'list_coils'] = list_coils
     order_msg_log.at[0,'each_coil_price'] = each_coil_price
+    order_msg_log.at[0, 'list_ware'] = list_ware
     order_msg_log.at[0,'string_operations'] = string_operations
     order_msg_log.at[0,'date'] =date.today().strftime('%Y-%m-%d')
     return order_msg_log.to_json()
