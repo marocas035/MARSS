@@ -74,7 +74,7 @@ class LogAgent(Agent):
                     logger.info(n)
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
-                    formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{msg_sender_jid2};%(pathname)s;%(message)s')
+                    formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
                     fileh.setFormatter(formatter)
                     log = logging.getLogger()  # root logger
                     for hdlr in log.handlers[:]:  # remove all old handlers
