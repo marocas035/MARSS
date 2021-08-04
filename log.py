@@ -178,8 +178,8 @@ class LogAgent(Agent):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip_machine = s.getsockname()[0]
-        start_msg = asf.send_activation_finish(my_full_name, ip_machine, 'start')
-        logger.debug(start_msg)
+        #start_msg = asf.send_activation_finish(my_full_name, ip_machine, 'start') #### TO DO FUNCION
+        #logger.debug(start_msg)
 
 
 if __name__ == "__main__":
