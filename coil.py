@@ -13,6 +13,8 @@ import logging
 import argparse
 import operative_functions as opf
 import os
+import socket
+import json
 
 
 class CoilAgent(Agent):
