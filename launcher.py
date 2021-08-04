@@ -8,18 +8,20 @@ import datetime
 from spade.agent import Agent
 from spade.behaviour import OneShotBehaviour
 from spade.template import Template
+import json
+import socket
 
 class LaunchAgent(Agent):
     class LABehav(OneShotBehaviour):
         async def run(self):
-            global la_status_var, my_full_name, la_started_at, stop_time, my_dir, wait_msg_time
+            global la_status_var, my_full_name, la_started_at, stop_time, my_dir, wait_msg_time, ip_machine
             """inform log of status"""
             la_activation_json = opf.activation_df(my_full_name, la_started_at)
             la_msg_log = opf.msg_to_log(la_activation_json, my_dir)
             await self.send(la_msg_log)
             """Send new order to log"""
             if order_code != "No":
-                la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, string_operations)
+                la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, list_ware, string_operations)
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
             """Send searching code to browser"""
@@ -33,13 +35,12 @@ class LaunchAgent(Agent):
             """Receive message"""
             msg = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
             if msg:
-                print(msg.body)
                 single = msg.body.split(":")
                 if single[0] == "Alive":
                     msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{la_started_at}'
                     response_active = opf.msg_to_log(msg_aa_response, my_dir)
                     await self.send(response_active)
-            print('Off')    
+    
                 
         async def on_end(self):
             await self.agent.stop()
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     parser.add_argument('-lc', '--list_coils', type=str, metavar='', required=False, default='No', help='List of codes of coils involved in the order.Write between "x"')
     parser.add_argument('-po', '--price_order', type=float, metavar='', required=False, default='1', help='Price given to the order')
     parser.add_argument('-so', '--string_operations', type=str, metavar='', required=False, default='No', help='Sequence of operations needed.Write between "x".Format:"BZA|TD[2]|ENT[2|3]|HO[1|2]|NWW[1|4]|VA*[9|10|11]"')    
+    parser.add_argument('-lp', '--list_position', type=str, metavar='', required=False, default='No',help='Coil warehouses.Write between ",".Format:K,L,K')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -91,7 +93,13 @@ if __name__ == "__main__":
     each_coil_price = round((args.price_order/args.number_coils),2)
     list_coils = args.list_coils
     string_operations = args.string_operations
+    list_ware = args.list_position
 
+        "IP"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_machine = s.getsockname()[0]
+    
     """XMPP info"""
     la_jid = opf.agent_jid(my_dir, my_full_name)
     la_passwd = opf.agent_passwd(my_dir, my_full_name)
@@ -99,6 +107,7 @@ if __name__ == "__main__":
     future = la_agent.start(auto_register=True)
     future.result()
     la_agent.b2.join()
+    
     """Counter"""
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
     while la_agent.is_alive():
