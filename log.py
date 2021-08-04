@@ -59,6 +59,7 @@ class LogAgent(Agent):
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     time= datetime.datetime.now()
+                    """Active agents register"""
                     my_list = [{'agent_id':msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type,'activation_time': time}]
                     if (counter ==2):
                         active_agents = pd.DataFrame([], columns = ['agent_id', 'agent_name', 'agent_type', 'activation_time'])
@@ -69,6 +70,36 @@ class LogAgent(Agent):
                     #print(active_agents)
                     n = f'ActiveAgent: agent_id: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     logger.info(n)
+                    """Log file"""
+                    fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
+                    formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{msg_sender_jid2};%(pathname)s;%(message)s')
+                    fileh.setFormatter(formatter)
+                    log = logging.getLogger()  # root logger
+                    for hdlr in log.handlers[:]:  # remove all old handlers
+                        log.removeHandler(hdlr)
+                    log.addHandler(fileh)
+                    if args.verbose == "DEBUG":
+                        logger.setLevel(logging.DEBUG)
+                    elif args.verbose == "INFO":
+                        logger.setLevel(logging.INFO)
+                    elif args.verbose == "WARNING":
+                        logger.setLevel(logging.WARNING)
+                    elif args.verbose == "ERROR":
+                        logger.setLevel(logging.ERROR)
+                    elif args.verbose == "CRITICAL":
+                        logger.setLevel(logging.CRITICAL)
+                    else:
+                        print('not valid verbosity')
+                    msg_2 = pd.read_json(msg.body)
+                    if msg_2.loc[0, 'purpose'] == 'inform error':
+                        logger.warning(msg.body)
+                    elif msg_2.loc[0, 'purpose'] == 'inform change' or 'status' in msg_2:
+                        logger.debug(msg.body)
+                    elif 'active_coils' in msg_2:
+                        logger.critical(msg.body)
+                    else:
+                        logger.info(msg.body)
+                    """Update coil status """
                     x = re.search("won auction to process", msg.body)
                     if x:                                     #update  coil status
                         auction = msg.body.split(" ")
@@ -99,15 +130,16 @@ class LogAgent(Agent):
                 else:
                     logger.debug(f"Log_agent didn't receive any msg in the last {wait_msg_time}s") 
             elif log_status_var == "stand-by":
-                print(log_status_var)
+                print(log_status_var) #### TO DO DEBUG: cambiar formato mensaje 
                 logger.debug(f"Log agent status: {log_status_var}")
                 log_status_var = "on"
                 logger.debug(f"Log agent status: {log_status_var}")
-                print(log_status_var)
+                print(log_status_var) #### TO DO DEBUG: cambiar formato mensaje 
             else:
                 logger.debug(f"Log agent status: {log_status_var}")
                 log_status_var = "stand-by"
                 logger.debug(f"Log agent status: {log_status_var}")
+                        #### TO DO DEBUG: cambiar formato mensaje 
 
         async def on_end(self):
             active_agents.to_csv('ActiveAgents.csv', header = True, index = False)
@@ -121,6 +153,31 @@ class LogAgent(Agent):
         template = Template()
         template.metadata = {"performative": "inform"}
         self.add_behaviour(b, template)
+        fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
+        formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{my_full_name};%(pathname)s;%(message)s')
+        fileh.setFormatter(formatter)
+        log = logging.getLogger()  # root logger
+        for hdlr in log.handlers[:]:  # remove all old handlers
+            log.removeHandler(hdlr)
+        log.addHandler(fileh)
+        if args.verbose == "DEBUG":
+            logger.setLevel(logging.DEBUG)
+        elif args.verbose == "INFO":
+            logger.setLevel(logging.INFO)
+        elif args.verbose == "WARNING":
+            logger.setLevel(logging.WARNING)
+        elif args.verbose == "ERROR":
+            logger.setLevel(logging.ERROR)
+        elif args.verbose == "CRITICAL":
+            logger.setLevel(logging.CRITICAL)
+        else:
+            print('not valid verbosity')
+        "IP"
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip_machine = s.getsockname()[0]
+        start_msg = asf.send_activation_finish(my_full_name, ip_machine, 'start')
+        logger.debug(start_msg)
 
 
 if __name__ == "__main__":
@@ -142,23 +199,6 @@ if __name__ == "__main__":
 
     """Logger info"""
     logger = logging.getLogger(__name__)
-    formatter = logging.Formatter('%(asctime)s;%(levelname)s;%(name)s;%(pathname)s;%(message)s')  # parameters saved to log file. message will be the *.json
-    file_handler = logging.FileHandler(f'{my_dir}/{my_name}.log')
-    file_handler.setFormatter(formatter)
-    logger.addHandler(file_handler)
-    if args.verbose == "DEBUG":
-        logger.setLevel(logging.DEBUG)
-    elif args.verbose == "INFO":
-        logger.setLevel(logging.INFO)
-    elif args.verbose == "WARNING":
-        logger.setLevel(logging.WARNING)
-    elif args.verbose == "ERROR":
-        logger.setLevel(logging.ERROR)
-    elif args.verbose == "CRITICAL":
-        logger.setLevel(logging.CRITICAL)
-    else:
-        print('not valid verbosity')
-    logger.debug(f"{my_name}_agent started")
 
     """XMPP info"""
     log_jid = opf.agent_jid(my_dir, my_full_name)
@@ -175,5 +215,6 @@ if __name__ == "__main__":
         log_agent.stop()
         log_status_var = "off"
         logger.critical(f"{my_full_name}_agent stopped, coil_status_var: {log_status_var}")
+        #### TO DO: cambiar formato mensaje 
         quit_spade()
         # while 1:
