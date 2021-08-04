@@ -15,7 +15,7 @@ import os
 class BrowserAgent(Agent):
     class BRBehav(CyclicBehaviour):
         async def run(self):
-            global br_status_var, my_full_name, br_started_at, stop_time, my_dir, wait_msg_time, br_coil_name_int_fab, br_int_fab, br_data_df
+            global br_status_var, my_full_name, br_started_at, stop_time, my_dir, wait_msg_time, br_coil_name_int_fab, br_int_fab, br_data_df, ip_machine
             """inform log of status"""
             br_activation_json = opf.activation_df(my_full_name, br_started_at)
             br_msg_log = opf.msg_to_log(br_activation_json, my_dir)
@@ -221,16 +221,19 @@ if __name__ == "__main__":
     coil_agent_number = args.coil_number_interrupted_fab
     br_coil_name_int_fab = opf.my_full_name(coil_agent_name, coil_agent_number)
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
-    """Save to csv who I am"""
-    opf.set_agent_parameters(my_dir, my_name, my_full_name)
-    br_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
-    #opf.br_create_register(my_dir, my_full_name)  # register to store entrance and exit
+    
+    "IP"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_machine = s.getsockname()[0]
+    
     """XMPP info"""
     br_jid = opf.agent_jid(my_dir, my_full_name)
     br_passwd = opf.agent_passwd(my_dir, my_full_name)
     br_agent = BrowserAgent(br_jid, br_passwd)
     future = br_agent.start(auto_register=True)
     future.result()
+    
     """Counter"""
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
     while datetime.datetime.now() < stop_time:
