@@ -11,12 +11,14 @@ import logging
 import argparse
 import operative_functions as opf
 import os
+import json
+import socket
 
 
 class WarehouseAgent(Agent):
     class WHBehav(CyclicBehaviour):
         async def run(self):
-            global wh_status_var, my_full_name, wh_status_started_at, stop_time, my_dir, wait_msg_time
+            global wh_status_var, my_full_name, wh_status_started_at, stop_time, my_dir, wait_msg_time, ip_machine
             """inform log of status"""
             wh_activation_json = opf.activation_df(my_full_name, wh_status_started_at)
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
@@ -132,15 +134,23 @@ if __name__ == "__main__":
     wh_search = args.search
     wh_delete = args.delete
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
+    
+    "IP"
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    ip_machine = s.getsockname()[0]
+    
     """Save to csv who I am"""
     opf.set_agent_parameters(my_dir, my_name, my_full_name)
     #opf.wh_create_register(my_dir, my_full_name)  # register to store entrance and exit
+    
     """XMPP info"""
     wh_jid = opf.agent_jid(my_dir, my_full_name)
     wh_passwd = opf.agent_passwd(my_dir, my_full_name)
     wh_agent = WarehouseAgent(wh_jid, wh_passwd)
     future = wh_agent.start(auto_register=True)
     future.result()
+    
     """Counter"""
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
     while datetime.datetime.now() < stop_time:
