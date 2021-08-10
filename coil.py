@@ -1,7 +1,5 @@
 from spade import quit_spade
 import time
-from spade import quit_spade
-import time
 import datetime
 from spade.agent import Agent
 from spade.behaviour import CyclicBehaviour, PeriodicBehaviour
@@ -9,7 +7,6 @@ from spade.template import Template
 from spade.message import Message
 import sys
 import pandas as pd
-import logging
 import argparse
 import operative_functions as opf
 import os
@@ -20,12 +17,14 @@ import json
 class CoilAgent(Agent):
     class CoilBehav(PeriodicBehaviour):
         async def run(self):
-            global my_full_name, my_dir, wait_msg_time, coil_status_var, coil_started_at, stop_time, refresh_time, coil_agent, coil_data_df, bid_register_df, ca_coil_msg_sender, not_entered_auctions, ip_machine
+            global my_full_name, my_dir, wait_msg_time, coil_status_var, coil_started_at, stop_time, refresh_time, coil_agent, coil_data_df, bid_register_df, ca_coil_msg_sender, not_entered_auctions, ip_machine, seq_coil #, auction_finish_at            
             """inform log of status"""
+            print(coil_data_df)
             coil_activation_json = opf.activation_df(my_full_name, coil_started_at)
             coil_msg_log = opf.msg_to_log(coil_activation_json, my_dir)
             await self.send(coil_msg_log)
-            "Ask browser to search" #todo 20/05
+            
+            "Ask browser to search order" 
             if (coil_search != "No")&(datetime.datetime.now() < searching_time):
                 coil_search_browser = opf.order_to_search(coil_search, my_full_name, my_dir)
                 await self.send(coil_search_browser)
@@ -33,6 +32,7 @@ class CoilAgent(Agent):
             if (coil_delete != "No")&(datetime.datetime.now() < searching_time):
                 coil_delete_order = opf.order_to_erase(coil_delete, my_full_name, my_dir)
                 await self.send(coil_delete_order)
+                
             "Register as active agent" 
             msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
             if msg:
@@ -43,10 +43,12 @@ class CoilAgent(Agent):
                     await self.send(response_active)
                 elif single[0] == "Search requested":
                     print(msg.body)
+                    
             if coil_status_var == "auction":
                 """inform log of status"""
                 to_do = "search-auction"
-                coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, to_do).to_json()
+                coil_msg_log_body = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, to_do).to_json()
+                coil_inform_json = coil_msg_log_body.to_json(orient="records")
                 coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
                 await self.send(coil_msg_log)
                 this_time = datetime.datetime.now()
@@ -57,7 +59,7 @@ class CoilAgent(Agent):
                     msg_sender_jid = str(va_coil_msg.sender)
                     msg_sender_jid = msg_sender_jid[:-33]
                     if msg_sender_jid == "launch":
-                        la_coil_msg_df = pd.read_json(va_coil_msg.body)
+                        la_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
                     elif (msg_sender_jid == "ca") or (msg_sender_jid == "va") :
                         seq_coil = seq_coil + 1
@@ -77,7 +79,6 @@ class CoilAgent(Agent):
                             coil_ca_msg.body = coil_data_df.to_json()
                             await self.send(coil_ca_msg)
                           
-#
                             """Store initial Bid"""
                             bid_level = 'initial'
                             bid_register_df = opf.append_bid(coil_bid, bid_register_df, my_name, my_full_name, ca_coil_msg_df, bid_level)
