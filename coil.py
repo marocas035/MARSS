@@ -53,12 +53,13 @@ class CoilAgent(Agent):
                 print(coil_status_var)
                 # it will wait here for ca's that are auctionable.
                 ca_coil_msg = await self.receive(timeout=wait_msg_time)
-                print(ca_coil_msg)
                 if ca_coil_msg:
-                    single = ca_coil_msg.body.split(':') #todo 20/05
-                    if single[0] != "Order searched":
-                        ca_coil_msg_sender = ca_coil_msg.sender
-                        print(ca_coil_msg_sender)
+                    msg_sender_jid = str(va_coil_msg.sender)
+                    msg_sender_jid = msg_sender_jid[:-33]
+                    if msg_sender_jid == "launch":
+                        la_coil_msg_df = pd.read_json(va_coil_msg.body)
+                        coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
+                    elif (msg_sender_jid == "ca") or (msg_sender_jid == "va") :    
                         ca_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         """Evaluate if resource conditions are acceptable to enter auction"""
                         # rating to difference of temperature between resource and coil parameters
