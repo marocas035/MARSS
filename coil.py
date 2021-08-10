@@ -59,7 +59,8 @@ class CoilAgent(Agent):
                     if msg_sender_jid == "launch":
                         la_coil_msg_df = pd.read_json(va_coil_msg.body)
                         coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
-                    elif (msg_sender_jid == "ca") or (msg_sender_jid == "va") :    
+                    elif (msg_sender_jid == "ca") or (msg_sender_jid == "va") :
+                        seq_coil = seq_coil + 1
                         ca_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         """Evaluate if resource conditions are acceptable to enter auction"""
                         # rating to difference of temperature between resource and coil parameters
