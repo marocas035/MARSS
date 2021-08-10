@@ -14,6 +14,7 @@ import socket
 """General Functions"""
 
 
+''' Funciones Mónica '''
 def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price,string_operations):
     order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price', 'list_ware', 'string_operations','date'])
     order_msg_log.at[0,'id'] = agent_full_name
@@ -226,7 +227,9 @@ def delete_order(code):
     os.remove('RegisterOrders.csv')
     os.rename('new.csv', 'RegisterOrders.csv')
     
-    
+
+''' Funciones Jose '''
+
 def coil_to_contact_list(contact):
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(','
@@ -255,8 +258,151 @@ def coil_to_contact_list(contact):
                 name = 'coil_00' + str(number)
         time.sleep(3)
         j = j + 1
-    
-#
+
+                                                
+
+'''Functions to improve readability in messages. Improve functions'''
+ 
+def request_browser(df, seq, list):
+    df.loc[:, 'id':'request_type']
+    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df.loc[0, 'msg'] = seq
+    df.loc[0, 'coils'] = str(list)
+    df = df[['id', 'purpose', 'request_type', 'msg', 'to']]
+    return df
+
+def answer_va(df_br, sender, df_va, coils, location):
+    df = pd.DataFrame()
+    df.loc[0, 'msg'] = df_va.loc[0, 'seq']
+    df.loc[0, "id"] = 'browser'
+    df.loc[0, "coils"] = coils
+    df.loc[0, "location"] = location
+    df.loc[0, "purpose"] = 'answer'
+    df.loc[0, "to"] = sender
+    df = df[['id', 'purpose', 'msg', 'coils', 'location', 'to']]
+    return df
+
+def answer_coil(df, sender, seq_df):
+    df.loc[0, 'msg'] = seq_df.loc[0, 'msg']
+    df.loc[0, "id"] = 'browser'
+    df.loc[0, "purpose"] = 'answer'
+    df.loc[0, "to"] = sender
+    df = df[['id', 'purpose', 'msg','location', 'to']]
+    return df
+
+def send_va(my_full_name, number, auction_level, jid_list):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    if auction_level == 1:
+        df.loc[0, 'msg'] = 'send pre-auction'
+    elif auction_level == 2:
+        df.loc[0, 'msg'] = 'send auction'
+    elif auction_level == 3:
+        df.loc[0, 'msg'] = 'send acceptance'
+    df.loc[0, 'number'] = number
+    df.loc[0, 'to'] = jid_list
+    return df
+
+def send_coil(my_full_name, seq):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'agent_type'] = 'coil'
+    df.loc[0, 'purpose'] = 'request'
+    df.loc[0, 'request_type'] = 'my location'
+    df.loc[0, 'msg'] = seq
+    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    return df
+
+def send_br_log(df, df_br, my_full_name):
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'answer'
+    df.loc[0, 'msg'] = df_br.loc[0, 'msg']
+    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df = df[['id', 'purpose', 'msg', 'location', 'to']]
+    return df.to_json(orient="records")
+
+def send_to_va_msg(my_full_name, bid, to, level):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'agent_type'] = 'coil'
+    df.loc[0, 'purpose'] = 'inform'
+    if level == '1':
+        df.loc[0, 'msg'] = 'send bid'
+        df.loc[0, 'Bid'] = bid
+    elif level == 2:
+        df.loc[0, 'msg'] = 'send counterbid'
+        df.loc[0, 'counterbid'] = bid
+    df.loc[0, 'to'] = to
+    return df
+
+def send_activation_finish(my_full_name, ip_machine, level):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = 'change status'
+    if level == 'start':
+        df.loc[0, 'status'] = 'started'
+    elif level == 'end':
+        df.loc[0, 'status'] = 'ended'
+    df.loc[0, 'IP'] = ip_machine
+    return df.to_json(orient="records")
+
+def inform_error(msg):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'inform error'
+    df.loc[0, 'msg'] = msg
+    return df.to_json(orient="records")
+
+def inform_finish(msg):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = msg
+    return df.to_json(orient="records")
+
+def won_auction(my_full_name, va_coil_msg_sender_f, this_time):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = f'won auction in {va_coil_msg_sender_f}'
+    df.loc[0, 'time'] = this_time
+    return df.to_json(orient="records")
+
+def finish_va_auction(my_full_name, number):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = f'finish auction number: {number}.'
+    return df.to_json(orient="records")
+
+def order_register(my_full_name, code, coils, locations):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = 'new order from launcher'
+    df.loc[0, 'code'] = code
+    df.loc[0, 'coils'] = coils
+    df.loc[0, 'locations'] = locations
+    return df.to_json(orient="records")
+
+def log_status(my_full_name, status, ip_machine):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = 'change status'
+    df.loc[0, 'status'] = status
+    df.loc[0, 'IP'] = ip_machine
+    return df.to_json(orient="records")
+
+def coil_status(my_full_name):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'msg'] = 'change status'
+    df.loc[0, 'status'] = 'sleep'
+    return df.to_json(orient="records")
+                                                
+#                                                
 def agents_data():
     """This is a file from which all functions read information. It contains crucial information of the system:
     -jids, passwords, agent_full_names, pre-stablished location and WH capacity"""
