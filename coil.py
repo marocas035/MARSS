@@ -75,6 +75,8 @@ class CoilAgent(Agent):
                             coil_data_df.loc[0, 'bid_status'] = 'counterbid'
                             coil_ca_msg.body = coil_data_df.to_json()
                             await self.send(coil_ca_msg)
+                          
+#
                             """Store initial Bid"""
                             bid_level = 'initial'
                             bid_register_df = opf.append_bid(coil_bid, bid_register_df, my_name, my_full_name, ca_coil_msg_df, bid_level)
