@@ -259,7 +259,17 @@ def coil_to_contact_list(contact):
         time.sleep(3)
         j = j + 1
 
-                                                
+def inform_register_aa(msg):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'inform register of agent'
+    df.loc[0, 'msg'] = msg
+    return df.to_json(orient="records")
+
+def update_coil_status(msg):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'inform coil status updated'
+    df.loc[0, 'msg'] = msg
+    return df.to_json(orient="records")                                                
 
 '''Functions to improve readability in messages. Improve functions'''
  
