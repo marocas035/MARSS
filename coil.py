@@ -219,9 +219,9 @@ class CoilAgent(Agent):
                                                         """inform log of issue"""
                                                         ca_id = ca_coil_msg_df.loc[0, 'id']
                                                         coil_msg_log_body = f'{my_full_name} did not accept to process in {ca_id} in final acceptance'
+                                                        coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                                                         coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                         await self.send(coil_msg_log)
-                                                        print(coil_msg_log_body)
                                                 else:
                                                     """inform log of issue"""
                                                     ca_id = ca_coil_msg_df.loc[0, 'id']
