@@ -25,6 +25,7 @@ class ContinuousAnnealingAgent(Agent):
             ca_activation_json = opf.activation_df(my_full_name, ca_status_started_at, op_times_df)
             ca_msg_log = opf.msg_to_log(ca_activation_json, my_dir)
             await self.send(ca_msg_log)
+            
             "Ask browser to search"  
             if (ca_search != "No")&(datetime.datetime.now() < searching_time):
                 ca_search_browser = opf.order_to_search(ca_search, my_full_name, my_dir)
@@ -33,7 +34,7 @@ class ContinuousAnnealingAgent(Agent):
             if (ca_delete != "No")&(datetime.datetime.now() < searching_time):
                 ca_delete_order = opf.order_to_erase(ca_delete, my_full_name, my_dir)
                 await self.send(ca_delete_order)
-            "Register as active agent" 
+
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
                 single = msg.body.split(":")
