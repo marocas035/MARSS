@@ -228,15 +228,16 @@ class CoilAgent(Agent):
                                                     ca_bid_status = ca_coil_msg_df.at[0, 'bid_status']
                                                     ca_auction_level = ca_coil_msg_df.at[0, 'auction_level']
                                                     coil_msg_log_body = f'{my_full_name} received wrong message from {ca_id} in final acceptance. ca_auction_level: {ca_auction_level}!= 3 or ca_bid_status: {ca_bid_status} != accepted'                                                    
+                                                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                                                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                     await self.send(coil_msg_log)
-                                                    print(coil_msg_log_body)
                                             else:
                                                 """inform log of issue"""
                                                 coil_msg_log_body = f'incorrect sender'
+                                                coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                                                 coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                 await self.send(coil_msg_log)
-                                                print(coil_msg_log_body)
+                                                
                                         else:
                                             """inform log"""
                                             coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var} at last auction level'
@@ -246,30 +247,31 @@ class CoilAgent(Agent):
                                 else:
                                     """inform log of issue"""
                                     coil_msg_log_body = f'incorrect sender'
+                                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                     await self.send(coil_msg_log)
-                                    print(coil_msg_log_body)
                             else:
                                 """inform log"""
                                 coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var} at last auction level'
+                                coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                                 coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                 await self.send(coil_msg_log)
-                                print(coil_msg_log_body)
                         else:
                             """inform log of status"""
                             to_do = "search-auction"
                             ca_id = ca_coil_msg_df.loc[0, 'id']
                             not_entered_auctions += int(1)
                             entered_auction_str = f'{my_full_name} did not enter {ca_id} auction because Temp difference was too high. Not_entered auction number: {not_entered_auctions}'
-                            coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, to_do, entered_auction_str).to_json()
-                            coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
+                            coil_msg_log_body = opf.inform_error(entered_auction_str)
+                            coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                             await self.send(coil_msg_log)
-                            print(entered_auction_str)
                 else:
                     """inform log"""
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var}'
+                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
+                    
             elif coil_status_var == "sleep":
                 """wait for message from in case fabrication was interrupted"""
                 interrupted_fab_msg = await self.receive(timeout=wait_msg_time)
@@ -290,14 +292,24 @@ class CoilAgent(Agent):
                         """inform log"""
                         time.sleep(5)
                         coil_msg_log_body = f'{my_full_name} receive msg at {coil_status_var}, but not from browser'
+                         coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                         coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                         await self.send(coil_msg_log)
                 else:
                     """inform log"""
-                    time.sleep(5)
+                    time.sleep(10)
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var}'
+                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
+                    now_time = datetime.datetime.now()
+                    tiempo = now_time - auction_finish_at
+                    segundos = tiempo.seconds
+                    if segundos > 50:
+                        opf.change_jid(my_dir, my_full_name)
+                        self.kill()
+                    
+                    
             elif coil_status_var == "stand-by":  # stand-by status for BR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it won      t change to stand-by.
                 """inform log of status"""
                 coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var).to_json()
@@ -307,21 +319,29 @@ class CoilAgent(Agent):
                 # now it just changes directly to auction
                 """inform log of status"""
                 coil_status_var = "auction"
-                coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var).to_json()
+                coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, coil_df).to_json(orient="records")
                 coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
-                await self.send(coil_msg_log)
             else:
                 """inform log of status"""
                 coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var).to_json()
                 coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
                 await self.send(coil_msg_log)
                 coil_status_var = "stand-by"
-
+                
         async def on_end(self):
+            print({self.counter})
+            """Inform log """
+            coil_msg_end = opf.send_activation_finish(my_full_name, ip_machine, 'end')
+            va_msg_log = opf.msg_to_log(coil_msg_end, my_dir)
+            await self.send(va_msg_log)
             await self.agent.stop()
 
         async def on_start(self):
             self.counter = 1
+            """inform log of start"""
+            coil_msg_start = opf.send_activation_finish(my_full_name, ip_machine, 'start')
+            coil_msg_start = opf.msg_to_log(coil_msg_start, my_dir)
+            await self.send(coil_msg_start)
 
     async def setup(self):
         start_at = datetime.datetime.now() + datetime.timedelta(seconds=3)
@@ -335,18 +355,24 @@ if __name__ == "__main__":
     """Parser parameters"""
     parser = argparse.ArgumentParser(description='coil parser')
     parser.add_argument('-an', '--agent_number', type=int, metavar='', required=False, default=1, help='agent_number: 1,2,3,4..')
-    parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
+    parser.add_argument('-v', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, off')
     parser.add_argument('-b', '--budget', type=int, metavar='', required=False, default=100, help='budget: in case of needed, budget can be increased')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade),at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=cO202106101')
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
+    parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, off')
+    parser.add_argument('-b', '--budget', type=int, metavar='', required=False, default=200, help='budget: in case of needed, budget can be increased')
+    parser.add_argument('-l', '--location', type=str, metavar='', required=False, default='K', help='location: K')
+    parser.add_argument('-c', '--code', type=str, metavar='', required=False, default='cO202106101',help='code: cO202106101')
+    parser.add_argument('-w', '--wait_auction_time', type=int, metavar='', required=False, default=500, help='wait_msg_time: time in seconds to wait for a msg')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
     my_full_name = opf.my_full_name(my_name, args.agent_number)
     wait_msg_time = args.wait_msg_time
+    auction_time = args.wait_auction_time
     coil_started_at = datetime.datetime.now().time()
     coil_status_var = args.status
     coil_search = args.search
@@ -359,9 +385,9 @@ if __name__ == "__main__":
     coil_data_df = pd.read_csv(f'{my_full_name}.csv', header=0, delimiter=",", engine='python')
     coil_data_df.at[0, 'budget'] = args.budget
     budget = coil_data_df.loc[0, 'budget']
-    print(f'budget:{budget}')
     bid_register_df = opf.bid_register(my_name, my_full_name)
     not_entered_auctions = int(0)
+    seq_coil = int(200)
     
     "IP"
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -374,8 +400,8 @@ if __name__ == "__main__":
     coil_agent = CoilAgent(coil_jid, coil_passwd)
     future = coil_agent.start(auto_register=True)
     future.result()
+    
     """Counter"""
-    #python coil.py -w 5 -st 5
     stop_time = datetime.datetime.now() + datetime.timedelta(seconds=args.stop_time)
     while datetime.datetime.now() < stop_time:
         time.sleep(1)
