@@ -21,11 +21,24 @@ from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
-    
-    async def on_subscribe(self, jid):
+    def __init__(self, agent):
+        self.agent = agent
+        self.client = agent.client
+        self.roster = self.client.summon(aioxmpp.RosterClient)
+        self.presenceclient = self.client.summon(aioxmpp.PresenceClient)
+        self.presenceserver = self.client.summon(aioxmpp.PresenceServer)
+
+        self._contacts = {}
+
+        self.approve_all = True
+        
+        self.roster.on_subscribe.connect(self._on_subscribe)
+        self.roster.on_unsubscribed.connect(self._on_unsubscribed)
+        
+    '''def on_subscribe(self, jid):
             print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
             self.presence.approve(jid)
-            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
+            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))'''
             
     class LogBehav(CyclicBehaviour):            
         async def run(self):
