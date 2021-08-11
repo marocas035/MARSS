@@ -65,7 +65,7 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     self.presence.subscribe(msg_sender_jid0)
                     #approve(msg_sender_jid0)
-                    list_contacts = get_contacts()
+                    list_contacts = opf.get_contacts(self)
                     print(list_contacts)
                     '''time = datetime.datetime.now()
                     """Active agents register"""
@@ -175,7 +175,7 @@ class LogAgent(Agent):
             print("[{}] Agent {} has accepted the subscription.".format(self.agent.name, jid.split("@")[0]))
             print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
-        async def get_contacts(self):
+        '''async def get_contacts(self):
             """Returns list of contacts"""
             for jid, item in self.roster.items.items():
                 try:
@@ -183,7 +183,7 @@ class LogAgent(Agent):
                 except KeyError:
                     self._contacts[jid.bare()] = item.export_as_json()
 
-        return self._contacts   
+        return self._contacts'''   
 
     async def setup(self):
         b = self.LogBehav()
