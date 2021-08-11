@@ -227,6 +227,27 @@ def delete_order(code):
     os.remove('RegisterOrders.csv')
     os.rename('new.csv', 'RegisterOrders.csv')
     
+def order_budget(budget, code):
+    df = pd.DataFrame()
+    df_agents = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
+    name = df_agents.loc[df_agents.Code == code, 'User name'].values
+    name = name[0]
+    df.loc[0, 'id'] = 'launcher'
+    df.loc[0, 'purpose'] = 'setup'
+    df.loc[0, 'msg'] = 'new budget'
+    df.loc[0, 'budget'] = budget
+    df.loc[0, 'code'] = str(code)
+    df.loc[0, 'to'] = str(name)
+    return df
+
+def order_coil(la_json, code):
+    df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
+    name = df.loc[df.Code == code, 'User name'].values
+    name = name[0]
+    msg_budget = Message()
+    msg_budget.to = str(name)
+    msg_budget.body = la_json
+    return msg_budget
 
 ''' Funciones Jose '''
 '''
