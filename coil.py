@@ -12,6 +12,8 @@ import operative_functions as opf
 import os
 import socket
 import json
+import aioxmpp
+from aioxmpp import PresenceState, PresenceShow
 
 
 class CoilAgent(Agent):
