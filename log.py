@@ -21,9 +21,10 @@ from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
-    class spade.presence.LogBehav(CyclicBehaviour):            
+    class LogBehav(CyclicBehaviour):            
         async def run(self):
             self.presence.on_subscribe = self.on_subscribe
+            self.presence.on_subscribed = self.on_subscribed
             global wait_msg_time, logger, log_status_var, active_agents, ip_machine, list_contacts
             if log_status_var == "on":
                 '''"Active Agents"   #todo
@@ -62,7 +63,8 @@ class LogAgent(Agent):
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
-                    approve(msg_sender_jid0)
+                    self.presence.subscribe(msg_sender_jid0)
+                    #approve(msg_sender_jid0)
                     list_contacts = get_contacts()
                     print(list_contacts)
                     '''time = datetime.datetime.now()
@@ -162,6 +164,15 @@ class LogAgent(Agent):
         async def on_start(self):
             self.counter = 1
             list_contacts = {}
+            
+        async def on_subscribe(self, jid):
+            print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
+            self.presence.approve(jid)
+            self.presence.subscribe(jid)
+            
+        async def on_subscribed(self, jid):
+            print("[{}] Agent {} has accepted the subscription.".format(self.agent.name, jid.split("@")[0]))
+            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
         '''async def get_contacts(self):
         """
