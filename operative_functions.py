@@ -11,10 +11,25 @@ from random import random
 import numpy as np
 import json
 import socket
-"""General Functions"""
+import aioxmpp
+from aioxmpp import PresenceState, PresenceShow
 
 
 ''' Funciones Mónica '''
+def get_contacts(self):
+        """
+        Returns list of contacts
+        Returns:
+          dict: the roster of contacts
+        """
+        for jid, item in self.roster.items.items():
+            try:
+                self._contacts[jid.bare()].update(item.export_as_json())
+            except KeyError:
+                self._contacts[jid.bare()] = item.export_as_json()
+
+        return self._contacts
+
 def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price,string_operations):
     order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price', 'list_ware', 'string_operations','date'])
     order_msg_log.at[0,'id'] = agent_full_name
