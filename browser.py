@@ -195,6 +195,11 @@ class BrowserAgent(Agent):
             browser_msg_ended = opf.send_activation_finish(my_full_name, ip_machine, 'end')
             browser_msg_ended = opf.msg_to_log(browser_msg_ended, my_dir)
             await self.send(browser_msg_ended)
+            
+            '''async def unsuscribe(self):
+                """Asks for unsubscription"""
+                self.roster.unsubscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())'''
+                
 
         async def on_start(self):
             self.counter = 1
@@ -202,6 +207,12 @@ class BrowserAgent(Agent):
             browser_msg_start = opf.send_activation_finish(my_full_name, ip_machine, 'start')
             browser_msg_start = opf.msg_to_log(browser_msg_start, my_dir)
             await self.send(browser_msg_start)
+            
+            '''async def suscribe(self):
+                """Asks for subscription"""
+                self.roster.subscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())'''
+
+            
 
     async def setup(self):
         b = self.BRBehav()
