@@ -100,7 +100,7 @@ if __name__ == "__main__":
     string_operations = args.string_operations
     list_ware = args.list_position
 
-        "IP"
+    """IP"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip_machine = s.getsockname()[0]
