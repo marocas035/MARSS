@@ -294,7 +294,7 @@ class CoilAgent(Agent):
                         """inform log"""
                         time.sleep(5)
                         coil_msg_log_body = f'{my_full_name} receive msg at {coil_status_var}, but not from browser'
-                         coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                        coil_msg_log_body = opf.inform_error(coil_msg_log_body)
                         coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                         await self.send(coil_msg_log)
                 else:
