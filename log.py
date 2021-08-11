@@ -176,11 +176,7 @@ class LogAgent(Agent):
             print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
         async def get_contacts(self):
-        """
-        Returns list of contacts
-        Returns:
-          dict: the roster of contacts
-        """
+        """Returns list of contacts"""
         for jid, item in self.roster.items.items():
             try:
                 self._contacts[jid.bare()].update(item.export_as_json())
