@@ -164,6 +164,7 @@ class LogAgent(Agent):
         async def on_start(self):
             self.counter = 1
             list_contacts = {}
+            self._contacts = {}
             
         async def on_subscribe(self, jid):
             print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
@@ -174,7 +175,7 @@ class LogAgent(Agent):
             print("[{}] Agent {} has accepted the subscription.".format(self.agent.name, jid.split("@")[0]))
             print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
-        '''async def get_contacts(self):
+        async def get_contacts(self):
         """
         Returns list of contacts
         Returns:
@@ -186,7 +187,7 @@ class LogAgent(Agent):
             except KeyError:
                 self._contacts[jid.bare()] = item.export_as_json()
 
-        return self._contacts   ''' 
+        return self._contacts   
 
     async def setup(self):
         b = self.LogBehav()
