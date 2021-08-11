@@ -265,35 +265,74 @@ def order_coil(la_json, code):
     return msg_budget
 
 ''' Funciones Jose '''
-'''
-def coil_to_contact_list(contact):
+def change_warehouse(launcher_df, my_dir):
     va = launcher_df.loc[0, 'list_ware'].split(',')
-    lc = launcher_df.loc[0, 'list_coils'].split(','
+    lc = launcher_df.loc[0, 'list_coils'].split(',')
+    wait_time = launcher_df.loc[0, 'wait_time']
+    #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
     j = 0
     my_dir = os.getcwd()
     for z in lc:
         number = 1
         name = 'coil_00' + str(number)
+        df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
         for i in range(11):
             if df.loc[df.Name == name, 'Code'].isnull().any().any():
-                df.loc[df.Name == name, 'location'] = va[j]
-                df.loc[df.Name == name, 'Code'] = z
-                df.to_csv(f'{my_dir}''/''agents.csv', index=False, header=True)
-                                                
-                cmd = f'python3 coil.py -an {str(number)}'
+                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
             elif df.loc[df.Name == name, 'Code'].values == z:
-                df.loc[df.Name == name, 'location'] = va[j]
-                df.to_csv(f'{my_dir}''/''agents.csv', index=False, header=True)
-                cmd = f'python3 coil.py -an {str(number)}'
+                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
             else:
                 number = number + 1
                 name = 'coil_00' + str(number)
-        time.sleep(3)
-        j = j + 1 '''
+        time.sleep(5)
+        j = j + 1
+
+def req_active_users_loc_times(agent_df, seq, list, *args):
+    """Returns msg body to send to browser as a json"""
+    va_request_df = agent_df #.loc[:, 'id':'time']
+    va_request_df = va_request_df.astype(str)
+    va_request_df.at[0, 'purpose'] = "request"
+    this_time = datetime.datetime.now()
+    va_request_df.at[0, 'time'] = this_time
+    va_request_df.at[0, 'seq'] = seq
+    va_request_df.loc[0, 'list_coils'] = str(list)
+    if args:
+        va_request_df.at[0, 'request_type'] = args[0]
+    else:
+        va_request_df.at[0, 'request_type'] = "active users location & op_time"
+    return va_request_df
+
+def req_active_users_loc_times_coil(agent_df, seq, *args):
+    """Returns msg body to send to browser as a json"""
+    va_request_df = agent_df   #.loc[:, 'id':'time']
+    va_request_df = va_request_df.astype(str)
+    va_request_df.at[0, 'purpose'] = "request"
+    this_time = datetime.datetime.now()
+    va_request_df.at[0, 'time'] = this_time
+    va_request_df.at[0, 'seq'] = seq
+    va_request_df.loc[0, 'list_coils'] = str(list)
+    if args:
+        va_request_df.at[0, 'request_type'] = args[0]
+    else:
+        va_request_df.at[0, 'request_type'] = "active users location & op_time"
+    return va_request_df
+
+def req_coil_loc(agent_df, *args):
+    """Returns msg body to send to browser as a json"""
+    coil_request_df = agent_df #.loc[:, 'id':'time']
+    coil_request_df = coil_request_df.astype(str)
+    coil_request_df.at[0, 'purpose'] = "request"
+    this_time = datetime.datetime.now()
+    coil_request_df.at[0, 'time'] = this_time
+    if args:
+        coil_request_df.at[0, 'request_type'] = args[0]
+    else:
+        coil_request_df.at[0, 'request_type'] = "my location"
+    return coil_request_df.to_json()
 
 def inform_register_aa(msg):
     df = pd.DataFrame()
