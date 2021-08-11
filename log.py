@@ -16,6 +16,8 @@ import logging.handlers as handlers
 import re
 import json
 import socket
+import aioxmpp
+from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
@@ -24,6 +26,7 @@ class LogAgent(Agent):
         async def on_subscribe(self, jid):
             print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
             self.presence.approve(jid)
+            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
         async def run(self):
             self.presence.on_subscribe = self.on_subscribe
@@ -161,6 +164,20 @@ class LogAgent(Agent):
 
         async def on_start(self):
             self.counter = 1
+            
+        '''async def get_contacts(self):
+        """
+        Returns list of contacts
+        Returns:
+          dict: the roster of contacts
+        """
+        for jid, item in self.roster.items.items():
+            try:
+                self._contacts[jid.bare()].update(item.export_as_json())
+            except KeyError:
+                self._contacts[jid.bare()] = item.export_as_json()
+
+        return self._contacts   ''' 
 
     async def setup(self):
         b = self.LogBehav()
