@@ -340,7 +340,7 @@ class CoilAgent(Agent):
             await self.send(va_msg_log)
             await self.agent.stop()
             
-            async def unsuscribe(self):
+            def unsuscribe(self):
                 """Asks for unsubscription"""
                 self.roster.unsubscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())
 
@@ -351,7 +351,7 @@ class CoilAgent(Agent):
             coil_msg_start = opf.msg_to_log(coil_msg_start, my_dir)
             await self.send(coil_msg_start)
             
-            async def suscribe(self):
+           def suscribe(self):
                 """Asks for subscription"""
                 self.roster.subscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())
 
