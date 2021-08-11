@@ -21,7 +21,7 @@ from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
-    def __init__(self, agent):
+    def __init__(self):
         self.agent = agent
         self.client = agent.client
         self.roster = self.client.summon(aioxmpp.RosterClient)
