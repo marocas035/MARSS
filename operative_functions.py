@@ -229,7 +229,7 @@ def delete_order(code):
     
 
 ''' Funciones Jose '''
-
+'''
 def coil_to_contact_list(contact):
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(','
@@ -257,7 +257,7 @@ def coil_to_contact_list(contact):
                 number = number + 1
                 name = 'coil_00' + str(number)
         time.sleep(3)
-        j = j + 1
+        j = j + 1 '''
 
 def inform_register_aa(msg):
     df = pd.DataFrame()
