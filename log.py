@@ -21,29 +21,10 @@ from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
-    def __init__(self):
-        self.agent = agent
-        self.client = agent.client
-        self.roster = self.client.summon(aioxmpp.RosterClient)
-        self.presenceclient = self.client.summon(aioxmpp.PresenceClient)
-        self.presenceserver = self.client.summon(aioxmpp.PresenceServer)
-
-        self._contacts = {}
-
-        self.approve_all = True
-        
-        self.roster.on_subscribe.connect(self._on_subscribe)
-        self.roster.on_unsubscribed.connect(self._on_unsubscribed)
-        
-    '''def on_subscribe(self, jid):
-            print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
-            self.presence.approve(jid)
-            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))'''
-            
-    class LogBehav(CyclicBehaviour):            
+    class spade.presence.LogBehav(CyclicBehaviour):            
         async def run(self):
             self.presence.on_subscribe = self.on_subscribe
-            global wait_msg_time, logger, log_status_var, active_agents, ip_machine
+            global wait_msg_time, logger, log_status_var, active_agents, ip_machine, list_contacts
             if log_status_var == "on":
                 '''"Active Agents"   #todo
                 r = opf.checkFileExistance()
@@ -81,6 +62,9 @@ class LogAgent(Agent):
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
+                    approve(msg_sender_jid0)
+                    list_contacts = get_contacts()
+                    print(list_contacts)
                     '''time = datetime.datetime.now()
                     """Active agents register"""
                     my_list = [{'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type,
@@ -177,6 +161,7 @@ class LogAgent(Agent):
 
         async def on_start(self):
             self.counter = 1
+            list_contacts = {}
             
         '''async def get_contacts(self):
         """
