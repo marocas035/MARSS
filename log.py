@@ -21,13 +21,13 @@ from aioxmpp import PresenceState, PresenceShow
 
 
 class LogAgent(Agent):
-    class LogBehav(CyclicBehaviour):
-        
-        async def on_subscribe(self, jid):
+    
+    async def on_subscribe(self, jid):
             print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
             self.presence.approve(jid)
             print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
             
+    class LogBehav(CyclicBehaviour):            
         async def run(self):
             self.presence.on_subscribe = self.on_subscribe
             global wait_msg_time, logger, log_status_var, active_agents, ip_machine
