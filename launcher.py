@@ -21,13 +21,16 @@ class LaunchAgent(Agent):
             await self.send(la_msg_log)
             """Send new order to log"""
             if order_code != "No":
-                la_inform_log_json = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,num_coils,list_coils,each_coil_price, list_ware, string_operations)
+                la_inform_log_json = asf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,
+                                                    num_coils, list_coils, each_coil_price, list_ware, string_operations, wait_msg_time).to_json(orient="records")
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
-                
-                """Suscribe coil agents to contact list"""
-                contact = pd.read_json(la_order_log)
-                #funcion
+           if name_coil != "No":
+                la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
+                msg_budget = opf.order_coil(la_coil_json, name_coil)
+                await self.send(msg_budget)
+                la_order_log = asf.order_to_log(la_coil_json, my_dir)
+                await self.send(la_order_log)           
                 
             """Send searching code to browser"""
             if la_search != "No":
@@ -48,6 +51,10 @@ class LaunchAgent(Agent):
     
                 
         async def on_end(self):
+            """Inform log """
+            la_msg_ended = opf.send_activation_finish(my_full_name, ip_machine, 'end')
+            la_msg_ended = opf.msg_to_log(la_msg_ended, my_dir)
+            await self.send(la_msg_ended)
             await self.agent.stop()
 
         async def on_start(self):
@@ -82,6 +89,10 @@ if __name__ == "__main__":
     parser.add_argument('-po', '--price_order', type=float, metavar='', required=False, default='1', help='Price given to the order')
     parser.add_argument('-so', '--string_operations', type=str, metavar='', required=False, default='No', help='Sequence of operations needed.Write between "x".Format:"BZA|TD[2]|ENT[2|3]|HO[1|2]|NWW[1|4]|VA*[9|10|11]"')    
     parser.add_argument('-lp', '--list_position', type=str, metavar='', required=False, default='No',help='Coil warehouses.Write between ",".Format:K,L,K')
+    parser.add_argument('-cb', '--change_budget', type=str, metavar='', required=False, default='210',
+                        help='Specify the new budget. Write between "x"')
+    parser.add_argument('-na', '--name_new_budget', type=str, metavar='', required=False, default='No',
+                        help='Specify the coil of new budget. "cO202106101"')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -99,7 +110,13 @@ if __name__ == "__main__":
     list_coils = args.list_coils
     string_operations = args.string_operations
     list_ware = args.list_position
+    change_budget = args.change_budget
+    name_coil = args.name_new_budget
 
+    
+    """Save to csv who I am"""
+    la_data_df = opf.set_agent_parameters(my_dir, my_name, my_full_name)
+    
     """IP"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
@@ -121,6 +138,6 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             la_status_var = "off"
             la_agent.stop()
-            quit_spade()                   
+    quit_spade()                   
                         
                         
