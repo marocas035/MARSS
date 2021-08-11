@@ -337,6 +337,10 @@ class CoilAgent(Agent):
             va_msg_log = opf.msg_to_log(coil_msg_end, my_dir)
             await self.send(va_msg_log)
             await self.agent.stop()
+            
+            async def unsuscribe(self):
+                """Asks for unsubscription"""
+                self.roster.unsubscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())
 
         async def on_start(self):
             self.counter = 1
@@ -344,6 +348,10 @@ class CoilAgent(Agent):
             coil_msg_start = opf.send_activation_finish(my_full_name, ip_machine, 'start')
             coil_msg_start = opf.msg_to_log(coil_msg_start, my_dir)
             await self.send(coil_msg_start)
+            
+            async def suscribe(self):
+                """Asks for subscription"""
+                self.roster.subscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())
 
     async def setup(self):
         start_at = datetime.datetime.now() + datetime.timedelta(seconds=3)
