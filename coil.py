@@ -354,7 +354,7 @@ class CoilAgent(Agent):
             coil_msg_start = opf.msg_to_log(coil_msg_start, my_dir)
             await self.send(coil_msg_start)
             
-           def suscribe(self):
+            def suscribe(self):
                 """Asks for subscription"""
                 self.roster.subscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())
 
