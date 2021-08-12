@@ -25,6 +25,8 @@ class LaunchAgent(Agent):
                                                     num_coils, list_coils, each_coil_price, list_ware, string_operations, wait_msg_time).to_json(orient="records")
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
+                """Active coil agents"""
+                opf.change_warehouse(la_inform_log_json, my_dir)
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
                 msg_budget = opf.order_coil(la_coil_json, name_coil)
