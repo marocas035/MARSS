@@ -65,7 +65,9 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     self.presence.subscribe(msg_sender_jid0)
                     #approve(msg_sender_jid0)
-                    print(self.agent.presence.get_contacts()) ### si funciona
+                    contacts = self.agent.presence.get_contacts() ### si funciona
+                    contacts[msg_sender_jid0]{'agent_jid':msg_sender_jid0,'agent_name':msg_sender_jid, 'type': agent_type}
+                    print(contacts)
                     #list_contacts = opf.get_contacts(self)
                     #print(list_contacts)
                     '''time = datetime.datetime.now()
