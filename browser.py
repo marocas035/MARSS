@@ -67,7 +67,9 @@ class BrowserAgent(Agent):
                         change_register = opf.msg_to_log(ack_change, my_dir)
                         await self.send(change_register)
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
-                        single = msg.body.split(':')
+                        msg = agent_df.loc[0, 'msg']
+                        print(msg)
+                        single = msg.split(':')
                         search = single[1]
                         c = search.split('=')
                         type_code_to_search = c[0]
