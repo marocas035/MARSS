@@ -93,15 +93,15 @@ def save_order(msg):
             else:
                 df.to_csv(f, header=False, index = False)
         i+=1
-
+        
+##########
 
 def order_to_search(search_body,agent_full_name , agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "browser"]
     browser_jid = agents_df['User name'].iloc[-1]
-    search_msg = Message(to=browser_jid)
-    print(f'Search: {search_body}: {agent_full_name}')
-    search_msg.body = 'Search:' + search_body + ':' +agent_full_name
+    search_msg = Message(to=browser_jid) 
+    search_msg.body = search_body
     search_msg.set_metadata("performative", "inform")
     return search_msg
 
