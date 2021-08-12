@@ -28,8 +28,11 @@ class CoilAgent(Agent):
             
             "Ask browser to search order" 
             if (coil_search != "No")&(datetime.datetime.now() < searching_time):
-                coil_search_browser = opf.order_to_search(coil_search, my_full_name, my_dir)
+                msg_to_search = 'Search:' + coil_search + ':' + my_full_name
+                order_to_search_json = opf.search_br(my_full_name, msg_to_search)
+                coil_search_browser = opf.order_to_search(order_to_search_json, my_full_name, my_dir)
                 await self.send(coil_search_browser)
+                
             "Ask browser to delete order in register"
             if (coil_delete != "No")&(datetime.datetime.now() < searching_time):
                 coil_delete_order = opf.order_to_erase(coil_delete, my_full_name, my_dir)
