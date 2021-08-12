@@ -53,7 +53,6 @@ class BrowserAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                 if msg:
                     agent_df = pd.read_json(msg.body)
-                    '''single = msg.body.split(':')   ##### cambiar esto , utilizar formato purpose #todo'''
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
                     if agent_df.loc[0, 'purpose'] == "active_agent":    #an agent has notified its status
@@ -139,8 +138,7 @@ class BrowserAgent(Agent):
                                 if ca_data_df.loc[0, 'request_type'] == "active users location & op_time":  # provides active users, and saves request.
                                     """Checks for active users and their actual locations and reply"""
                                     ca_name = ca_data_df.loc[0, 'agent_type']
-                                    br_msg_ca_body = opf.check_active_users_loc_times(
-                                        ca_name)  # provides agent_id as argument
+                                    br_msg_ca_body = opf.check_active_users_loc_times(ca_name)  # provides agent_id as argument
                                     br_msg_ca.body = br_msg_ca_body
                                     print(f'br_msg_ca active users: {br_msg_ca.body}')
                                     await self.send(br_msg_ca)
@@ -150,8 +148,7 @@ class BrowserAgent(Agent):
                                 elif ca_data_df.loc[0, 'request_type'] == "coils":
                                     """Checks for active coils and their actual locations and reply"""
                                     coil_request = ca_data_df.loc[0, 'request_type']
-                                    br_msg_ca_body = opf.check_active_users_loc_times(my_name,
-                                                                                      coil_request)  # specifies request as argument
+                                    br_msg_ca_body = opf.check_active_users_loc_times(my_name,coil_request)  # specifies request as argument
                                     br_msg_ca.body = br_msg_ca_body
                                     print(f'br_msg_ca coils: {br_msg_ca.body}')
                                     await self.send(br_msg_ca)
