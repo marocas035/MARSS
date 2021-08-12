@@ -25,8 +25,12 @@ class WarehouseAgent(Agent):
             await self.send(wh_msg_log)
             "Ask browser to search"  
             if (wh_search != "No")&(datetime.datetime.now() < searching_time):
-                wh_search_browser = opf.order_to_search(wh_search, my_full_name, my_dir)
+                msg_to_search = 'Search:' + wh_search + ':' + my_full_name
+                order_to_search_body = opf.search_br(my_full_name, msg_to_search)
+                order_to_search_json = order_to_search_body.to_json(orient="records")
+                wh_search_browser = opf.order_to_search(order_to_search_json, my_full_name, my_dir)
                 await self.send(wh_search_browser)
+                
             "Ask browser to delete order in register"
             if (wh_delete != "No")&(datetime.datetime.now() < searching_time):
                 wh_delete_order = opf.order_to_erase(wh_delete, my_full_name, my_dir)
