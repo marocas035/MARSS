@@ -66,7 +66,7 @@ class BrowserAgent(Agent):
                         ack_change = f'Order has been deleted successfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
                         change_register = opf.msg_to_log(ack_change, my_dir)
                         await self.send(change_register)
-                    elif if agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
+                    elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         single = msg.body.split(':')
                         search = single[1]
                         c = search.split('=')
