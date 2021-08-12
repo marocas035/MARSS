@@ -52,20 +52,21 @@ class BrowserAgent(Agent):
                     print(br_msg_log_body)
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                 if msg:
-                    single = msg.body.split(':')   ##### cambiar esto , utilizar formato purpose #todo
+                    agent_df = pd.read_json(msg.body)
+                    '''single = msg.body.split(':')   ##### cambiar esto , utilizar formato purpose #todo
                     msg_sender_jid0 = str(msg.sender)
-                    msg_sender_jid = msg_sender_jid0[:-33]
-                    if single[0] == "Alive":
+                    msg_sender_jid = msg_sender_jid0[:-33]'''
+                    if 'Alive' in agent_df:    #an agent has notified its status
                         msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
                         response_active = opf.msg_to_log(msg_aa_response, my_dir)
                         await self.send(response_active)
-                    elif single[0] == 'Delete order':
+                    elif 'Delete order' in agent_df:    #an agent has requested to delete a order
                         code_to_erase = single[1]
                         opf.delete_order(code_to_erase)
                         ack_change = f'Order has been deleted successfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
                         change_register = opf.msg_to_log(ack_change, my_dir)
                         await self.send(change_register)
-                    elif single[0] == 'Search':
+                    elif 'Search' in agent_df:    #an agent has requested a search
                         search = single[1]
                         c = search.split('=')
                         type_code_to_search = c[0]
