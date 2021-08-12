@@ -347,6 +347,14 @@ def update_coil_status(msg):
     return df.to_json(orient="records")                                                
 
 '''Functions to improve readability in messages. Improve functions'''
+
+def search_br(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'search'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    return df
  
 def request_browser(df, seq, list):
     df.loc[:, 'id':'request_type']
