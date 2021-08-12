@@ -53,9 +53,9 @@ class BrowserAgent(Agent):
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                 if msg:
                     agent_df = pd.read_json(msg.body)
-                    '''single = msg.body.split(':')   ##### cambiar esto , utilizar formato purpose #todo
+                    '''single = msg.body.split(':')   ##### cambiar esto , utilizar formato purpose #todo'''
                     msg_sender_jid0 = str(msg.sender)
-                    msg_sender_jid = msg_sender_jid0[:-33]'''
+                    msg_sender_jid = msg_sender_jid0[:-33]
                     if 'Alive' in agent_df:    #an agent has notified its status
                         msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
                         response_active = opf.msg_to_log(msg_aa_response, my_dir)
