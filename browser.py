@@ -68,7 +68,6 @@ class BrowserAgent(Agent):
                         await self.send(change_register)
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         msg = agent_df.loc[0, 'msg']
-                        print(msg)
                         single = msg.split(':')
                         search = single[1]
                         c = search.split('=')
@@ -117,13 +116,17 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         if column != 'Null':
-                            print(f'Code to search: {code_to_search}')
+                            print(f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}')
                             filter = register.loc[register[column] == code_to_search]
                             if len(filter) == 0:
-                                print('Code to search not found')
+                                br_search_msg = f'msg_body: error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
                             else:
-                                print(filter)
+                                br_search_msg = f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}'
+                            br_msg_search_json = opf.inform_search(br_search_msg)
+                            inform_search_log = opf.msg_to_log(br_msg_search_json, my_dir)
+                            await self.send(inform_search_log)
                             searched = filter.to_json()
+                            print(searched)
                             br_msg_search = opf.order_searched(searched, agent_search_request, my_dir)
                             await self.send(br_msg_search)
                     else:
