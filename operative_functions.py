@@ -30,9 +30,11 @@ def get_contacts(self):
 
         return self._contacts
 
-def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price,string_operations):
+def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_coils,list_coils,each_coil_price, list_ware, string_operations, wait_time):
     order_msg_log = pd.DataFrame([],columns=['id','order_code','steel_grade','thickness_coils','width_coils','num_coils','list_coils','each_coil_price', 'list_ware', 'string_operations','date'])
     order_msg_log.at[0,'id'] = agent_full_name
+    order_msg_log.at[0, 'purpose'] = 'setup' 
+    order_msg_log.at[0, 'msg'] = 'new order'
     order_msg_log.at[0,'order_code'] = order_code
     order_msg_log.at[0,'steel_grade'] = steel_grade
     order_msg_log.at[0,'thickness_coils'] = thickness
@@ -43,7 +45,9 @@ def order_file(agent_full_name,order_code,steel_grade,thickness,width_coils,num_
     order_msg_log.at[0, 'list_ware'] = list_ware
     order_msg_log.at[0,'string_operations'] = string_operations
     order_msg_log.at[0,'date'] =date.today().strftime('%Y-%m-%d')
-    return order_msg_log.to_json()
+    order_msg_log.at[0, 'to'] = 'log'
+    order_msg_log.at[0, 'wait_time'] = wait_time    
+    return order_msg_log
 
 
 def order_to_log(order_body,agent_directory):
