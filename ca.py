@@ -28,8 +28,12 @@ class ContinuousAnnealingAgent(Agent):
             
             "Ask browser to search"  
             if (ca_search != "No")&(datetime.datetime.now() < searching_time):
-                ca_search_browser = opf.order_to_search(ca_search, my_full_name, my_dir)
+                msg_to_search = 'Search:' + ca_search + ':' + my_full_name
+                order_to_search_body = opf.search_br(my_full_name, msg_to_search)
+                order_to_search_json = order_to_search_body.to_json(orient="records")
+                ca_search_browser = opf.order_to_search(order_to_search_json, my_full_name, my_dir)
                 await self.send(ca_search_browser)
+                
             "Ask browser to delete order in register"
             if (ca_delete != "No")&(datetime.datetime.now() < searching_time):
                 ca_delete_order = opf.order_to_erase(ca_delete, my_full_name, my_dir)
