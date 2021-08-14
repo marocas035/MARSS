@@ -69,7 +69,7 @@ def save_order(msg):
     steel =s[3].split('"')
     thick =s[4].split('"')
     width =s[5].split('"')
-    num =s[6].split('"')
+    num =s[6].split(',')
     list =s[7].split('"')
     id_coil = list[1].split(',')
     price =s[8].split(',')
