@@ -65,10 +65,10 @@ def order_to_log(order_body,agent_directory):
 
 def save_order(msg):
     s = msg.split(':')
-    code =s[2].split('"')
+    code =s[1].split('"')
     steel =s[3].split('"')
-    thick =s[4].split('"')
-    width =s[5].split('"')
+    thick =s[4].split(',')
+    width =s[5].split(',')
     num =s[6].split(',')
     list =s[7].split('"')
     id_coil = list[1].split(',')
@@ -81,7 +81,7 @@ def save_order(msg):
     while (i<n):
         lista_total =[]
         lista_total.append({
-            'Date': dat[34],
+            'Date': dat[35],
             'Order_code': code[1],
             'Steel_grade': steel[1],
             'Thickness': thick[0],
