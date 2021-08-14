@@ -74,7 +74,7 @@ def save_order(msg):
     id_coil = list[1].split(',')
     price =s[9].split(',')
     dat =msg.split('"')
-    string_operations = s[18].split('"')
+    string_operations = s[11].split('"')
     status = string_operations[1].split(';')
     i = 0
     n = int(num[0])
