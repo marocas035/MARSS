@@ -130,8 +130,8 @@ class LogAgent(Agent):
                         launcher_df = pd.read_json(msg.body)
                         if 'order_code' in launcher_df:   # Save order
                             opf.save_order(msg.body)
-                            logger.info(msg.body)
                             ack_msg = "new order successfully saved"
+                            #mensaje en logger informarivo?
                             log_msg_la = opf.msg_to_launcher(ack_msg, my_dir)
                             await self.send(log_msg_la)
                     elif msg_sender_jid == "browser":
