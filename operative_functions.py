@@ -13,6 +13,9 @@ import json
 import socket
 import aioxmpp
 from aioxmpp import PresenceState, PresenceShow
+import subprocess
+import time
+import statistics as stats
 
 
 ''' Funciones Mónica '''
