@@ -281,11 +281,11 @@ def change_warehouse(launcher_df, my_dir):
         name = 'coil_00' + str(number)
         df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
         for i in range(11):
-            if df.loc[df.Name == name, 'Code'].isnull().any().any():
+            if df.loc[df.Name == name, 'Name'].isnull().any().any():   #columna code para que
                 cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
-            elif df.loc[df.Name == name, 'Code'].values == z:
+            elif df.loc[df.Name == name, 'Name'].values == z:
                 cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
