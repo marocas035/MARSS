@@ -81,7 +81,7 @@ def save_order(msg):
     while (i<n):
         lista_total =[]
         lista_total.append({
-            'Date': dat[51],
+            'Date': dat[34],
             'Order_code': code[1],
             'Steel_grade': steel[1],
             'Thickness': thick[0],
