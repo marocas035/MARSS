@@ -65,7 +65,7 @@ def order_to_log(order_body,agent_directory):
 
 def save_order(msg):
     s = msg.split(':')
-    code =s[1].split('"')
+    code =s[2].split('"')
     steel =s[3].split('"')
     thick =s[4].split(',')
     width =s[5].split(',')
