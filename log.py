@@ -67,7 +67,7 @@ class LogAgent(Agent):
                     #approve(msg_sender_jid0)
                     contacts = self.agent.presence.get_contacts() ### si funciona
                     keys = contacts.keys()
-                    print(keys)
+                    print(contacts['localpart'])
                     '''
                     contacts[msg_sender_jid0]:{'agent_jid':msg_sender_jid0,'agent_name':msg_sender_jid, 'type': agent_type}
                     print(contacts)
