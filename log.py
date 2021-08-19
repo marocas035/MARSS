@@ -65,9 +65,10 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     self.presence.subscribe(msg_sender_jid0)
                     #approve(msg_sender_jid0)
-                    contacts = self.agent.presence.get_contacts() ### si funciona
-                    keys = contacts.keys()
-                    print(contacts['localpart'])
+                    list_contacts = pd.DataFrame()
+                    list_contacts = self.agent.presence.get_contacts() ### si funciona
+                    #keys = contacts.keys()
+                    print(list_contacts['localpart'])
                     '''
                     contacts[msg_sender_jid0]:{'agent_jid':msg_sender_jid0,'agent_name':msg_sender_jid, 'type': agent_type}
                     print(contacts)
