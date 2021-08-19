@@ -67,12 +67,12 @@ class LogAgent(Agent):
                     self.presence.subscribe(msg_sender_jid0)
                     #list_contacts = pd.DataFrame()
                     contacts = self.agent.presence.get_contacts() 
-                    contact_jid = contacts["JID"]
+                    contacts_string = json.dumps(contacts)
+                    contact_jid = contacts_string.split("JID(")
                     print(contact_jid)
-                    print(contact_jid["subscription"])
                     #contact_name = contact_jid.split(", resource=None")
-                    list_contacts = pd.read_json(contacts)
-                    print(list_contacts["JID"])
+                    #list_contacts = pd.read_json(contacts)
+                    #print(list_contacts["JID"])
                     #keys = contacts.keys()
                     #print(list_contacts['localpart'])
                     '''
