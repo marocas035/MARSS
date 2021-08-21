@@ -65,6 +65,17 @@ class BrowserAgent(Agent):
                         ack_change = f'Order has been deleted successfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
                         change_register = opf.msg_to_log(ack_change, my_dir)
                         await self.send(change_register)
+                    elif agent_df.loc[0, 'purpose'] == "contact_list":
+                        r = 'Request contact list'
+                        request_contact_list = opf.rq_list_log(my_full_name, r)   #función que solicita a lof contact list 
+                        await self.send(request_contact_list)
+                        msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
+                        if msg_cl:
+                            contact_list = (msg_cl.body).to_json()
+                            cl_to_launcher = opf.contact_list(contact_list, my_full_name)
+                            cl_to_launcher_json = opf.contact_list_json(cl_to_launcher, my_dir)
+                            await self.send(cl_to_launcher_json)
+                            
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         msg = agent_df.loc[0, 'msg']
                         single = msg.split(':')
