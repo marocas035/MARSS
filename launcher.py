@@ -27,7 +27,13 @@ class LaunchAgent(Agent):
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
                 """Active coil agents"""
-                opf.change_warehouse(la_inform_log, my_dir)
+                request_contact_list = opf.request_list(my_dir)   #función que solicita a browser contact list
+                await self.send(request_contact_list)
+                msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
+                if msg_cl:
+                    contact_list = msg_cl.body
+                    opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
+                    
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
                 msg_budget = opf.order_coil(la_coil_json, name_coil)
