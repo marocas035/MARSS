@@ -28,8 +28,9 @@ class LaunchAgent(Agent):
                 await self.send(la_order_log)
                 """Active coil agents"""
                 r = 'Request contact list'
-                request_contact_list = opf.rq_list_br(my_full_name, r)   #función que solicita a browser contact list
-                await self.send(request_contact_list)
+                rq_contact_list = opf.rq_list_br(my_full_name, r)   #función que solicita a browser contact list
+                rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     contact_list = msg_cl.body
