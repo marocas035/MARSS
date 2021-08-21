@@ -262,6 +262,15 @@ def order_budget(budget, code):
     df.loc[0, 'to'] = str(name)
     return df
 
+def contact_list_json(contact_list,agent_directory):
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == "launcher"]
+    launcher_jid = agents_df['User name'].iloc[-1]
+    contact_list_msg = Message(to=launcher_jid)
+    contact_list_msg.body = order_body
+    contact_list_msg.set_metadata("performative", "inform")
+    return contact_list_msg
+
 def order_coil(la_json, code):
     df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
     name = df.loc[df.Code == code, 'User name'].values
@@ -354,6 +363,31 @@ def update_coil_status(msg):
     return df.to_json(orient="records")                                                
 
 '''Functions to improve readability in messages. Improve functions'''
+
+def contact_list(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = 'launcher@apiict03.etsii.upm.es'
+    return df
+
+def rq_list_br(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    return df
+
+def rq_list_log(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
+    return df
+
 def inform_search(msg):
     df = pd.DataFrame()
     df.loc[0, 'purpose'] = 'inform search'
