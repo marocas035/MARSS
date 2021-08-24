@@ -34,7 +34,7 @@ class LaunchAgent(Agent):
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     contact_list = msg_cl.body
-                    opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
+                    opf.change_warehouse(la_inform_log_json, my_dir) #,contact_list)
                     
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
