@@ -280,6 +280,15 @@ def rq_contact_list_br_json(rq_contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
+def rq_contact_list_log_json(rq_contact_list,agent_directory):
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == "log"]
+    log_jid = agents_df['User name'].iloc[-1]
+    contact_list_msg = Message(to=log_jid)
+    contact_list_msg.body = rq_contact_list
+    contact_list_msg.set_metadata("performative", "inform")
+    return contact_list_msg
+
 def order_coil(la_json, code):
     df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
     name = df.loc[df.Code == code, 'User name'].values
