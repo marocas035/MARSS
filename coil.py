@@ -21,7 +21,6 @@ class CoilAgent(Agent):
         async def run(self):
             global my_full_name, my_dir, wait_msg_time, coil_status_var, coil_started_at, stop_time, refresh_time, coil_agent, coil_data_df, bid_register_df, ca_coil_msg_sender, not_entered_auctions, ip_machine, seq_coil #, auction_finish_at            
             """inform log of status"""
-            print(coil_data_df) ####### ?¿?¿?¿ 
             coil_activation_json = opf.activation_df(my_full_name, coil_started_at)
             coil_msg_log = opf.msg_to_log(coil_activation_json, my_dir)
             await self.send(coil_msg_log)
