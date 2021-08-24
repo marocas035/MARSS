@@ -409,12 +409,12 @@ def search_br(my_full_name, msg):
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'search'
     df.loc[0, 'msg'] = msg
-    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
  
 def request_browser(df, seq, list):
     df.loc[:, 'id':'request_type']
-    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     df.loc[0, 'msg'] = seq
     df.loc[0, 'coils'] = str(list)
     df = df[['id', 'purpose', 'request_type', 'msg', 'to']]
@@ -460,14 +460,14 @@ def send_coil(my_full_name, seq):
     df.loc[0, 'purpose'] = 'request'
     df.loc[0, 'request_type'] = 'my location'
     df.loc[0, 'msg'] = seq
-    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
 
 def send_br_log(df, df_br, my_full_name):
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'answer'
     df.loc[0, 'msg'] = df_br.loc[0, 'msg']
-    df.loc[0, 'to'] = 'browser@apiict00.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     df = df[['id', 'purpose', 'msg', 'location', 'to']]
     return df.to_json(orient="records")
 
