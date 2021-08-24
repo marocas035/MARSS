@@ -274,7 +274,7 @@ def contact_list_json(contact_list,agent_directory):
 def rq_contact_list_br_json(rq_contact_list,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "browser"]
-    browserer_jid = agents_df['User name'].iloc[-1]
+    browser_jid = agents_df['User name'].iloc[-1]
     contact_list_msg = Message(to=browser_jid)
     contact_list_msg.body = rq_contact_list
     contact_list_msg.set_metadata("performative", "inform")
