@@ -23,7 +23,7 @@ class LaunchAgent(Agent):
             if order_code != "No":
                 la_inform_log = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,
                                                     num_coils, list_coils, each_coil_price, list_ware, string_operations, wait_msg_time)
-                la_inform_log_json = la_inform_log_json.to_json(orient="records")
+                la_inform_log_json = la_inform_log.to_json(orient="records")
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
                 """Active coil agents"""
