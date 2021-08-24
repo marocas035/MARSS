@@ -293,7 +293,7 @@ def order_coil(la_json, code):
 def change_warehouse(launcher_df, my_dir):
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
-    wait_time = int(launcher_df.loc[0, 'wait_time'])
+    wait_time = launcher_df.loc[0, 'wait_time']
     #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
     j = 0
     my_dir = os.getcwd()
@@ -301,8 +301,8 @@ def change_warehouse(launcher_df, my_dir):
         number = 1
         name = 'coil_00' + str(number)
         df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
-        for i in range(11):
-            if df.loc[df.Name == name, 'Code'].isnull().any().any():   #columna code para que
+        for i in range(30):
+            if df.loc[df.Name == name, 'Code'].isnull().any().any():   
                 cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
