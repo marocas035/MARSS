@@ -322,12 +322,8 @@ class CoilAgent(Agent):
                 coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var).to_json()
                 coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
                 await self.send(coil_msg_log)
-                # We could introduce here a condition to be met to change to "on"
-                # now it just changes directly to auction
-                """inform log of status"""
-                #coil_status_var = "auction"
-                #coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, coil_data_df).to_json(orient="records")
-                #coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
+               # now it just changes directly to auction
+                coil_status_var = "auction"
             else:
                 """inform log of status"""
                 coil_inform_json = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var).to_json()
