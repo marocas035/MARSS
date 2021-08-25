@@ -127,7 +127,8 @@ class LogAgent(Agent):
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
                         contacts = self.agent.presence.get_contacts()
                         rq_contact_list = opf.contact_list_la(my_full_name, contacts).to_json(orient="records")
-                        #rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list,   TODO
+                        rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
+                        await self.send(rq_contact_list_json)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
                     else:
