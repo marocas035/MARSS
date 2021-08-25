@@ -52,8 +52,7 @@ class CoilAgent(Agent):
             if coil_status_var == "auction":
                 """inform log of status"""
                 to_do = "search-auction"
-                coil_msg_log_body = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, to_do).to_json()
-                coil_inform_json = coil_msg_log_body.to_json(orient="records")
+                coil_msg_log_body = opf.inform_log_df(my_full_name, coil_started_at, coil_status_var, to_do).to_json(orient="records")
                 coil_msg_log = opf.msg_to_log(coil_inform_json, my_dir)
                 await self.send(coil_msg_log)
                 this_time = datetime.datetime.now()
