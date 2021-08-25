@@ -57,8 +57,7 @@ class LaunchAgent(Agent):
             """Receive message"""
             msg = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
             if msg:
-                msg_df = pd.read_json(msg.body)
-                print(msg_df)
+                print(msg.body)
                 single = msg.body.split(":")
                 if single[0] == "Alive":
                     msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{la_started_at}'
