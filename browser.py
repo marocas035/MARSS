@@ -66,11 +66,13 @@ class BrowserAgent(Agent):
                         change_register = opf.msg_to_log(ack_change, my_dir)
                         await self.send(change_register)
                     elif agent_df.loc[0, 'purpose'] == "contact_list":
+                        print(msg.body)
                         r = 'Request contact list'
                         rq_contact_list = opf.rq_list_log(my_full_name, r).to_json(orient="records")   #request contact list to log 
                         request_contact_list_json = opf.rq_contact_list_log_json(rq_contact_list, my_dir)
                         await self.send(request_contact_list_json)
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
+                        print(msg_cl.body)
                         if msg_cl:
                             contact_list = (msg_cl.body).to_json()
                             cl_to_launcher = opf.contact_list(contact_list, my_full_name)
