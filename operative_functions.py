@@ -312,11 +312,12 @@ def change_warehouse(launcher_df, my_dir):
         df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
         for i in range(30):
             if df.loc[df.Name == name, 'Code'].isnull().any().any():   
-                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
+                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                
                 break
             elif df.loc[df.Name == name, 'Code'].values == z:
-                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c{z} -w{wait_time}'
+                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 break
             else:
@@ -324,6 +325,11 @@ def change_warehouse(launcher_df, my_dir):
                 name = 'coil_00' + str(number)
         time.sleep(5)
         j = j + 1
+        
+def change_jid(my_dir, my_full_name):
+    df = agents_data()
+    df.loc[df.Name == my_full_name, 'Code'] = ''
+    df.to_csv(f'{my_dir}''/''agents.csv', index=False, header=True)
 
 def req_active_users_loc_times(agent_df, seq, list, *args):
     """Returns msg body to send to browser as a json"""
