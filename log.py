@@ -67,7 +67,7 @@ class LogAgent(Agent):
                     self.presence.subscribe(msg_sender_jid0)
                     #list_contacts = pd.DataFrame()
                     contacts = self.agent.presence.get_contacts()
-                    print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
+                    #print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
                     #contacts_string = json.dumps(contacts)
                     ###getDomain(contacts)
                     ###print(getDomain(self))
