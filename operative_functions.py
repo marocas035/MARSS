@@ -315,6 +315,7 @@ def change_warehouse(launcher_df, my_dir):
                 cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 df.loc[df.Name == name, 'Code'] = z
+                df.to_csv('agents.csv', index = False)
                 break
             elif df.loc[df.Name == name, 'Code'].values == z:
                 cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
