@@ -75,6 +75,7 @@ class BrowserAgent(Agent):
                         if msg_cl:
                             agent_df = pd.read_json(msg_cl.body)
                             contact_list = agent_df.loc[0, 'msg']
+                            print(contact_list)
                             cl_to_launcher = opf.contact_list(contact_list, my_full_name).to_json(orient="records") 
                             cl_to_launcher_json = opf.contact_list_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
