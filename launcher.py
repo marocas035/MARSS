@@ -35,7 +35,7 @@ class LaunchAgent(Agent):
                 if msg_cl:
                     agent_df = pd.read_json(msg_cl.body)
                     if agent_df.loc[0, 'purpose'] == "contact_list":
-                        contact_list = msg_cl.body
+                        contact_list = agent_df.loc[0, 'msg']
                         print(contact_list)
                         opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
                    
