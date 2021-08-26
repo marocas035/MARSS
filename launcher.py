@@ -34,7 +34,7 @@ class LaunchAgent(Agent):
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     agent_df = pd.read_json(msg_cl.body)
-                    list_id_coil_agent = ""
+                    list_id_coil_agent = "{"
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = agent_df.loc[0, 'msg']
                         contact_jid = contact_list.split("JID(localpart='")
@@ -43,9 +43,9 @@ class LaunchAgent(Agent):
                             id_agent = id_agent_list[0][0]
                             if id_agent == 'c':
                                 id_coil_agent = id_agent_list[0][0:4]
-                                list_id_coil_agent = '{'+ list_id_coil_agent + ',' + id_coil_agent + '}'
-                                print(list_id_coil_agent)
-                                #print(len(contact_jid))
+                                list_id_coil_agent = list_id_coil_agent + ',' + id_coil_agent 
+                        list_id_coil_agents = f"{list_id_coil_agent}}"
+                        print(list_id_coil_agents)
                             #opf.change_warehouse(la_inform_log, my_dir) #,contact_list)'''
 
             if name_coil != "No":
