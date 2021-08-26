@@ -66,19 +66,6 @@ class LogAgent(Agent):
                     agent_type = opf.aa_type(msg_sender_jid2)
                     '''Active agents register '''
                     self.presence.subscribe(msg_sender_jid0)
-                    #list_contacts = pd.DataFrame()
-                    #contacts = self.agent.presence.get_contacts()
-                    #print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
-                    #contacts_string = json.dumps(contacts)
-                    ###getDomain(contacts)
-                    ###print(getDomain(self))
-                    #contact_jid = contacts_string.split("JID(")
-                    #print(contact_jid)
-                    #contact_name = contact_jid.split(", resource=None")
-                    #list_contacts = pd.read_json(contacts)
-                    #print(list_contacts["JID"])
-                    #keys = contacts.keys()
-                    #print(list_contacts['localpart'])
                     '''
                     contacts[msg_sender_jid0]:{'agent_jid':msg_sender_jid0,'agent_name':msg_sender_jid, 'type': agent_type}
                     print(contacts)
