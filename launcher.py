@@ -43,9 +43,8 @@ class LaunchAgent(Agent):
                             id_agent = id_agent_list[0][0]
                             if id_agent == 'c':
                                 id_coil_agent = id_agent_list[0][0:4]
-                                print(id_coil_agent)
                                 list_id_coil_agent = '{'+ list_id_coil_agent + ',' + id_coil_agent + '}'
-                                #print(list_id_coil_agent)
+                                print(list_id_coil_agent)
                                 #print(len(contact_jid))
                             #opf.change_warehouse(la_inform_log, my_dir) #,contact_list)'''
 
