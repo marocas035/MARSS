@@ -72,9 +72,9 @@ class BrowserAgent(Agent):
                         request_contact_list_json = opf.rq_contact_list_log_json(rq_contact_list, my_dir)
                         await self.send(request_contact_list_json)
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
-                        print(msg_cl.body)
                         if msg_cl:
-                            contact_list = (msg_cl.body)
+                            agent_df = pd.read_json(msg_cl.body)
+                            contact_list = agent_df.loc[0, 'msg']
                             cl_to_launcher = opf.contact_list(contact_list, my_full_name).to_json(orient="records") 
                             cl_to_launcher_json = opf.contact_list_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
