@@ -125,7 +125,7 @@ class LogAgent(Agent):
                     elif 'IP' in msg_2:  # msg_2.loc[0, 'purpose'] == 'inform' or ###jose???
                         logger.debug(msg.body)
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
-                        contacts = (self.agent.presence.get_contacts()).to_json()
+                        contacts = json.dumps((self.agent.presence.get_contacts()))
                         rq_contact_list = opf.rq_list_br(my_full_name, contacts).to_json(orient="records")
                         rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
