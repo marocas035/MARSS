@@ -267,7 +267,7 @@ def contact_list_json(contact_list,agent_directory):
     agents_df = agents_df.loc[agents_df['Name'] == "launcher"]
     launcher_jid = agents_df['User name'].iloc[-1]
     contact_list_msg = Message(to=launcher_jid)
-    contact_list_msg.body = order_body
+    contact_list_msg.body = contact_list
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
