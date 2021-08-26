@@ -34,7 +34,7 @@ class LaunchAgent(Agent):
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     agent_df = pd.read_json(msg_cl.body)
-                    lis_id_coil_agent = ""
+                    list_id_coil_agent = ""
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = agent_df.loc[0, 'msg']
                         contact_jid = contact_list.split("JID(localpart='")
