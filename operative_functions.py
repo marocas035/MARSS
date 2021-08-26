@@ -299,7 +299,8 @@ def order_coil(la_json, code):
     return msg_budget
 
 ''' Funciones Jose '''
-def change_warehouse(launcher_df, my_dir):  
+def change_warehouse(launcher_df, my_dir, list_id_coil_agents):
+    ca = list_id_coil_agents.split(',')    
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])
