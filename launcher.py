@@ -33,7 +33,7 @@ class LaunchAgent(Agent):
                 await self.send(rq_contact_list_json)
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
-                    agent_df = pd.read_json(msg.body)
+                    agent_df = pd.read_json(msg_cl.body)
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = msg_cl.body
                         print(contact_list)
