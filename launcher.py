@@ -38,7 +38,7 @@ class LaunchAgent(Agent):
                         contact_list = agent_df.loc[0, 'msg']
                         contact_jid = contact_list.split("JID(localpart='")
                         print(contact_jid[1])
-                        print(length(contact_jid))
+                        print(type(contact_jid))
                         opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
                    
             if name_coil != "No":
