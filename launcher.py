@@ -43,10 +43,10 @@ class LaunchAgent(Agent):
                             id_agent = id_agent_list[0][0]
                             if id_agent == 'c':
                                 id_coil_agent = id_agent_list[0][0:4]
-                                list_id_coil_agent = list_id_coil_agent + ',' + id_coil_agent 
+                                list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','
                         list_id_coil_agents = f"{list_id_coil_agent}"
                         print(list_id_coil_agents)
-                        opf.change_warehouse(la_inform_log, my_dir ,contact_list)
+                        inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list)
 
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
