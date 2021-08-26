@@ -34,21 +34,21 @@ class LaunchAgent(Agent):
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     agent_df = pd.read_json(msg_cl.body)
+                    lis_id_coil_agent = ""
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = agent_df.loc[0, 'msg']
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
                             id_agent_list = i.split("', domain='apiict03.etsii.upm.es', resource=None): {'subscription': 'none', 'ask': 'subscribe'}")
                             id_agent = id_agent_list[0][0]
-                            print(id_agent)
-                            '''
-                            if id_agent.split("0")[0] == 'c':
-                                #dataframe
-                                id_agent = 
-                                print(id_agent)
+                            if id_agent == 'c':
+                                id_coil_agent = id_agent[0][3]
+                                print(id_coil_agent)
+                                list_id_coil_agent = '{'+ list_id_coil_agent + ',' + id_coil_agent + '}'
+                                #print(list_id_coil_agent)
                                 #print(len(contact_jid))
-                            opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
-                   '''
+                            #opf.change_warehouse(la_inform_log, my_dir) #,contact_list)'''
+
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
                 msg_budget = opf.order_coil(la_coil_json, name_coil)
