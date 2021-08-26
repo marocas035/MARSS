@@ -153,11 +153,12 @@ class LogAgent(Agent):
                         if 'order_code' in launcher_df:   # Save order
                             opf.save_order(msg.body)
                             order_code = launcher_df['order_code']
+                            print(order_code)
                             ack_msg = f"New order successfully saved. Order code: {order_code}"
                             ack_msg_json = opf.inform_new_order(my_full_name, ack_msg).to_json(orient="records")
                             logger.info(ack_msg_json)
-                            log_msg_la = opf.msg_to_launcher(ack_msg_json, my_dir)
-                            await self.send(log_msg_la)
+                            #log_msg_la = opf.msg_to_launcher(ack_msg_json, my_dir)
+                            #await self.send(log_msg_la)
                     elif msg_sender_jid == "browser":
                         browser_df = pd.read_json(msg.body)
                         if 'SearchAA' in browser_df:  # Active agents list requested   #####¿¿¿¿?¿?¿?¿? #todo
