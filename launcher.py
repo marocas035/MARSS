@@ -37,9 +37,13 @@ class LaunchAgent(Agent):
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = agent_df.loc[0, 'msg']
                         contact_jid = contact_list.split("JID(localpart='")
-                        print(contact_jid[1])
-                        print(len(contact_jid))
-                        opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
+                        for i in contact_jid:
+                            id_agent = i.split("', domain='apiict03.etsii.upm.es', resource=None): {'subscription': 'none', 'ask': 'subscribe'},")
+                            if id_agent.split("0")[0] == 'c':
+                                #dataframe
+                                print(id_agent)
+                                #print(len(contact_jid))
+                            opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
                    
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
