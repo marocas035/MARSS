@@ -42,7 +42,7 @@ class LaunchAgent(Agent):
                             id_agent_list = i.split("', domain='apiict03.etsii.upm.es', resource=None): {'subscription': 'none', 'ask': 'subscribe'}")
                             id_agent = id_agent_list[0][0]
                             if id_agent == 'c':
-                                id_coil_agent = id_agent_list[0:3]
+                                id_coil_agent = id_agent_list[0][0:3]
                                 print(id_coil_agent)
                                 list_id_coil_agent = '{'+ list_id_coil_agent + ',' + id_coil_agent + '}'
                                 #print(list_id_coil_agent)
