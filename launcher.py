@@ -39,10 +39,11 @@ class LaunchAgent(Agent):
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
                             id_agent = i.split("', domain='apiict03.etsii.upm.es', resource=None): {'subscription': 'none', 'ask': 'subscribe'},")
-                            if id_agent.split("0")[0] == 'c':
+                            print(id_agent)
+                            '''if id_agent.split("0")[0] == 'c':
                                 #dataframe
                                 print(id_agent)
-                                #print(len(contact_jid))
+                                #print(len(contact_jid))'''
                             opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
                    
             if name_coil != "No":
