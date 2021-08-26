@@ -413,6 +413,13 @@ def rq_list_log(my_full_name, msg):
     df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
     return df
 
+def inform_new_order(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'register_orders'
+    df.loc[0, 'msg'] = msg
+    return df
+
 def inform_search(msg):
     df = pd.DataFrame()
     df.loc[0, 'purpose'] = 'inform search'
