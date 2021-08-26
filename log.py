@@ -67,7 +67,7 @@ class LogAgent(Agent):
                     '''Active agents register '''
                     self.presence.subscribe(msg_sender_jid0)
                     #list_contacts = pd.DataFrame()
-                    contacts = self.agent.presence.get_contacts()
+                    #contacts = self.agent.presence.get_contacts()
                     #print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
                     #contacts_string = json.dumps(contacts)
                     ###getDomain(contacts)
@@ -152,9 +152,11 @@ class LogAgent(Agent):
                         launcher_df = pd.read_json(msg.body)
                         if 'order_code' in launcher_df:   # Save order
                             opf.save_order(msg.body)
-                            ack_msg = "new order successfully saved"
-                            #mensaje en logger informarivo?
-                            log_msg_la = opf.msg_to_launcher(ack_msg, my_dir)
+                            order_code = launcher_df['order_code']
+                            ack_msg = f"New order successfully saved. Order code: {order_code}"
+                            ack_msg_json = opf.inform_new_order(my_full_name, ack_msg).to_json(orient="records")
+                            logger.info(ack_msg_json)
+                            log_msg_la = opf.msg_to_launcher(ack_msg_json, my_dir)
                             await self.send(log_msg_la)
                     elif msg_sender_jid == "browser":
                         browser_df = pd.read_json(msg.body)
