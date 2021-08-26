@@ -75,7 +75,7 @@ class BrowserAgent(Agent):
                         print(msg_cl.body)
                         if msg_cl:
                             contact_list = (msg_cl.body)
-                            cl_to_launcher = opf.contact_list(contact_list, my_full_name)
+                            cl_to_launcher = opf.contact_list(contact_list, my_full_name).to_json(orient="records") 
                             cl_to_launcher_json = opf.contact_list_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
                             
