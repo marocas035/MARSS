@@ -74,7 +74,7 @@ class BrowserAgent(Agent):
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                         print(msg_cl.body)
                         if msg_cl:
-                            contact_list = (msg_cl.body).to_json()
+                            contact_list = (msg_cl.body)
                             cl_to_launcher = opf.contact_list(contact_list, my_full_name)
                             cl_to_launcher_json = opf.contact_list_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
