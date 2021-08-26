@@ -34,7 +34,7 @@ class LaunchAgent(Agent):
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
                     agent_df = pd.read_json(msg.body)
-                    if agent_df.loc[0, 'purpose'] == "contact_list"
+                    if agent_df.loc[0, 'purpose'] == "contact_list":
                         contact_list = msg_cl.body
                         print(contact_list)
                         opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
