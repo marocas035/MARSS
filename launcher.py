@@ -46,7 +46,7 @@ class LaunchAgent(Agent):
                                 list_id_coil_agent = list_id_coil_agent + ',' + id_coil_agent 
                         list_id_coil_agents = f"{list_id_coil_agent}"
                         print(list_id_coil_agents)
-                            #opf.change_warehouse(la_inform_log, my_dir) #,contact_list)'''
+                        opf.change_warehouse(la_inform_log, my_dir ,contact_list)
 
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
@@ -68,7 +68,6 @@ class LaunchAgent(Agent):
             """Receive message"""
             msg = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
             if msg:
-                print(msg.body)
                 single = msg.body.split(":")
                 if single[0] == "Alive":
                     msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{la_started_at}'
