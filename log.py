@@ -18,6 +18,7 @@ import json
 import socket
 import aioxmpp
 from aioxmpp import PresenceState, PresenceShow
+import getpass
 
 
 class LogAgent(Agent):
@@ -125,7 +126,9 @@ class LogAgent(Agent):
                     elif 'IP' in msg_2:  # msg_2.loc[0, 'purpose'] == 'inform' or ###jose???
                         logger.debug(msg.body)
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
-                        contacts = json.dumps((self.agent.presence.get_contacts()))
+                        contacts = self.agent.presence.get_contacts()
+                        contacts_jid = contacts.split("localpart")
+                        print(contacts_jid)
                         rq_contact_list = opf.rq_list_br(my_full_name, contacts).to_json(orient="records")
                         rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
