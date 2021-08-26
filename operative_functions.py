@@ -309,17 +309,22 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents):
     my_dir = os.getcwd()
     for z in lc:
         number = 1
+        msg_log = ""
         name = 'coil_00' + str(number)
         df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
         for i in range(30):
-            for n in ca:    
-                if name == n:  #active_coil 
+            for c in ca:    
+                if name == c:  #active_coil- change localitation 
                         cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]},'
+                        msg_log = msg_log + inform_log
                         break
                 else:
                         cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]},'
+                        msg_log = msg_log + inform_log
                         df.loc[df.Name == name, 'Code'] = z
                         df.to_csv('agents.csv', index = False)
                         break
@@ -328,6 +333,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents):
                 name = 'coil_00' + str(number)
         time.sleep(5)
         j = j + 1
+    return msg_log            
+        
 
 def change_warehouseeeeeeeee(launcher_df, my_dir, list_id_coil_agents):
     ca = list_id_coil_agents.split(',')    
@@ -357,7 +364,8 @@ def change_warehouseeeeeeeee(launcher_df, my_dir, list_id_coil_agents):
                 name = 'coil_00' + str(number)
         time.sleep(5)
         j = j + 1
-        
+
+
 def change_jid(my_dir, my_full_name):
     df = agents_data()
     df.loc[df.Name == my_full_name, 'Code'] = ''
