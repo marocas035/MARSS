@@ -33,9 +33,11 @@ class LaunchAgent(Agent):
                 await self.send(rq_contact_list_json)
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
-                    contact_list = msg_cl.body
-                    print(contact_list)
-                    opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
+                    agent_df = pd.read_json(msg.body)
+                    if agent_df.loc[0, 'purpose'] == "contact_list"
+                        contact_list = msg_cl.body
+                        print(contact_list)
+                        opf.change_warehouse(la_inform_log, my_dir) #,contact_list)
                    
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
