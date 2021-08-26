@@ -127,7 +127,7 @@ class LogAgent(Agent):
                         logger.debug(msg.body)
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
                         contacts = self.agent.presence.get_contacts()
-                        cl_msg = ("Contact list: {}".format(self.agent.presence.get_contacts())
+                        cl_msg = f"Contact list: {contacts}"
                         print(cl_msg)          
                         rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
