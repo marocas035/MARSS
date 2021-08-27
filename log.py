@@ -113,6 +113,8 @@ class LogAgent(Agent):
                         agent_register = opf.inform_register_aa(agent_register)
                         logger.info(agent_register)
                         '''
+                    elif msg_2.loc[0, 'purpose'] == 'coil_df_list':
+                        coil_df_list = active_coil_agents.to_json(orient="records")    
                     elif  msg_2.loc[0, 'status'] == 'ended':
                         self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
