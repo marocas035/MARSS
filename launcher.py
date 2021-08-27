@@ -39,7 +39,6 @@ class LaunchAgent(Agent):
                         if (len(agent_df.columns)) == 5:
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2'] 
-                            print(active_coil_df)
                         else:
                             contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
@@ -48,9 +47,12 @@ class LaunchAgent(Agent):
                             id_agent = id_agent_list[0][0]
                             if id_agent == 'c':
                                 id_coil_agent = id_agent_list[0][0:4]
-                                list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','
+                                list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','        
                         list_id_coil_agents = f"{list_id_coil_agent}"
-                        inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list)
+                        if (len(agent_df.columns)) == 5:
+                            inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, active_coil_df)
+                        else:
+                            inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list)
 
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
