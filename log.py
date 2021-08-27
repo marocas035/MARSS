@@ -98,16 +98,16 @@ class LogAgent(Agent):
                         self.counter += 1
                         counter = int(self.counter)
                         """Active coil agents register"""
-                        coil_code = msg_2.loc[0, 'coil_code']
+                        coil_id = msg_2.loc[0, 'coil_code']
                         coil_agent_name = msg_2.loc[0, 'agent_name']
                         coil_location = msg_2.loc[0, 'coil_location']
-                        coil_register_df = [{'coil_id': coil_code , 'coil_agent_name': coil_agent_name, 'coil_jid': msg_sender_jid2 ,'coil_location': coil_location}]
+                        coil_register_df = [{'coil_id': coil_id , 'coil_agent_name': coil_agent_name, 'coil_jid': msg_sender_jid2 ,'coil_location': coil_location}]
                         if (counter == 2):   
                             active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                         else:
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
-                            active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'agent_name'], keep='first')
+                            active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
                         print(active_coil_agents)
                         '''
                         agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
