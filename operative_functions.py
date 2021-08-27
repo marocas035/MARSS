@@ -262,7 +262,7 @@ def order_budget(budget, code):
     df.loc[0, 'to'] = str(name)
     return df
 
-def contact_list_json(contact_list,agent_directory):
+def contact_list_la_json(contact_list,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "launcher"]
     launcher_jid = agents_df['User name'].iloc[-1]
@@ -271,7 +271,7 @@ def contact_list_json(contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
-def rq_contact_list_br_json(rq_contact_list,agent_directory):
+def contact_list_br_json(rq_contact_list,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "browser"]
     browser_jid = agents_df['User name'].iloc[-1]
@@ -280,7 +280,7 @@ def rq_contact_list_br_json(rq_contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
-def rq_contact_list_log_json(rq_contact_list,agent_directory):
+def contact_list_log_json(rq_contact_list,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "log"]
     log_jid = agents_df['User name'].iloc[-1]
@@ -437,19 +437,29 @@ def update_coil_status(msg):
 
 '''Functions to improve readability in messages. Improve functions'''
 
-def contact_list(my_full_name, msg):
+def rec_list_la(my_full_name, msg_contlist, msg_actcoil):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'contact_list'
-    df.loc[0, 'msg'] = msg
+    df.loc[0, 'msg1'] = msg_contlist
+    df.loc[0, 'msg2'] = msg_actcoil    
     df.loc[0, 'to'] = 'launcher@apiict03.etsii.upm.es'
+    return df
+
+def rec_list_br(my_full_name, msg_contlist, msg_actcoil):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg1'] = msg_contlist
+    df.loc[0, 'msg2'] = msg_actcoil    
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
 
 def rq_list_br(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'contact_list'
-    df.loc[0, 'msg'] = msg
+    df.loc[0, 'msg'] = msg   
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
 
