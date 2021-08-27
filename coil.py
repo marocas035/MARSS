@@ -26,8 +26,9 @@ class CoilAgent(Agent):
             await self.send(coil_msg_log)
             
             if (args.code != 'cO00000000'):
-                coil_number = f'c{args.agent_number}'
-                activation_coil = opf.inform_coil_activation(my_full_name, args.code , coil_number , args.location).to_json(orient="records")
+                coil_number = str(args.agent_number)
+                coil_name = 'c'+coil_number
+                activation_coil = opf.inform_coil_activation(my_full_name, args.code , coil_name , args.location).to_json(orient="records")
                 activation_coil_msg = opf.activation_coil_inform_msg(activation_coil,  my_dir)
                 await self.send(activation_coil_msg)
             
