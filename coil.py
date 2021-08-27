@@ -25,6 +25,12 @@ class CoilAgent(Agent):
             coil_msg_log = opf.msg_to_log(coil_activation_json, my_dir)
             await self.send(coil_msg_log)
             
+            if ((args.code != 'cO00000000'):
+                inform_log = f'coil_code: {args.code} , agent_name: c{args.agent_number} , location: {args.location}'
+                activation_coil = opf.inform_coil_activation(my_full_name, inform_log).to_json(orient="records")
+                activation_coil_msg = opf.activation_coil_inform_msg(activation_coil,  my_dir)
+                await self.send(activation_coil_msg)
+            
             "Ask browser to search order" 
             if (coil_search != "No")&(datetime.datetime.now() < searching_time):
                 msg_to_search = 'Search:' + coil_search + ':' + my_full_name
@@ -373,7 +379,7 @@ if __name__ == "__main__":
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     parser.add_argument('-l', '--location', type=str, metavar='', required=False, default='K', help='location: K')
-    parser.add_argument('-c', '--code', type=str, metavar='', required=False, default='cO202106101',help='code: cO202106101')
+    parser.add_argument('-c', '--code', type=str, metavar='', required=False, default='cO00000000',help='code: cO202106101')
     parser.add_argument('-w', '--wait_auction_time', type=int, metavar='', required=False, default=500, help='wait_msg_time: time in seconds to wait for a msg')
     args = parser.parse_args()
     my_dir = os.getcwd()
