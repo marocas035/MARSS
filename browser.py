@@ -79,7 +79,7 @@ class BrowserAgent(Agent):
                                 cl_to_launcher = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")
                             else:
                                contact_list = agent_df.loc[0, 'msg'] 
-                               cl_to_launcher = opf.rq_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")     
+                               cl_to_launcher = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
                             cl_to_launcher_json = opf.contact_list_la_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
                             
