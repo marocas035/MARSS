@@ -73,6 +73,7 @@ class BrowserAgent(Agent):
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                         if msg_cl:
                             agent_df = pd.read_json(msg_cl.body)
+                            print(len(agent_df.columns))
                             if (len(agent_df.columns)) == 2:
                                 contact_list = agent_df.loc[0, 'msg1']
                                 active_coil_df = agent_df.loc[0, 'msg2']
