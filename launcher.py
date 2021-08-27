@@ -36,8 +36,12 @@ class LaunchAgent(Agent):
                     agent_df = pd.read_json(msg_cl.body)
                     list_id_coil_agent = ""
                     if agent_df.loc[0, 'purpose'] == "contact_list":
-                        contact_list = agent_df.loc[0, 'msg1']
-                        active_coil_df = agent_df.loc[0, 'msg2']
+                        if (len(agent_df.columns) == 2:
+                            contact_list = agent_df.loc[0, 'msg1']
+                            active_coil_df = agent_df.loc[0, 'msg2'] 
+                            print(active_coil_df)
+                        else:
+                            contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
                             id_agent_list = i.split("', domain='apiict03.etsii.upm.es', resource=None): {'subscription': 'none', 'ask': 'subscribe'}")
@@ -46,7 +50,6 @@ class LaunchAgent(Agent):
                                 id_coil_agent = id_agent_list[0][0:4]
                                 list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','
                         list_id_coil_agents = f"{list_id_coil_agent}"
-                        print(active_coil_df)
                         inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list)
 
             if name_coil != "No":
