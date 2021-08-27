@@ -101,9 +101,9 @@ class LogAgent(Agent):
                         coil_code = msg_2.loc[0, 'coil_code']
                         coil_agent_name = msg_2.loc[0, 'agent_name']
                         coil_location = msg_2.loc[0, 'coil_location']
-                        coil_register_df = [{'coil_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'activation_time': time}]
+                        coil_register_df = [{'coil_id': coil_code , 'coil_agent_name': coil_agent_name, 'coil_jid': msg_sender_jid2 ,'coil_location': coil_location}]
                         if (counter == 2):   
-                            active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_location'])
+                            active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                         else:
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
