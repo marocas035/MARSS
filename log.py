@@ -26,7 +26,7 @@ class LogAgent(Agent):
         async def run(self):
             self.presence.on_subscribe = self.on_subscribe
             self.presence.on_subscribed = self.on_subscribed
-            global wait_msg_time, logger, log_status_var, active_agents, ip_machine, list_contacts
+            global wait_msg_time, logger, log_status_var, active_agents, ip_machine, active_coil_agents
             if log_status_var == "on":
                 '''"Active Agents"   #todo
                 r = opf.checkFileExistance()
@@ -56,37 +56,13 @@ class LogAgent(Agent):
                         del a'''
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
-                    print(f"received msg number {self.counter}")
-                    self.counter += 1
-                    counter = int(self.counter)
-                    #logger.info(msg.body)
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     '''Active agents register '''
                     self.presence.subscribe(msg_sender_jid0)
-                    '''
-                    contacts[msg_sender_jid0]:{'agent_jid':msg_sender_jid0,'agent_name':msg_sender_jid, 'type': agent_type}
-                    print(contacts)
-                    #list_contacts = opf.get_contacts(self)
-                    #print(list_contacts)
                     
-                    time = datetime.datetime.now()
-                    """Active agents register"""
-                    my_list = [{'agent_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'agent_type': agent_type,
-                                'activation_time': time}]
-                    if (counter == 2):
-                        active_agents = pd.DataFrame([], columns=['agent_id', 'agent_name', 'agent_type',
-                                                                  'activation_time'])
-                        active_agents = active_agents.append(my_list, ignore_index=True)
-                    else:
-                        active_agents = active_agents.append(my_list, ignore_index=True)
-                        active_agents = active_agents.drop_duplicates(['agent_id', 'agent_name'], keep='first')
-                    # print(active_agents)
-                    agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
-                    agent_register = opf.inform_register_aa(agent_register)
-                    logger.info(agent_register)'''
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
                     formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
@@ -118,6 +94,26 @@ class LogAgent(Agent):
                         rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.rq_contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
+                    elif  msg_2.loc[0, 'purpose'] == 'new_coil':
+                        self.counter += 1
+                        counter = int(self.counter)
+                        """Active coil agents register"""
+                        coil_code = msg_2.loc[0, 'coil_code']
+                        coil_agent_name = msg_2.loc[0, 'agent_name']
+                        coil_location = msg_2.loc[0, 'coil_location']
+                        coil_register_df = [{'coil_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'activation_time': time}]
+                        if (counter == 2):   
+                            active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_location'])
+                            active_coil_agents = active_coil_agents.append(my_list, ignore_index=True)
+                        else:
+                            active_coil_agents = active_coil_agents.append(my_list, ignore_index=True)
+                            active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'agent_name'], keep='first')
+                    print(active_agents)
+                    '''
+                    agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
+                    agent_register = opf.inform_register_aa(agent_register)
+                    logger.info(agent_register)
+                    '''
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
                     else:
@@ -176,7 +172,6 @@ class LogAgent(Agent):
 
         async def on_start(self):
             self.counter = 1
-            list_contacts = {}
             self._contacts = {}
             
         async def on_subscribe(self, jid):
