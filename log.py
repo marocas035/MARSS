@@ -117,8 +117,8 @@ class LogAgent(Agent):
                         rq_contact_list = opf.rec_list_br(my_full_name, cl_msg, coil_df_list).to_json(orient="records")
                         rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
-                    elif  msg_2.loc[0, 'status'] == 'ended':
-                        self.presence.unsubscribe(msg_sender_jid0)
+                    #elif  msg_2.loc[0, 'status'] == 'ended':
+                     #   self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
                     else:
