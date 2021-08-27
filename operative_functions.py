@@ -463,6 +463,14 @@ def rq_list_br(my_full_name, msg):
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
 
+def rq_list_la(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg   
+    df.loc[0, 'to'] = 'launcher@apiict03.etsii.upm.es'
+    return df
+
 def rq_list_log(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
