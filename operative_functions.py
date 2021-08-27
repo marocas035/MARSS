@@ -289,6 +289,15 @@ def rq_contact_list_log_json(rq_contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
+def activation_coil_inform_msg(activation_coil_msg ,agent_directory):
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == "log"]
+    log_jid = agents_df['User name'].iloc[-1]
+    inform_log_msg = Message(to=log_jid)
+    inform_log_msg.body = activation_coil_msg
+    inform_log_msg.set_metadata("performative", "inform")
+    return inform_log_msg
+
 def order_coil(la_json, code):
     df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
     name = df.loc[df.Code == code, 'User name'].values
@@ -317,7 +326,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents):
                 if name == c:  #active_coil- change localitation 
                         cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]},'
+                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]}'
                         msg_log = msg_log + inform_log
                         break
                 else:
@@ -333,7 +342,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents):
                 name = 'coil_00' + str(number)
         time.sleep(5)
         j = j + 1
-    return msg_log            
+           
         
 
 def change_warehouseeeeeeeee(launcher_df, my_dir, list_id_coil_agents):
@@ -448,6 +457,14 @@ def rq_list_log(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
+    return df
+
+def inform_coil_activation(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'new_coil'
     df.loc[0, 'msg'] = msg
     df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
     return df
