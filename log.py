@@ -112,9 +112,13 @@ class LogAgent(Agent):
                             print(type(coil_df_list))'''
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
                         contacts = self.agent.presence.get_contacts()
-                        cl_msg = f"Contact list: {contacts}" 
-                        coil_df_list = active_coil_agents.to_json(orient="records")
-                        rq_contact_list = opf.rec_list_br(my_full_name, cl_msg, coil_df_list).to_json(orient="records")
+                        cl_msg = f"Contact list: {contacts}"
+                        counter = int(self.counter)
+                        if counter != 1:
+                            coil_df_list = active_coil_agents.to_json(orient="records")
+                            rq_contact_list = opf.rec_list_br(my_full_name, cl_msg, coil_df_list).to_json(orient="records")
+                        else:
+                            rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
                     #elif  msg_2.loc[0, 'status'] == 'ended':
