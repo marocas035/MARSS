@@ -108,7 +108,7 @@ class LogAgent(Agent):
                         else:
                             active_coil_agents = active_coil_agents.append(my_list, ignore_index=True)
                             active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'agent_name'], keep='first')
-                    print(active_agents)
+                        print(active_agents)
                     '''
                     agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                     agent_register = opf.inform_register_aa(agent_register)
