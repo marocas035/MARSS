@@ -423,7 +423,7 @@ def req_coil_loc(agent_df, *args):
         coil_request_df.at[0, 'request_type'] = "my location"
     return coil_request_df.to_json()
 
-def inform_register_aa(msg):
+def inform_register_aa(msg):     #quitar
     df = pd.DataFrame()
     df.loc[0, 'purpose'] = 'inform register of agent'
     df.loc[0, 'msg'] = msg
@@ -461,11 +461,13 @@ def rq_list_log(my_full_name, msg):
     df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
     return df
 
-def inform_coil_activation(my_full_name, msg):
+def inform_coil_activation(my_full_name, code, agent_name, location):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'new_coil'
-    df.loc[0, 'msg'] = msg
+    df.loc[0, 'coil_code'] = code
+    df.loc[0, 'agent_name'] = agent_name
+    df.loc[0, 'coil_location'] = location    
     df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
     return df
 
