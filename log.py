@@ -107,9 +107,9 @@ class LogAgent(Agent):
                         agent_register = opf.inform_register_aa(agent_register)
                         logger.info(agent_register)
                         '''
-                    '''elif msg_2.loc[0, 'purpose'] == 'coil_df_list':
-                        coil_df_list = active_coil_agents.to_json(orient="records")
-                        print(type(coil_df_list))'''
+                        '''elif msg_2.loc[0, 'purpose'] == 'coil_df_list':
+                            coil_df_list = active_coil_agents.to_json(orient="records")
+                            print(type(coil_df_list))'''
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
                         contacts = self.agent.presence.get_contacts()
                         cl_msg = f"Contact list: {contacts}" 
