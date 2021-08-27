@@ -104,9 +104,9 @@ class LogAgent(Agent):
                         coil_register_df = [{'coil_id': msg_sender_jid2, 'agent_name': msg_sender_jid, 'activation_time': time}]
                         if (counter == 2):   
                             active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_location'])
-                            active_coil_agents = active_coil_agents.append(my_list, ignore_index=True)
+                            active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                         else:
-                            active_coil_agents = active_coil_agents.append(my_list, ignore_index=True)
+                            active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                             active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'agent_name'], keep='first')
                         print(active_agents)
                         '''
