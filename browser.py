@@ -68,15 +68,15 @@ class BrowserAgent(Agent):
                     elif agent_df.loc[0, 'purpose'] == "contact_list":
                         r = 'Request contact list'
                         rq_contact_list = opf.rq_list_log(my_full_name, r).to_json(orient="records")   #request contact list to log 
-                        request_contact_list_json = opf.rq_contact_list_log_json(rq_contact_list, my_dir)
+                        request_contact_list_json = opf.contact_list_log_json(rq_contact_list, my_dir)
                         await self.send(request_contact_list_json)
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                         if msg_cl:
                             agent_df = pd.read_json(msg_cl.body)
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2']
-                            cl_to_launcher = opf.rq_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records") 
-                            cl_to_launcher_json = opf.rq_contact_list_la_json(cl_to_launcher, my_dir)
+                            cl_to_launcher = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records") 
+                            cl_to_launcher_json = opf.contact_list_la_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)
                             
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
