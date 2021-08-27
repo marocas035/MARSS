@@ -60,9 +60,8 @@ class LogAgent(Agent):
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
-                    '''Active agents register '''
-                    self.presence.subscribe(msg_sender_jid0)
-                    
+                    '''Suscribe agents to contact list'''
+                    self.presence.subscribe(msg_sender_jid0)                   
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
                     formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
@@ -114,6 +113,8 @@ class LogAgent(Agent):
                         agent_register = opf.inform_register_aa(agent_register)
                         logger.info(agent_register)
                         '''
+                    elif  msg_2.loc[0, 'status'] == 'ended':
+                        self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
                     else:
