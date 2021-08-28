@@ -14,7 +14,7 @@ import socket
 class LaunchAgent(Agent):
     class LABehav(OneShotBehaviour):
         async def run(self):
-            global la_status_var, my_full_name, la_started_at, stop_time, my_dir, wait_msg_time, ip_machine
+            global la_status_var, my_full_name, la_started_at, stop_time, my_dir, wait_msg_time, ip_machine, counter
             """inform log of status"""
             la_activation_json = opf.activation_df(my_full_name, la_started_at)
             la_msg_log = opf.msg_to_log(la_activation_json, my_dir)
