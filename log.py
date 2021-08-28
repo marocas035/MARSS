@@ -84,7 +84,6 @@ class LogAgent(Agent):
                         print('not valid verbosity')
                         
                     msg_2 = pd.read_json(msg.body)
-                    print(msg_2)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
                     elif 'IP' in msg_2:  # msg_2.loc[0, 'purpose'] == 'inform' or ###jose???
