@@ -61,7 +61,7 @@ class LogAgent(Agent):
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
                     '''Suscribe agents to contact list'''
-                    self.presence.subscribe(msg_sender_jid0)                   
+                    self.presence.subscribe(msg_sender_jid0)
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
                     formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
@@ -84,6 +84,7 @@ class LogAgent(Agent):
                         print('not valid verbosity')
                         
                     msg_2 = pd.read_json(msg.body)
+                    print(msg_2)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
                     elif 'IP' in msg_2:  # msg_2.loc[0, 'purpose'] == 'inform' or ###jose???
@@ -102,7 +103,6 @@ class LogAgent(Agent):
                         else:
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                             active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-                        print(active_coil_agents)
                         '''
                         agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
                         agent_register = opf.inform_register_aa(agent_register)
@@ -231,7 +231,7 @@ class LogAgent(Agent):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip_machine = s.getsockname()[0]
-        start_msg = opf.send_activation_finish(my_full_name, ip_machine, 'start') #### TO DO FUNCION
+        start_msg = opf.send_activation_finish(my_full_name, ip_machine, 'start') 
         logger.debug(start_msg)
 
 
