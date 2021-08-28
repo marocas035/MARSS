@@ -308,44 +308,51 @@ def order_coil(la_json, code):
     return msg_budget
 
 ''' Funciones Jose '''
-def change_warehouseeeeee(launcher_df, my_dir, list_id_coil_agents):
-    ca = list_id_coil_agents.split(',')    
+def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
+    ca = list_id_coil_agents.split(',')   #contact_list 
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])
-    #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
-    j = 0
-    my_dir = os.getcwd()
-    for z in lc:
-        number = 1
-        msg_log = ""
-        name = 'coil_00' + str(number)
-        df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
-        for i in range(30):
-            for c in ca:    
-                if name == c:  #active_coil- change localitation 
-                        cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
-                        subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]}'
-                        msg_log = msg_log + inform_log
-                        break
-                else:
-                        cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
-                        subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]},'
-                        msg_log = msg_log + inform_log
-                        df.loc[df.Name == name, 'Code'] = z
-                        df.to_csv('agents.csv', index = False)
-                        break
-            else:
-                number = number + 1
-                name = 'coil_00' + str(number)
-        time.sleep(5)
-        j = j + 1
+    df = pd.DataFrame(columns = ['number','code'])    
+    coil_numbers = ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029','030']    
+    df['number'] = coil_numbers         
+    if args:
+        active_coil_str = str(args)
+        active_coil_split = active_coil_str.split("'")
+        active_coil_list = json.loads(active_coil_split[1])
+        active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
+        active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
+        active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
+    
+        j = 0
+        my_dir = os.getcwd()
+        for z in lc:
+            number = 1
+            name = 'coil_00' + str(number)    
+            if active_coil_df.loc[active_coil_df.coil_id == z]:  #active_coil already in register - change of localitation
+                coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
+                number = coil_agent_name.split("_")[1]
+                cmd = f'python3 coil.py -an {number} -l {va[j]} -c {z} -w{wait_time}'
+                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+      
+                break
+                        else:
+                                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
+                                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                                inform_log = f'coil_code: {z} , agent_name: c{str(number)} , location: {va[j]},'
+                                msg_log = msg_log + inform_log
+                                df.loc[df.Name == name, 'Code'] = z
+                                df.to_csv('agents.csv', index = False)
+                                break
+                    else:
+                        number = number + 1
+                        name = 'coil_00' + str(number)
+                time.sleep(5)
+                j = j + 1
            
         
 
-def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
+def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
     ca = list_id_coil_agents.split(',')    
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
