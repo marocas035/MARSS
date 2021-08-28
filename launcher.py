@@ -50,9 +50,9 @@ class LaunchAgent(Agent):
                                 id_coil_agent = id_agent_list[0][0:4]
                                 list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','        
                         list_id_coil_agents = f"{list_id_coil_agent}"
-                        counter = int(self.counter)
+                        count = int(self.counter)
                         if (len(agent_df.columns)) == 5:
-                            inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, counter,  active_coil_df)
+                            inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, count,  active_coil_df)
                         else:
                             inform_log = opf.change_warehouse(la_inform_log, my_dir , counter, contact_list)
 
