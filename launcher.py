@@ -38,12 +38,9 @@ class LaunchAgent(Agent):
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         if (len(agent_df.columns)) == 5:
                             self.counter += 1
-                            counter = int(self.counter)
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2']
                         else:
-                            self.counter += 1
-                            counter = int(self.counter)
                             contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
@@ -53,6 +50,7 @@ class LaunchAgent(Agent):
                                 id_coil_agent = id_agent_list[0][0:4]
                                 list_id_coil_agent = list_id_coil_agent + id_coil_agent + ','        
                         list_id_coil_agents = f"{list_id_coil_agent}"
+                        counter = int(self.counter)
                         if (len(agent_df.columns)) == 5:
                             inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, counter,  active_coil_df)
                         else:
