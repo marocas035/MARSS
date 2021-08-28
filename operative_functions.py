@@ -351,7 +351,11 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])
     if args:
-        active_coil_df = str(args)
+        active_coil_str = str(args)
+        active_coil_split = active_coil_str.split("'")
+        active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
+        active_coil_df = active_coil_df.append(active_coil_split, ignore_index=True)
+        active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
         print(active_coil_df)
     #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
     j = 0
