@@ -73,7 +73,6 @@ class BrowserAgent(Agent):
                         msg_cl = await self.receive(timeout=wait_msg_time)  # wait for a message for 60 seconds
                         if msg_cl:
                             agent_df = pd.read_json(msg_cl.body)
-                            print(len(agent_df.columns))
                             if (len(agent_df.columns)) == 5:
                                 contact_list = agent_df.loc[0, 'msg1']
                                 active_coil_df = agent_df.loc[0, 'msg2']
@@ -189,11 +188,12 @@ class BrowserAgent(Agent):
                 else:
                     """inform log"""
                     br_msg_log_body = f'{my_name} did not receive a message in the last {wait_msg_time}s'
+                    br_msg_log_body = opf.inform_error(br_msg_log_body)
                     br_msg_log = opf.msg_to_log(br_msg_log_body, my_dir)
                     await self.send(br_msg_log)
             elif br_status_var == "stand-by":  # stand-by status for BR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it won      t change to stand-by.
                 """inform log of status"""
-                br_inform_json = opf.inform_log_df(my_full_name, br_started_at, br_status_var).to_json()
+                br_inform_json = opf.log_status(my_full_name, br_status_var, ip_machine)
                 br_msg_log = opf.msg_to_log(br_inform_json, my_dir)
                 await self.send(br_msg_log)
 
