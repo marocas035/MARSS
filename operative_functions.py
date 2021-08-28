@@ -338,7 +338,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
                 break
             else:
                 for i in range(30):
-                    if df['code'][i] is empty:
+                    if df['code'].isnull().values.any():
                         n = int(df['coil_agent_number'][i])
                         cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
@@ -350,7 +350,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
     else:
         for z in lc:
             for i in range(30):
-                if df['code'][i] is empty:
+                if df['code'].isnull().values.any():
                     n = int(df['coil_agent_number'][i])
                     cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
                     subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
