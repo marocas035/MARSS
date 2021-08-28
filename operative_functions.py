@@ -315,7 +315,9 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
     wait_time = int(launcher_df.loc[0, 'wait_time'])
     df = pd.DataFrame(columns = ['coil_agent_number','code'])    
     coil_numbers = ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029','030']    
-    df['coil_agent_number'] = coil_numbers         
+    df['coil_agent_number'] = coil_numbers  
+    j = 0
+    my_dir = os.getcwd()
     if args:
         active_coil_str = str(args)
         active_coil_split = active_coil_str.split("'")
@@ -323,9 +325,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
         active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
         active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-    
-        j = 0
-        my_dir = os.getcwd()
+
         for z in lc:     
             if active_coil_df.loc[active_coil_df.coil_id == z]:  #active_coil already in register - change of localitation
                 coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
@@ -334,24 +334,30 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
                 cmd = f'python3 coil.py -an {number} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                 df.loc[df.coil_agent_number == number, 'code'] = z
+                j = j + 1
                 break
             else:
-                for n in coil_numbers:
-                    if df.loc[df.coil_agent_number == n, 'code'].isnull().any().any():    
-                        cmd = f'python3 coil.py -an {n)} -l {va[j]} -c {z} -w{wait_time}'
+                for i in range(30):
+                    if df['code'].isnull().any().any():
+                        n = df['coil_agent_number']
+                        cmd = f'python3 coil.py -an {n} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        df.loc[df.coil_agent_number == n, 'code'] = z
+                        df['code'] = z
+                        #df.loc[df.coil_agent_number == n, 'code'] = z
                         break 
-        time.sleep(5)
-        j = j + 1
+                time.sleep(5)
+                j = j + 1
     else:
-        for n in coil_numbers:
-            if df.loc[df.coil_agent_number == n, 'code'].isnull().any().any():    
-                cmd = f'python3 coil.py -an {n)} -l {va[j]} -c {z} -w{wait_time}'
-                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                df.loc[df.coil_agent_number == n, 'code'] = z
-                break    
-        
+        for z in lc:
+            for i in range(30):
+                if df['code'].isnull().any().any():
+                    n = df['coil_agent_number']
+                    cmd = f'python3 coil.py -an {n} -l {va[j]} -c {z} -w{wait_time}'
+                    subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                    df['code'] = z
+                    break    
+            time.sleep(5)
+            j = j + 1
 
 def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
     ca = list_id_coil_agents.split(',')    
