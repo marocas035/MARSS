@@ -343,7 +343,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
                         n = int(df.iloc[i]['coil_agent_number'])
                         cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
                         subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        df[i]['code'] = z
+                        df.iloc[i]['code'] = z
                         print(df)
                         #df.loc[df.coil_agent_number == n, 'code'] = z
                         break 
@@ -356,7 +356,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
                     n = int(df.iloc[i]['coil_agent_number'])
                     cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
                     subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                    df['code'] = z
+                    df.iloc[i]['code'] = z
                     break    
             time.sleep(5)
             j = j + 1
