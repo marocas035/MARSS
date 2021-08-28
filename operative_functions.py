@@ -327,7 +327,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
 
         for z in lc:     
-            if active_coil_df.loc['coil_id'].values == z:  #active_coil already in register - change of localitation
+            if active_coil_df.loc[[],'coil_id'].values == z:  #active_coil already in register - change of localitation
                 coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
                 number = coil_agent_name.split("_")[1]
                 df.loc[df.coil_agent_number == number, 'code'] = z
