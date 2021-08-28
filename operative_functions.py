@@ -351,9 +351,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, *args):
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])
     if args:
-        active_coil_df = args
+        active_coil_df = str(args)
         print(active_coil_df)
-        print(type(args))
     #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
     j = 0
     my_dir = os.getcwd()
