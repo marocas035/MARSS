@@ -39,7 +39,6 @@ class LaunchAgent(Agent):
                         if (len(agent_df.columns)) == 5:
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2']
-                            active_coil_df_string = str(active_coil_df)
                         else:
                             contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
