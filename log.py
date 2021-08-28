@@ -82,6 +82,7 @@ class LogAgent(Agent):
                         logger.setLevel(logging.CRITICAL)
                     else:
                         print('not valid verbosity')
+                        
                     msg_2 = pd.read_json(msg.body)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
@@ -121,8 +122,8 @@ class LogAgent(Agent):
                             rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
-                    #elif  msg_2.loc[0, 'status'] == 'ended':
-                     #   self.presence.unsubscribe(msg_sender_jid0)
+                        #elif  msg_2.loc[0, 'status'] == 'ended':
+                        #   self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
                     else:
@@ -149,13 +150,13 @@ class LogAgent(Agent):
                             logger.info(ack_msg_json)
                             #log_msg_la = opf.msg_to_launcher(ack_msg_json, my_dir)
                             #await self.send(log_msg_la)
-                    elif msg_sender_jid == "browser":
+                        '''elif msg_sender_jid == "browser":
                         browser_df = pd.read_json(msg.body)
                         if 'SearchAA' in browser_df:  # Active agents list requested   #####¿¿¿¿?¿?¿?¿? #todo
                             logger.info(msg.body)
                             list_aa = str(active_agents)
                             log_msg_br = opf.msg_aa_to_br(list_aa, my_dir)
-                            await self.send(log_msg_br)
+                            await self.send(log_msg_br)'''
                 else:
                     msg = f"Log_agent didn't receive any msg in the last {wait_msg_time}s"
                     msg = opf.inform_error(msg)
