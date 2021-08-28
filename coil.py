@@ -44,7 +44,7 @@ class CoilAgent(Agent):
                 coil_delete_order = opf.order_to_erase(coil_delete, my_full_name, my_dir)
                 await self.send(coil_delete_order)
                 
-            "Register as active agent" 
+            '''"Register as active agent" 
             msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
             if msg:
                 single = msg.body.split(':')
@@ -53,7 +53,7 @@ class CoilAgent(Agent):
                     response_active = opf.msg_to_log(msg_aa_response, my_dir)
                     await self.send(response_active)
                 elif single[0] == "Search requested":
-                    print(msg.body)
+                    print(msg.body)'''
                     
             if coil_status_var == "auction":
                 """inform log of status"""
