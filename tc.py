@@ -35,7 +35,21 @@ class TransportAgent(Agent):
                 erase_order_msg= 'Delete order:' + tr_delete + ':' + my_full_name
                 order_to_erase_json = opf.order_to_erase_json(my_full_name, erase_order_msg).to_json(orient="records")
                 tr_delete_order = opf.order_to_erase(tr_delete, my_full_name, my_dir)
-                await self.send(wh_delete_order)               
+                await self.send(wh_delete_order)
+                
+            """Ask browser for active agents in the system"""
+            if  (active_agents != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_aa_br(my_full_name, r).to_json(orient="records")   #request contact list to browser
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
+            
+             """Ask browser for coil in the system df """
+            if (coil_df != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_cd_br(my_full_name, r).to_json(orient="records")  
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)    
   
             if tr_status_var == "on":
                 """inform log of status"""
@@ -48,6 +62,9 @@ class TransportAgent(Agent):
                     if msg_df.loc[0, 'purpose'] =="search_requested":
                         order_searched = msg_df.loc[0, 'msg']  
                         print(order_searched)
+                    elif msg_df.loc[0, 'purpose'] =="contact_list":
+                        request = msg_df.loc[0, 'msg']  
+                        print(request)    
                     else:
                         ca_data_df = pd.read_json(msg.body)
                         if ca_data_df.loc[0, 'action'] == "pre-book":
@@ -127,6 +144,8 @@ if __name__ == "__main__":
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')    
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
+    parser.add_argument('-aa', '--active_agents', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active agents in the system')
+    parser.add_argument('-cd', '--coil_df', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active coils and their localitation')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -137,6 +156,8 @@ if __name__ == "__main__":
     tr_status_var = args.status
     tr_search = args.search
     tr_delete = args.delete
+    active_agents = args.active_agents
+    coil_df = args.coil_df
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     
     "IP"
