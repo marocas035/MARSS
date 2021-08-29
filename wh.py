@@ -36,15 +36,12 @@ class WarehouseAgent(Agent):
             if (wh_delete != "No")&(datetime.datetime.now() < searching_time):
                 wh_delete_order = opf.order_to_erase(wh_delete, my_full_name, my_dir)
                 await self.send(wh_delete_order)
+                
             "Register as active agent"    
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
-                single = msg.body.split(":")
-                if single[0] == "Alive":
-                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{wh_status_started_at}'                    
-                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
-                    await self.send(response_active)
-                elif single[0] == "Search requested":
+                msg_df = pd.read_json(msg.body)
+                if msg_df.loc[0, 'purpose'] =="search_requested":
                     print(msg.body)
             if wh_status_var == "on":
                 """inform log of status"""
