@@ -120,12 +120,12 @@ def order_to_erase(code_to_erase,agent_full_name , agent_directory):
     erase_order_msg.set_metadata("performative", "inform")
     return erase_order_msg
 
-def order_searched(filter,agent_request,agent_directory):
+def order_searched(msg,agent_request,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent_request]
     agent_jid = agents_df['User name'].iloc[-1]
     order_searched_msg = Message(to=agent_jid)
-    order_searched_msg.body = 'Search requested:'+ filter
+    order_searched_msg.body = msg
     order_searched_msg.set_metadata("performative","inform")
     return order_searched_msg
 
