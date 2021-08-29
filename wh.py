@@ -39,13 +39,29 @@ class WarehouseAgent(Agent):
                 wh_delete_order = opf.order_to_erase(order_to_erase_json, my_full_name, my_dir)
                 await self.send(wh_delete_order)
                 
-            "Register as active agent"    
+            """Ask browser for active agents in the system"""
+            if  (active_agents != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_aa_br(my_full_name, r).to_json(orient="records")   #request contact list to browser
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
+            
+             """Ask browser for coil in the system df """
+            if (coil_df != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_cl_br(my_full_name, r).to_json(orient="records")  
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
+  
             msg = await self.receive(timeout=wait_msg_time)
             if msg:
                 msg_df = pd.read_json(msg.body)
                 if msg_df.loc[0, 'purpose'] =="search_requested":
                     order_searched = msg_df.loc[0, 'msg']  
                     print(order_searched)
+                if msg_df.loc[0, 'purpose'] =="contact_list":
+                    request = msg_df.loc[0, 'msg']  
+                    print(request)
             if wh_status_var == "on":
                 """inform log of status"""
                 wh_inform_json = opf.inform_log_df(my_full_name, wh_status_started_at, wh_status_var).to_json()
@@ -127,9 +143,11 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--wait_msg_time', type=int, metavar='', required=False, default=20, help='wait_msg_time: time in seconds to wait for a msg. Purpose of system monitoring')
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent isnt asleep')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
-    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade), at(average_thickness),wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
+    parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: oc(order_code), sg(steel_grade), at(average_thickness),wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')
     parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
     parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
+    parser.add_argument('-aa', '--active_agents', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active agents in the system')
+    parser.add_argument('-cd', '--coil_df', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active coils and their localitation')
     args = parser.parse_args()                     
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -140,6 +158,8 @@ if __name__ == "__main__":
     wh_status_var = args.status
     wh_search = args.search
     wh_delete = args.delete
+    active_agents = args.active_agents
+    coil_df = args.coil_df
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     
     "IP"
