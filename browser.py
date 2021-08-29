@@ -63,12 +63,20 @@ class BrowserAgent(Agent):
                             if (len(agent_df.columns)) == 5:
                                 contact_list = agent_df.loc[0, 'msg1']
                                 active_coil_df = agent_df.loc[0, 'msg2']
-                                cl_to_launcher = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")
+                                if msg_sender_jid = "launch":
+                                    cl_to_agent = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")
+                                else:
+                                    if agent_df.loc[0, 'purpose2'] == "contact_list":
+                                        agent = agent_df.loc[0, 'id']
+                                        cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    #crear esta funcion
+                                    if agent_df.loc[0, 'purpose2'] == "active_coil_df":
+                                        agent = agent_df.loc[0, 'id']
+                                        cl_to_agent = opf.rec_list(my_full_name,active_coil_df, agent).to_json(orient="records")
                             else:
-                               contact_list = agent_df.loc[0, 'msg'] 
-                               cl_to_launcher = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
-                            cl_to_launcher_json = opf.contact_list_la_json(cl_to_launcher, my_dir)
-                            await self.send(cl_to_launcher_json)                           
+                               contact_list = agent_df.loc[0, 'msg']
+                               cl_to_agent = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
+                            cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    # hay que cambiar esta funcion
+                            await self.send(cl_to_agent_json)  
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         msg_search = agent_df.loc[0, 'msg']
                         single = msg_search.split(':')
@@ -130,7 +138,7 @@ class BrowserAgent(Agent):
                             br_msg_search_json = opf.br_msg_search_json(searched, agent_search_request).to_json(orient="records")
                             br_msg_search = opf.order_searched(br_msg_search_json, agent_search_request, my_dir)
                             br_inform_log = opf.msg_to_log(br_msg_search_json, my_dir)
-                            await self.send(br_msg_search)
+                            await self.send(br_msg_search)      
                     else:
                         if msg_sender_jid == 'ca':
                             print(f'ca_br_msg: {msg.body}')
