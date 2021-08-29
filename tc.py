@@ -142,7 +142,7 @@ if __name__ == "__main__":
     parser.add_argument('-st', '--stop_time', type=int, metavar='', required=False, default=84600, help='stop_time: time in seconds where agent')
     parser.add_argument('-s', '--status', type=str, metavar='', required=False, default='stand-by', help='status_var: on, stand-by, Off')
     parser.add_argument('--search', type=str, metavar='', required=False, default='No',help='Search order by code. Write depending on your case: aa=list (list active agents), oc(order_code), sg(steel_grade), at(average_thickness), wi(width_coils), ic(id_coil), so(string_operations), date. Example: --search oc=987')    
-    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=20, help='search_time: time in seconds where agent is searching by code')
+    parser.add_argument('-set', '--search_time', type=int, metavar='', required=False, default=5, help='search_time: time in seconds where agent is searching by code')
     parser.add_argument('-do', '--delete', type=str, metavar='', required=False, default='No', help='Delete order in register given a code to filter')
     parser.add_argument('-aa', '--active_agents', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active agents in the system')
     parser.add_argument('-cd', '--coil_df', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active coils and their localitation')
