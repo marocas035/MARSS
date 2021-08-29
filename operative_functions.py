@@ -361,8 +361,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                             cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                             break     
-                time.sleep(5)
-                j = j + 1
+            time.sleep(5)
+            j = j + 1
 
 def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
     ca = list_id_coil_agents.split(',')    
