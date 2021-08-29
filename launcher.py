@@ -82,7 +82,8 @@ class LaunchAgent(Agent):
             if msg:
                 msg_df = pd.read_json(msg.body)
                 if msg_df.loc[0, 'purpose'] =="search_requested":
-                    print(msg.body)
+                    order_searched = msg_df.loc[0, 'msg']  
+                    print(order_searched)
     
                 
         async def on_end(self):
