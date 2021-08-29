@@ -111,21 +111,21 @@ def order_to_search(search_body,agent_full_name , agent_directory):
     search_msg.set_metadata("performative", "inform")
     return search_msg
 
-def order_to_erase(code_to_erase,agent_full_name , agent_directory):
+def order_to_erase(msg ,agent_full_name , agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "browser"]
     browser_jid = agents_df['User name'].iloc[-1]
     erase_order_msg = Message(to=browser_jid)
-    erase_order_msg.body = 'Delete order:' + code_to_erase + ':' +agent_full_name
+    erase_order_msg.body = msg   
     erase_order_msg.set_metadata("performative", "inform")
     return erase_order_msg
 
-def order_searched(msg,agent_request,agent_directory):
+def order_searched(filter,agent_request,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent_request]
     agent_jid = agents_df['User name'].iloc[-1]
     order_searched_msg = Message(to=agent_jid)
-    order_searched_msg.body = msg
+    order_searched_msg.body = 'Search requested:'+ filter
     order_searched_msg.set_metadata("performative","inform")
     return order_searched_msg
 
@@ -200,15 +200,6 @@ def aa_type(id):
     else:
         s = "coil"
     return s
-
-def checkFileExistance():
-    try:
-        with open('ActiveAgents.csv', 'r') as f:
-            return True
-    except FileNotFoundError as e:
-        return False
-    except IOError as e:
-        return False
     
 def checkFile2Existance():
     try:
@@ -481,6 +472,24 @@ def rq_list_br(my_full_name, msg):
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
 
+def rq_aa_br(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'purpose2'] = 'contact_list'
+    df.loc[0, 'msg'] = msg   
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    return df
+
+def rq_cd_br(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'purpose2'] = 'active_coil_df'
+    df.loc[0, 'msg'] = msg   
+    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    return df
+
 def rq_list_la(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
@@ -538,6 +547,13 @@ def br_msg_search_json(msg, agent):
     df.loc[0, 'from'] = 'browser@apiict03.etsii.upm.es'    
     return df
  
+def order_to_erase_json(my_full_name, msg):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'erase_order'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'from'] = my_full_name  
+    return df
+        
 def request_browser(df, seq, list):
     df.loc[:, 'id':'request_type']
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
