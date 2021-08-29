@@ -18,14 +18,17 @@ class BrowserAgent(Agent):
     class BRBehav(CyclicBehaviour):
         async def run(self):
             global br_status_var, my_full_name, br_started_at, stop_time, my_dir, wait_msg_time, br_coil_name_int_fab, br_int_fab, br_data_df, ip_machine
+            
             """inform log of status"""
             br_activation_json = opf.activation_df(my_full_name, br_started_at)
             br_msg_log = opf.msg_to_log(br_activation_json, my_dir)
             await self.send(br_msg_log)
+            
             """search order"""
             if (br_search != "No") & (datetime.datetime.now() < searching_time):
                 br_search_browser = opf.order_to_search(br_search, my_full_name, my_dir)
                 await self.send(br_search_browser)
+               
             """delete order"""   #### solucionar #todo
             if (br_delete != "No") & (datetime.datetime.now() < searching_time):
                 opf.delete_order(br_delete)
@@ -81,8 +84,7 @@ class BrowserAgent(Agent):
                                contact_list = agent_df.loc[0, 'msg'] 
                                cl_to_launcher = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
                             cl_to_launcher_json = opf.contact_list_la_json(cl_to_launcher, my_dir)
-                            await self.send(cl_to_launcher_json)
-                            
+                            await self.send(cl_to_launcher_json)                           
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         msg = agent_df.loc[0, 'msg']
                         single = msg.split(':')
@@ -90,8 +92,7 @@ class BrowserAgent(Agent):
                         c = search.split('=')
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
-                        register = pd.read_csv('RegisterOrders.csv', header=0, delimiter=",", engine='python')
-                        # active_agents = pd.read_csv('ActiveAgents.csv',header=0,delimiter=",",engine='python')
+                        register = pd.read_csv('RegisterOrders.csv', header=0, delimiter=",", engine='python')              # TODO
                         filter = pd.DataFrame()
                         if type_code_to_search == 'aa':
                             column = 'Null'
@@ -133,7 +134,7 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         if column != 'Null':
-                            print(f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}')
+                            print(f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}')          #TODO
                             filter = register.loc[register[column] == code_to_search]
                             if len(filter) == 0:
                                 br_search_msg = f'msg_body: error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
@@ -143,7 +144,6 @@ class BrowserAgent(Agent):
                             inform_search_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(inform_search_log)
                             searched = filter.to_json()
-                            print(searched)
                             br_msg_search = opf.order_searched(searched, agent_search_request, my_dir)
                             await self.send(br_msg_search)
                     else:
@@ -213,7 +213,6 @@ class BrowserAgent(Agent):
                 br_status_var = "stand-by"
 
         async def on_end(self):
-            print({self.counter})
             """Inform log """
             browser_msg_ended = opf.send_activation_finish(my_full_name, ip_machine, 'end')
             browser_msg_ended = opf.msg_to_log(browser_msg_ended, my_dir)
@@ -221,7 +220,7 @@ class BrowserAgent(Agent):
             
             '''async def unsuscribe(self):
                 """Asks for unsubscription"""
-                self.roster.unsubscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())'''
+                self.roster.unsubscribe(aioxmpp.JID.fromstr(log@apiict03.etsii.upm.es).bare())'''                            #TODO
                 
 
         async def on_start(self):
