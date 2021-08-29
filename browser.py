@@ -65,18 +65,24 @@ class BrowserAgent(Agent):
                                 active_coil_df = agent_df.loc[0, 'msg2']
                                 if msg_sender_jid = "launch":
                                     cl_to_agent = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")
+                                    cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    
+                                    await self.send(cl_to_agent_json) 
                                 else:
                                     if agent_df.loc[0, 'purpose2'] == "contact_list":
                                         agent = agent_df.loc[0, 'id']
-                                        cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    #crear esta funcion
+                                        cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    #crear estas funciones
+                                        cl_to_agent_json = opf.contact_list_json(cl_to_agent, my_dir)    
+                                        await self.send(cl_to_agent_json)
                                     if agent_df.loc[0, 'purpose2'] == "active_coil_df":
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name,active_coil_df, agent).to_json(orient="records")
+                                        cl_to_agent_json = opf.contact_list_json(cl_to_agent, my_dir)    
+                                        await self.send(cl_to_agent_json)
                             else:
                                contact_list = agent_df.loc[0, 'msg']
                                cl_to_agent = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
-                            cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    # hay que cambiar esta funcion
-                            await self.send(cl_to_agent_json)  
+                               cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    # hay que cambiar esta funcion
+                               await self.send(cl_to_agent_json)  
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
                         msg_search = agent_df.loc[0, 'msg']
                         single = msg_search.split(':')
