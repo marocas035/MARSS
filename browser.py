@@ -122,7 +122,6 @@ class BrowserAgent(Agent):
                             column = 'Date'
                             code_to_search = c[1]
                         if column != 'Null':
-                            print(f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}')          #TODO
                             filter = register.loc[register[column] == code_to_search]
                             if len(filter) == 0:
                                 br_search_msg = f'msg_body: error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
@@ -133,6 +132,7 @@ class BrowserAgent(Agent):
                             await self.send(inform_search_log)
                             searched = filter.to_json()
                             br_msg_search_json = opf.br_msg_search_json(searched, agent_search_request).to_json(orient="records")
+                            print(br_msg_search_json)
                             br_msg_search = opf.order_searched(br_msg_search_json, agent_search_request, my_dir)
                             await self.send(br_msg_search)
                     else:
