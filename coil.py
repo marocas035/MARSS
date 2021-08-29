@@ -44,6 +44,20 @@ class CoilAgent(Agent):
                 order_to_erase_json = opf.order_to_erase_json(my_full_name, erase_order_msg).to_json(orient="records")
                 coil_delete_order = opf.order_to_erase(order_to_erase_json, my_full_name, my_dir)
                 await self.send(coil_delete_order)
+            
+            """Ask browser for active agents in the system"""
+            if  (active_agents != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_aa_br(my_full_name, r).to_json(orient="records")   #request contact list to browser
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
+            
+             """Ask browser for coil in the system df """
+            if (coil_df != "No")&(datetime.datetime.now() < searching_time):
+                r = 'Request contact list'
+                rq_contact_list = opf.rq_cd_br(my_full_name, r).to_json(orient="records")  
+                rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
+                await self.send(rq_contact_list_json)
                     
             if coil_status_var == "auction":
                 """inform log of status"""
@@ -63,6 +77,9 @@ class CoilAgent(Agent):
                         if msg_df.loc[0, 'purpose'] =="search_requested":
                             order_searched = msg_df.loc[0, 'msg']  
                             print(order_searched)
+                        elif msg_df.loc[0, 'purpose'] =="contact_list":
+                            request = msg_df.loc[0, 'msg']   
+                            print(request)
                     elif msg_sender_jid == "launch":
                         la_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
@@ -375,6 +392,8 @@ if __name__ == "__main__":
     parser.add_argument('-l', '--location', type=str, metavar='', required=False, default='K', help='location: K')
     parser.add_argument('-c', '--code', type=str, metavar='', required=False, default='cO00000000',help='code: cO202106101')
     parser.add_argument('-w', '--wait_auction_time', type=int, metavar='', required=False, default=500, help='wait_msg_time: time in seconds to wait for a msg')
+    parser.add_argument('-aa', '--active_agents', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active agents in the system')
+    parser.add_argument('-cd', '--coil_df', type=str, metavar='', required=False, default='No', help='Write Y to Ask for list of active coils and their localitation')
     args = parser.parse_args()
     my_dir = os.getcwd()
     my_name = os.path.basename(__file__)[:-3]
@@ -385,6 +404,8 @@ if __name__ == "__main__":
     coil_status_var = args.status
     coil_search = args.search
     coil_delete = args.delete
+    active_agents = args.active_agents
+    coil_df = args.coil_df
     refresh_time = datetime.datetime.now() + datetime.timedelta(seconds=1)
     searching_time = datetime.datetime.now() + datetime.timedelta(seconds=args.search_time)
     
