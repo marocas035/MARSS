@@ -37,14 +37,14 @@ class TransportAgent(Agent):
                 tr_delete_order = opf.order_to_erase(tr_delete, my_full_name, my_dir)
                 await self.send(wh_delete_order)
                 
-            """Ask browser for active agents in the system"""
+            "Ask browser for active agents in the system"
             if  (active_agents != "No")&(datetime.datetime.now() < searching_time):
                 r = 'Request contact list'
                 rq_contact_list = opf.rq_aa_br(my_full_name, r).to_json(orient="records")   #request contact list to browser
                 rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                 await self.send(rq_contact_list_json)
             
-             """Ask browser for coil in the system df"""
+            "Ask browser for coil in the system df"
             if (coil_df != "No")&(datetime.datetime.now() < searching_time):
                 r = 'Request contact list'
                 rq_contact_list = opf.rq_cd_br(my_full_name, r).to_json(orient="records")  
