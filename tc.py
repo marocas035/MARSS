@@ -32,6 +32,8 @@ class TransportAgent(Agent):
               
             "Ask browser to delete order in register"
             if (tr_delete != "No")&(datetime.datetime.now() < searching_time):
+                erase_order_msg= 'Delete order:' + tr_delete + ':' + my_full_name
+                order_to_erase_json = opf.order_to_erase_json(my_full_name, erase_order_msg).to_json(orient="records")
                 tr_delete_order = opf.order_to_erase(tr_delete, my_full_name, my_dir)
                 await self.send(wh_delete_order)               
   
