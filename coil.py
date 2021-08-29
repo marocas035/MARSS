@@ -52,7 +52,7 @@ class CoilAgent(Agent):
                 rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                 await self.send(rq_contact_list_json)
             
-             """Ask browser for coil in the system df """
+             """Ask browser for coil in the system df"""
             if (coil_df != "No")&(datetime.datetime.now() < searching_time):
                 r = 'Request contact list'
                 rq_contact_list = opf.rq_cd_br(my_full_name, r).to_json(orient="records")  
