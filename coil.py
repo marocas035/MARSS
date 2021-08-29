@@ -61,7 +61,8 @@ class CoilAgent(Agent):
                     if msg_sender_jid == "browse":
                         br_msg_df = pd.read_json(msg.body)
                         if msg_df.loc[0, 'purpose'] =="search_requested":
-                            print(msg.body)
+                            order_searched = msg_df.loc[0, 'msg']  
+                            print(order_searched)
                     elif msg_sender_jid == "launch":
                         la_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
