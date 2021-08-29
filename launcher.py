@@ -15,10 +15,12 @@ class LaunchAgent(Agent):
     class LABehav(OneShotBehaviour):
         async def run(self):
             global la_status_var, my_full_name, la_started_at, stop_time, my_dir, wait_msg_time, ip_machine, counter,df
+            
             """inform log of status"""
             la_activation_json = opf.activation_df(my_full_name, la_started_at)
             la_msg_log = opf.msg_to_log(la_activation_json, my_dir)
             await self.send(la_msg_log)
+            
             """Send new order to log"""
             if order_code != "No":
                 la_inform_log = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,
@@ -26,6 +28,7 @@ class LaunchAgent(Agent):
                 la_inform_log_json = la_inform_log.to_json(orient="records")
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
+                
                 """Active coil agents"""
                 r = 'Request contact list'
                 rq_contact_list = opf.rq_list_br(my_full_name, r).to_json(orient="records")   #request contact list to browser
@@ -55,6 +58,8 @@ class LaunchAgent(Agent):
                             inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, counter,  active_coil_df)
                         else:
                             inform_log = opf.change_warehouse(la_inform_log, my_dir , contact_list, counter )
+                            
+            """Change in order"""                
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
                 msg_budget = opf.order_coil(la_coil_json, name_coil)
