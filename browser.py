@@ -23,11 +23,6 @@ class BrowserAgent(Agent):
             br_activation_json = opf.activation_df(my_full_name, br_started_at)
             br_msg_log = opf.msg_to_log(br_activation_json, my_dir)
             await self.send(br_msg_log)
-            
-            """search order"""
-            if (br_search != "No") & (datetime.datetime.now() < searching_time):
-                br_search_browser = opf.order_to_search(br_search, my_full_name, my_dir)
-                await self.send(br_search_browser)
                
             """delete order"""   #### solucionar #todo
             if (br_delete != "No") & (datetime.datetime.now() < searching_time):
@@ -86,8 +81,8 @@ class BrowserAgent(Agent):
                             cl_to_launcher_json = opf.contact_list_la_json(cl_to_launcher, my_dir)
                             await self.send(cl_to_launcher_json)                           
                     elif agent_df.loc[0, 'purpose'] == "search":    #an agent has requested a search
-                        msg = agent_df.loc[0, 'msg']
-                        single = msg.split(':')
+                        msg_search = agent_df.loc[0, 'msg']
+                        single = msg_search.split(':')
                         search = single[1]
                         c = search.split('=')
                         type_code_to_search = c[0]
@@ -144,7 +139,8 @@ class BrowserAgent(Agent):
                             inform_search_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(inform_search_log)
                             searched = filter.to_json()
-                            br_msg_search = opf.order_searched(searched, agent_search_request, my_dir)
+                            br_msg_search_json = opf.br_msg_search_json(searched, agent_search_request).to_json(orient="records")
+                            br_msg_search = opf.order_searched(br_msg_search_json, agent_search_request, my_dir)
                             await self.send(br_msg_search)
                     else:
                         if msg_sender_jid == 'ca':
