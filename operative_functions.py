@@ -318,6 +318,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
     if counter == 1:    
         df = pd.DataFrame([],columns = ['coil_agent_number','code'])  
         df['coil_agent_number'] = coil_numbers  
+    else:
+        df = df
     j = 0
     my_dir = os.getcwd()
     if args:
