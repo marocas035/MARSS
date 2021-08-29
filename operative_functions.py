@@ -309,14 +309,15 @@ def order_coil(la_json, code):
 
 ''' Funciones Jose '''
 def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
+    global df    
     ca = list_id_coil_agents.split(',')   #contact_list 
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
-    wait_time = int(launcher_df.loc[0, 'wait_time'])
-    if counter == 1:    
-        df = pd.DataFrame([],columns = ['coil_agent_number','code'])    
+    wait_time = int(launcher_df.loc[0, 'wait_time'])  
     coil_numbers = ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029','030']    
-    df['coil_agent_number'] = coil_numbers  
+    if counter == 1:    
+        df = pd.DataFrame([],columns = ['coil_agent_number','code'])  
+        df['coil_agent_number'] = coil_numbers  
     j = 0
     my_dir = os.getcwd()
     if args:
