@@ -41,6 +41,7 @@ class LaunchAgent(Agent):
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2']
                         else:
+                            counter = 1
                             contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
@@ -90,7 +91,7 @@ class LaunchAgent(Agent):
             await self.agent.stop()
 
         async def on_start(self):
-           counter = 1
+            self.counter = 1
 
     async def setup(self):
         self.b = self.LABehav()
