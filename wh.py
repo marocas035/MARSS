@@ -59,7 +59,7 @@ class WarehouseAgent(Agent):
                 if msg_df.loc[0, 'purpose'] =="search_requested":
                     order_searched = msg_df.loc[0, 'msg']  
                     print(order_searched)
-                if msg_df.loc[0, 'purpose'] =="contact_list":
+                elif msg_df.loc[0, 'purpose'] =="contact_list":
                     request = msg_df.loc[0, 'msg']  
                     print(request)
             if wh_status_var == "on":
