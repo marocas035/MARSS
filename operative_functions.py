@@ -314,12 +314,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
     va = launcher_df.loc[0, 'list_ware'].split(',')
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])  
-    coil_numbers = ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029','030']    
-    if counter == 1:    
-        df = pd.DataFrame([],columns = ['coil_agent_number','code'])  
-        df['coil_agent_number'] = coil_numbers  
-    else:
-        df = df
+    coil_numbers = ['001','002','003','004','005','006','007','008','009','010','011','012','013','014','015','016','017','018','019','020','021','022','023','024','025','026','027','028','029','030']        
     j = 0
     my_dir = os.getcwd()
     if args:
@@ -329,41 +324,47 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
         active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
         active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
+        active_coil_numbers = active_coil_df['coil_agent_name']
+        print(type(active_coil_numbers))
 
-        for z in lc:     
+        for z in lc:
+            number = 1
+            name = 'coil_00' + str(number)    
             if active_coil_df.loc[[],'coil_id'].values == z:  #active_coil already in register - change of localitation
                 coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
-                number = coil_agent_name.split("_")[1]
-                df.loc[df.coil_agent_number == number, 'code'] = z
-                cmd = f'python3 coil.py -an {number} -l {va[j]} -c {z} -w{wait_time}'
+                number_coil = coil_agent_name.split("_")[1]
+                cmd = f'python3 coil.py -an {number_coil} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                df.loc[df.coil_agent_number == number, 'code'] = z
-                print(df)
                 j = j + 1
                 break
             else:
                 for i in range(30):
-                    if df['code'].isnull().values.any():
-                        n = int(df.iloc[i]['coil_agent_number'])
-                        cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
-                        subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                        df.iloc[i]['code'] = z
-                        print(df)
-                        #df.loc[df.coil_agent_number == n, 'code'] = z
-                        break 
+                    for a in active_coil_numbers:
+                        if (a==name):
+                            number = number + 1
+                            name = 'coil_00' + str(number)
+                        else:
+                            cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
+                            subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                            break     
                 time.sleep(5)
                 j = j + 1
+                
     else:
         for z in lc:
+            number = 1
+            name = 'coil_00' + str(number)    
             for i in range(30):
-                if df['code'].isnull().values.any():
-                    n = int(df.iloc[i]['coil_agent_number'])
-                    cmd = f'python3 coil.py -an {str(n)} -l {va[j]} -c {z} -w{wait_time}'
-                    subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                    df.iloc[i]['code'] = z
-                    break    
-            time.sleep(5)
-            j = j + 1
+                    for a in active_coil_numbers:
+                        if (a==name):
+                            number = number + 1
+                            name = 'coil_00' + str(number)
+                        else:
+                            cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
+                            subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+                            break     
+                time.sleep(5)
+                j = j + 1
 
 def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
     ca = list_id_coil_agents.split(',')    
