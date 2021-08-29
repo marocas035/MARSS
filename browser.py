@@ -132,8 +132,8 @@ class BrowserAgent(Agent):
                             await self.send(inform_search_log)
                             searched = filter.to_json()
                             br_msg_search_json = opf.br_msg_search_json(searched, agent_search_request).to_json(orient="records")
-                            print(br_msg_search_json)
                             br_msg_search = opf.order_searched(br_msg_search_json, agent_search_request, my_dir)
+                            br_inform_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(br_msg_search)
                     else:
                         if msg_sender_jid == 'ca':
