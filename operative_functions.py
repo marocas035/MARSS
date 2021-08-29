@@ -333,7 +333,6 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                 number_coil = coil_agent_name.split("_")[1]
                 cmd = f'python3 coil.py -an {number_coil} -l {va[j]} -c {z} -w{wait_time}'
                 subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                j = j + 1
                 break
             else:
                 for i in range(30):
@@ -346,8 +345,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                             cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                             break     
-                time.sleep(5)
-                j = j + 1
+            time.sleep(5)
+            j = j + 1
                 
     else:
         for z in lc:
