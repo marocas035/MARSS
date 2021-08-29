@@ -51,8 +51,10 @@ class TransportAgent(Agent):
                 await self.send(wh_msg_log)
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
                 if msg:
-                    single = msg.body.split(':') #todo 20/05
-                    if single[0] != ("Order searched")and("Alive"):
+                    msg_df = pd.read_json(msg.body)
+                    if msg_df.loc[0, 'purpose'] =="search_requested":
+                        print(msg.body)
+                    else:
                         ca_data_df = pd.read_json(msg.body)
                         if ca_data_df.loc[0, 'action'] == "pre-book":
                             """Prepare reply to ca of availability"""
