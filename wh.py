@@ -82,7 +82,8 @@ class WarehouseAgent(Agent):
                     """inform log"""
                     time.sleep(5)
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {wh_status_var}'
-                    coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
+                    coil_msg_log_json = (coil_msg_log_body)
+                    coil_msg_log = opf.msg_to_log(coil_msg_log_json, my_dir)
                     await self.send(coil_msg_log)
             elif wh_status_var == "stand-by":  # stand-by status for WH is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it won      t change to stand-by.
                 """inform log of status"""
