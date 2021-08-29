@@ -342,12 +342,11 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                             name = 'coil_00' + str(number)    
                     cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                     subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                    break 
-                time.sleep(1)
-        number = number + 1
-        name = 'coil_00' + str(number)         
-        time.sleep(15)
-        j = j + 1
+                    break
+            number = number + 1
+            name = 'coil_00' + str(number)             
+            time.sleep(10)
+            j = j + 1
                 
     else:  #first order - there is no register
         for z in lc:
@@ -356,8 +355,8 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
             number = number + 1
             name = 'coil_00' + str(number)
             break
-        time.sleep(5)
-        j = j + 1
+            time.sleep(5)
+            j = j + 1
 
 def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
     ca = list_id_coil_agents.split(',')    
