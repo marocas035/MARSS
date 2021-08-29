@@ -277,6 +277,15 @@ def contact_list_log_json(rq_contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
+def contact_list_log_json(rq_contact_list,agent, agent_directory):
+    agents_df = agents_data()
+    agents_df = agents_df.loc[agents_df['Name'] == agent]
+    agent_jid = agents_df['User name'].iloc[-1]
+    contact_list_msg = Message(to=agent_jid)
+    contact_list_msg.body = rq_contact_list
+    contact_list_msg.set_metadata("performative", "inform")
+    return contact_list_msg
+
 def activation_coil_inform_msg(activation_coil_msg ,agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == "log"]
