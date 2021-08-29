@@ -70,7 +70,7 @@ class LaunchAgent(Agent):
             """Send searching code to browser"""
             if la_search != "No":
                 msg_to_search = 'Search:' + la_search + ':' + my_full_name
-                order_to_search_json = opf.search_br(my_full_name, msg_to_search)
+                order_to_search_json = opf.search_br(my_full_name, msg_to_search).to_json(orient="records")
                 la_search_browser = opf.order_to_search(order_to_search_json, my_full_name, my_dir)
                 await self.send(la_search_browser)
 
