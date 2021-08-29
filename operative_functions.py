@@ -341,6 +341,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                         if (a==name):
                             number = number + 1
                             name = 'coil_00' + str(number)
+                            break    
                         else:
                             cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
