@@ -307,7 +307,7 @@ def order_coil(la_json, code):
     msg_budget.body = la_json
     return msg_budget
 
-''' Funciones Jose '''
+
 def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):   
     ca = list_id_coil_agents.split(',')   #contact_list 
     va = launcher_df.loc[0, 'list_ware'].split(',')
@@ -326,7 +326,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
         active_coil_numbers = active_coil_df['coil_agent_name']
         print(type(active_coil_numbers))
-
+        
         for z in lc:    
             if active_coil_df.loc[[],'coil_id'].values == z:  #active_coil already in register - change of localitation
                 coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
@@ -343,7 +343,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                     cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                     subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                     break 
-                time.sleep(5)
+                time.sleep(1)
         time.sleep(15)
         j = j + 1
                 
