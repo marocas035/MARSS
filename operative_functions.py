@@ -354,7 +354,6 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
             number = number + 1
             name = 'coil_00' + str(number)
-            break
             time.sleep(5)
             j = j + 1
 
