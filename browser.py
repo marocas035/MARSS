@@ -46,11 +46,7 @@ class BrowserAgent(Agent):
                     agent_df = pd.read_json(msg.body)
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-33]
-                    if agent_df.loc[0, 'purpose'] == "active_agent":    #an agent has notified its status
-                        msg_aa_response = f'ActiveAgent: agent_id: agent_name:{my_full_name}, active_time:{br_started_at}'
-                        response_active = opf.msg_to_log(msg_aa_response, my_dir)
-                        await self.send(response_active)
-                    elif agent_df.loc[0, 'purpose'] == "delete_order":  #an agent has requested to delete a order
+                    if agent_df.loc[0, 'purpose'] == "delete_order":  #an agent has requested to delete a order
                         code_to_erase = single[1]
                         opf.delete_order(code_to_erase)
                         ack_change = f'Order has been deleted successfully: Code given to erase register is {code_to_erase} at {datetime.datetime.now()}'
@@ -80,7 +76,7 @@ class BrowserAgent(Agent):
                         c = search.split('=')
                         type_code_to_search = c[0]
                         agent_search_request = single[2]
-                        register = pd.read_csv('RegisterOrders.csv', header=0, delimiter=",", engine='python')              # TODO
+                        register = pd.read_csv('RegisterOrders.csv', header=0, delimiter=",", engine='python')              # Necessary this file needs to exist. This could be improved.
                         filter = pd.DataFrame()
                         if type_code_to_search == 'aa':
                             column = 'Null'
