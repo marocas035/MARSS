@@ -101,7 +101,6 @@ def save_order(msg):
                 df.to_csv(f, header=False, index = False)
         i+=1
         
-##########
 
 def order_to_search(search_body,agent_full_name , agent_directory):
     agents_df = agents_data()
@@ -117,7 +116,6 @@ def order_to_erase(code_to_erase,agent_full_name , agent_directory):
     agents_df = agents_df.loc[agents_df['Name'] == "browser"]
     browser_jid = agents_df['User name'].iloc[-1]
     erase_order_msg = Message(to=browser_jid)
-    print(f'Delete order: {code_to_erase}: {agent_full_name}')
     erase_order_msg.body = 'Delete order:' + code_to_erase + ':' +agent_full_name
     erase_order_msg.set_metadata("performative", "inform")
     return erase_order_msg
@@ -223,7 +221,6 @@ def checkFile2Existance():
 
 def alive_agent(agent_jid):
     msg_alive = Message(to=agent_jid)
-    #print(f'msg_body:{msg_body}')
     msg_alive.body = "Alive: Agent"
     msg_alive.set_metadata("performative", "inform")
     return msg_alive
@@ -325,7 +322,6 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
         active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
         active_coil_numbers = active_coil_df['coil_agent_name']
-        print(type(active_coil_numbers))
         
         for z in lc:    
             if active_coil_df.loc[[],'coil_id'].values == z:  #active_coil already in register - change of localitation
@@ -366,11 +362,9 @@ def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
         active_coil_str = str(args)
         active_coil_split = active_coil_str.split("'")
         active_coil_list = json.loads(active_coil_split[1])
-        print(active_coil_list)
         active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
         active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
         active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-        print(active_coil_df)
     #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
     j = 0
     my_dir = os.getcwd()
@@ -804,7 +798,6 @@ def msg_to_log(msg_body, agent_directory):
     agents_df = agents_df.loc[agents_df['Name'] == "log"]
     log_jid = agents_df['User name'].iloc[-1]
     msg_log = Message(to=log_jid)
-    print(f'msg_body:{msg_body}')
     msg_log.body = msg_body
     msg_log.set_metadata("performative", "inform")
     return msg_log
@@ -968,7 +961,6 @@ def wh_append_booking(agent_full_name, agent_directory, ca_df):
     data_to_save.at[0, 'request_type'] = ca_df.loc[0, 'action']  # action=book
     data_to_save.at[0, 'time'] = datetime.datetime.now()
     data_to_save.at[0, 'rack'] = 1
-    # print(f'{agent_book} booked rack on {agent_full_name}. Added +1 load to {agent_full_name} capacity')
     return data_to_save.to_json()
 
 
@@ -1234,8 +1226,6 @@ def get_tr_list(slot, br_data_df, agent_full_name, agent_directory):
         a = agents_df.loc[agents_df['Name'] == i]
         jid_names = jid_names.append(a)
     active_users_location_df = active_users_location_df.rename(columns={'from_to': 'segment'})
-    #print(f'active_users_location_df: {active_users_location_df}')
-    #print(f'segment_df: {segment_df}')
     results = active_users_location_df.merge(segment_df, on='segment')
 
     results = results.rename(columns={'agent': 'Name'})
