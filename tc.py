@@ -46,7 +46,8 @@ class TransportAgent(Agent):
                 if msg:
                     msg_df = pd.read_json(msg.body)
                     if msg_df.loc[0, 'purpose'] =="search_requested":
-                        print(msg.body)
+                        order_searched = msg_df.loc[0, 'msg']  
+                        print(order_searched)
                     else:
                         ca_data_df = pd.read_json(msg.body)
                         if ca_data_df.loc[0, 'action'] == "pre-book":
