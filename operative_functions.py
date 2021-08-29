@@ -351,17 +351,10 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
     else:
         for z in lc:
             number = 1
-            name = 'coil_00' + str(number)    
-            for i in range(30):
-                    for a in active_coil_numbers:
-                        if (a==name):
-                            number = number + 1
-                            name = 'coil_00' + str(number)
-                        else:
-                            cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
-                            subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                            break     
-            time.sleep(5)
+            name = 'coil_00' + str(number)               
+            cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
+            subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
+            break     
             j = j + 1
 
 def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
