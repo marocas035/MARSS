@@ -33,17 +33,8 @@ class TransportAgent(Agent):
             "Ask browser to delete order in register"
             if (tr_delete != "No")&(datetime.datetime.now() < searching_time):
                 tr_delete_order = opf.order_to_erase(tr_delete, my_full_name, my_dir)
-                await self.send(wh_delete_order)
-            "Register as active agent" 
-            msg2 = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
-            if msg2:
-                single = msg2.body.split(':')
-                if single[0] == "Alive":
-                    msg_aa_response = f'ActiveAgent: agent_name:{my_full_name}, active_time:{tr_status_started_at}'
-                    response_active = opf.msg_to_log(msg_aa_response, my_dir)
-                    await self.send(response_active)
-                if single[0] == "Search requested":
-                    print(msg2.body)
+                await self.send(wh_delete_order)               
+  
             if tr_status_var == "on":
                 """inform log of status"""
                 wh_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
@@ -85,8 +76,10 @@ class TransportAgent(Agent):
                 else:
                     """inform log"""
                     tr_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s'
-                    tr_msg_log = opf.msg_to_log(tr_msg_log_body, my_dir)
+                    tr_msg_log_json = opf.inform_error(tr_msg_log_body)
+                    tr_msg_log = opf.msg_to_log(tr_msg_log_json, my_dir)
                     await self.send(tr_msg_log)
+                    
             elif tr_status_var == "stand-by":  # stand-by status for TR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it wont change to stand-by.
                 """inform log of status"""
                 tr_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
@@ -99,6 +92,7 @@ class TransportAgent(Agent):
                 tr_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
                 tr_msg_log = opf.msg_to_log(tr_inform_json, my_dir)
                 await self.send(tr_msg_log)
+                
             else:
                 """inform log of status"""
                 tr_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
