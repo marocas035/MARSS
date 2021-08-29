@@ -40,7 +40,9 @@ class CoilAgent(Agent):
                 
             "Ask browser to delete order in register"
             if (coil_delete != "No")&(datetime.datetime.now() < searching_time):
-                coil_delete_order = opf.order_to_erase(coil_delete, my_full_name, my_dir)
+                erase_order_msg= 'Delete order:' + coil_delete + ':' + my_full_name
+                order_to_erase_json = opf.order_to_erase_json(my_full_name, erase_order_msg).to_json(orient="records")
+                coil_delete_order = opf.order_to_erase(order_to_erase_json, my_full_name, my_dir)
                 await self.send(coil_delete_order)
                     
             if coil_status_var == "auction":
