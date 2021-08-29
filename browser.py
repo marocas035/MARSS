@@ -24,13 +24,6 @@ class BrowserAgent(Agent):
             br_msg_log = opf.msg_to_log(br_activation_json, my_dir)
             await self.send(br_msg_log)
                
-            """delete order"""   #### solucionar #todo
-            if (br_delete != "No") & (datetime.datetime.now() < searching_time):
-                opf.delete_order(br_delete)
-                ack_change = f'Order has been deleted successfully: Code given to erase register is {br_delete} at {datetime.datetime.now()}'
-                change_register = opf.msg_to_log(ack_change, my_dir)
-                await self.send(change_register)
-
             if br_status_var == "on":
                 """inform log of status"""
                 br_inform_json = opf.inform_log_df(my_full_name, br_started_at, br_status_var).to_json()
