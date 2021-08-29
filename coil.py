@@ -56,7 +56,11 @@ class CoilAgent(Agent):
                 if ca_coil_msg:
                     msg_sender_jid = str(va_coil_msg.sender)
                     msg_sender_jid = msg_sender_jid[:-33]
-                    if msg_sender_jid == "launch":
+                    if msg_sender_jid == "browse":
+                        br_msg_df = pd.read_json(msg.body)
+                        if msg_df.loc[0, 'purpose'] =="search_requested":
+                            print(msg.body)
+                    elif msg_sender_jid == "launch":
                         la_coil_msg_df = pd.read_json(ca_coil_msg.body)
                         coil_df.loc[0, 'budget'] = la_coil_msg_df.loc[0, 'budget']
                     elif (msg_sender_jid == "ca") or (msg_sender_jid == "va") :
