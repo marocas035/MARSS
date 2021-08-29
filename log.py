@@ -24,44 +24,20 @@ import getpass
 class LogAgent(Agent):
     class LogBehav(CyclicBehaviour):            
         async def run(self):
+            global wait_msg_time, logger, log_status_var, active_agents, ip_machine, active_coil_agents
             self.presence.on_subscribe = self.on_subscribe
             self.presence.on_subscribed = self.on_subscribed
-            global wait_msg_time, logger, log_status_var, active_agents, ip_machine, active_coil_agents
             if log_status_var == "on":
-                '''"Active Agents"   #todo
-                r = opf.checkFileExistance()
-                if r == True:
-                    agent_id = []
-                    agent_name = []
-                    agent_type = []
-                    activation_time = []
-                    a = pd.read_csv('ActiveAgents.csv', header=0, delimiter=",", engine='python')
-                    if len(a) != 0:
-                        for line in a.index:
-                            agent_jid = a.loc[line, 'agent_id']
-                            alive_agent_msg = opf.alive_agent(agent_jid)
-                            await self.send(alive_agent_msg)
-                            msg2 = await self.receive(timeout=wait_msg_time)  # wait for a message for 3 seconds
-                            if msg2:
-                                logger.info(msg2.body)
-                                msg2_sender_jid0 = str(msg2.sender)
-                                msg2_sender_jid2 = msg2_sender_jid0[:-9]
-                                m = msg2.body.split(':')
-                                typeaa = opf.aa_type(msg2_sender_jid2)
-                                my_list1 = {'agent_id': msg2_sender_jid2, 'agent_name': m[2], 'agent_type': typeaa,
-                                            'activation_time': m[4]}
-                                active_agents = active_agents.append(my_list1, ignore_index=True)
-                                active_agents = active_agents.drop_duplicates(['agent_id', 'agent_name'], keep='first')
-                        remove('ActiveAgents.csv')
-                        del a'''
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
+                    
                     '''Suscribe agents to contact list'''
                     self.presence.subscribe(msg_sender_jid0)
+                    
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
                     formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
@@ -82,11 +58,12 @@ class LogAgent(Agent):
                         logger.setLevel(logging.CRITICAL)
                     else:
                         print('not valid verbosity')
-                        
+                    
+                    """TRead msg purpose"""
                     msg_2 = pd.read_json(msg.body)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
-                    elif 'IP' in msg_2:  # msg_2.loc[0, 'purpose'] == 'inform' or ###jose???
+                    elif 'IP' in msg_2:  
                         logger.debug(msg.body)
                     elif  msg_2.loc[0, 'purpose'] == 'new_coil':
                         self.counter += 1
@@ -102,11 +79,7 @@ class LogAgent(Agent):
                         else:
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                             active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-                        '''
-                        agent_register = f'ActiveAgent: agent_id:{msg_sender_jid2}, agent_name:{msg_sender_jid}, type:{agent_type}, active_time:{datetime.datetime.now()}'
-                        agent_register = opf.inform_register_aa(agent_register)
-                        logger.info(agent_register)
-                        '''
+                      
                         '''elif msg_2.loc[0, 'purpose'] == 'coil_df_list':
                             coil_df_list = active_coil_agents.to_json(orient="records")
                             print(type(coil_df_list))'''
@@ -121,7 +94,7 @@ class LogAgent(Agent):
                             rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
-                        #elif  msg_2.loc[0, 'status'] == 'ended':
+                        #elif  msg_2.loc[0, 'status'] == 'ended':                          # TODO
                         #   self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
@@ -147,15 +120,7 @@ class LogAgent(Agent):
                             ack_msg = f"New order successfully saved. Order code: {order_code}"
                             ack_msg_json = opf.inform_new_order(my_full_name, ack_msg).to_json(orient="records")
                             logger.info(ack_msg_json)
-                            #log_msg_la = opf.msg_to_launcher(ack_msg_json, my_dir)
-                            #await self.send(log_msg_la)
-                        '''elif msg_sender_jid == "browser":
-                        browser_df = pd.read_json(msg.body)
-                        if 'SearchAA' in browser_df:  # Active agents list requested   #####¿¿¿¿?¿?¿?¿? #todo
-                            logger.info(msg.body)
-                            list_aa = str(active_agents)
-                            log_msg_br = opf.msg_aa_to_br(list_aa, my_dir)
-                            await self.send(log_msg_br)'''
+                            
                 else:
                     msg = f"Log_agent didn't receive any msg in the last {wait_msg_time}s"
                     msg = opf.inform_error(msg)
@@ -176,7 +141,7 @@ class LogAgent(Agent):
 
 
         async def on_end(self):
-            #active_agents.to_csv('ActiveAgents.csv', header=True, index=False)   ####### CAMBIAR -CONTACT LIST? #todo
+            active_coil_agents.to_csv('coil_situation.csv', header=True, index=False)   
             await self.agent.stop()
 
         async def on_start(self):
@@ -191,16 +156,7 @@ class LogAgent(Agent):
         async def on_subscribed(self, jid):
             print("[{}] Agent {} has accepted the subscription.".format(self.agent.name, jid.split("@")[0]))
             print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
-            
-        '''async def get_contacts(self):
-            """Returns list of contacts"""
-            for jid, item in self.roster.items.items():
-                try:
-                    self._contacts[jid.bare()].update(item.export_as_json())
-                except KeyError:
-                    self._contacts[jid.bare()] = item.export_as_json()
-
-        return self._contacts'''   
+              
 
     async def setup(self):
         b = self.LogBehav()
@@ -226,6 +182,7 @@ class LogAgent(Agent):
             logger.setLevel(logging.CRITICAL)
         else:
             print('not valid verbosity')
+            
         "IP"
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
