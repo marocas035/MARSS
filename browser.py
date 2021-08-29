@@ -63,7 +63,7 @@ class BrowserAgent(Agent):
                             if (len(agent_df.columns)) == 5:
                                 contact_list = agent_df.loc[0, 'msg1']
                                 active_coil_df = agent_df.loc[0, 'msg2']
-                                if msg_sender_jid = "launch":
+                                if msg_sender_jid == "launch":
                                     cl_to_agent = opf.rec_list_la(my_full_name, contact_list, active_coil_df).to_json(orient="records")
                                     cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    
                                     await self.send(cl_to_agent_json) 
