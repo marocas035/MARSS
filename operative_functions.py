@@ -314,8 +314,10 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
     lc = launcher_df.loc[0, 'list_coils'].split(',')
     wait_time = int(launcher_df.loc[0, 'wait_time'])  
     j = 0
+    number = 1
+    name = 'coil_00' + str(number)
     my_dir = os.getcwd()
-    if args:
+    if args:                            #there is register
         active_coil_str = str(args)
         active_coil_split = active_coil_str.split("'")
         active_coil_list = json.loads(active_coil_split[1])
@@ -325,9 +327,7 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
         active_coil_numbers = active_coil_df['coil_agent_name']
         print(type(active_coil_numbers))
 
-        for z in lc:
-            number = 1
-            name = 'coil_00' + str(number)    
+        for z in lc:    
             if active_coil_df.loc[[],'coil_id'].values == z:  #active_coil already in register - change of localitation
                 coil_agent_name = active_coil_df.loc[active_coil_df.coil_agent_name]
                 number_coil = coil_agent_name.split("_")[1]
@@ -345,18 +345,17 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
                             cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
                             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
                             break 
-                    time.sleep(5)
                 time.sleep(5)
-        time.sleep(5)
+        time.sleep(15)
         j = j + 1
                 
-    else:
+    else:  #first order - there is no register
         for z in lc:
-            number = 1
-            name = 'coil_00' + str(number)               
             cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
             subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-            break     
+            number = number + 1
+            name = 'coil_00' + str(number)
+            break
         time.sleep(5)
         j = j + 1
 
