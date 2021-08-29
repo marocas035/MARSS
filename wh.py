@@ -44,7 +44,8 @@ class WarehouseAgent(Agent):
             if msg:
                 msg_df = pd.read_json(msg.body)
                 if msg_df.loc[0, 'purpose'] =="search_requested":
-                    print(msg.body)
+                    order_searched = msg_df.loc[0, 'msg']  
+                    print(order_searched)
             if wh_status_var == "on":
                 """inform log of status"""
                 wh_inform_json = opf.inform_log_df(my_full_name, wh_status_started_at, wh_status_var).to_json()
