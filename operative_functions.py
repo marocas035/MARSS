@@ -277,7 +277,7 @@ def contact_list_log_json(rq_contact_list,agent_directory):
     contact_list_msg.set_metadata("performative", "inform")
     return contact_list_msg
 
-def contact_list_log_json(rq_contact_list,agent, agent_directory):
+def contact_list_json(rq_contact_list, agent, agent_directory):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent]
     agent_jid = agents_df['User name'].iloc[-1]
@@ -479,6 +479,14 @@ def rq_list_br(my_full_name, msg):
     df.loc[0, 'purpose'] = 'contact_list'
     df.loc[0, 'msg'] = msg   
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    return df
+
+def rec_list(my_full_name, msg, agent):
+    df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name
+    df.loc[0, 'purpose'] = 'contact_list'
+    df.loc[0, 'msg'] = msg   
+    df.loc[0, 'to'] = agent
     return df
 
 def rq_aa_br(my_full_name, msg):
