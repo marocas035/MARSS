@@ -35,13 +35,13 @@ class LaunchAgent(Agent):
                 if msg_cl:
                     agent_df = pd.read_json(msg_cl.body)
                     list_id_coil_agent = ""
+                    counter = 1
                     if agent_df.loc[0, 'purpose'] == "contact_list":
                         if (len(agent_df.columns)) == 5:
                             counter += 1
                             contact_list = agent_df.loc[0, 'msg1']
                             active_coil_df = agent_df.loc[0, 'msg2']
                         else:
-                            counter = 1
                             contact_list = agent_df.loc[0, 'msg'] 
                         contact_jid = contact_list.split("JID(localpart='")
                         for i in contact_jid:
