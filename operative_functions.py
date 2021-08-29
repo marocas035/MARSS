@@ -528,6 +528,15 @@ def search_br(my_full_name, msg):
     df.loc[0, 'msg'] = msg
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
+
+
+def br_msg_search_json(msg, agent):
+    df = pd.DataFrame()
+    df.loc[0, 'purpose'] = 'search_requested'
+    df.loc[0, 'msg'] = msg
+    df.loc[0, 'to'] = agent
+    df.loc[0, 'from'] = 'browser@apiict03.etsii.upm.es'    
+    return df
  
 def request_browser(df, seq, list):
     df.loc[:, 'id':'request_type']
