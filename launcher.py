@@ -54,8 +54,7 @@ class LaunchAgent(Agent):
                         if (len(agent_df.columns)) == 5:
                             inform_log = opf.change_warehouse(la_inform_log, my_dir ,contact_list, counter,  active_coil_df)
                         else:
-                            inform_log = opf.change_warehouse(la_inform_log, my_dir , counter, contact_list)
-
+                            inform_log = opf.change_warehouse(la_inform_log, my_dir , contact_list, counter )
             if name_coil != "No":
                 la_coil_json = opf.order_budget(change_budget, name_coil).to_json(orient="records")
                 msg_budget = opf.order_coil(la_coil_json, name_coil)
