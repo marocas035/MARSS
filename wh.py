@@ -19,15 +19,16 @@ class WarehouseAgent(Agent):
     class WHBehav(CyclicBehaviour):
         async def run(self):
             global wh_status_var, my_full_name, wh_status_started_at, stop_time, my_dir, wait_msg_time, ip_machine
+            
             """inform log of status"""
             wh_activation_json = opf.activation_df(my_full_name, wh_status_started_at)
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
             await self.send(wh_msg_log)
+            
             "Ask browser to search"  
             if (wh_search != "No")&(datetime.datetime.now() < searching_time):
                 msg_to_search = 'Search:' + wh_search + ':' + my_full_name
-                order_to_search_body = opf.search_br(my_full_name, msg_to_search)
-                order_to_search_json = order_to_search_body.to_json(orient="records")
+                order_to_search_json = opf.search_br(my_full_name, msg_to_search).to_json(orient="records")
                 wh_search_browser = opf.order_to_search(order_to_search_json, my_full_name, my_dir)
                 await self.send(wh_search_browser)
                 
