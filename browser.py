@@ -72,16 +72,22 @@ class BrowserAgent(Agent):
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent,agent, my_dir)
-                                        print(cl_to_agent_json)
-                                        #faltaria dos funciones para informar al log de quien ha buscado y que ha buscado a que hora 
                                         await self.send(cl_to_agent_json)
+                                        
+                                        inform_log = 'requested contact list of agents in the system'
+                                        inform_log_json = opf.inform_log(my_full_name,inform_log,agent).to_json(orient="records")
+                                        inform_log_json_msg = opf.msg_to_log(inform_log_json,my_dir)
+                                        await self.send(inform_log_json_msg)
                                     elif agent_df.loc[0, 'purpose2'] == "active_coil_df":
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name,active_coil_df, agent).to_json(orient="records")
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent, agent, my_dir)
-                                        print(cl_to_agent_json)
-                                         #faltaria dos funciones para informar al log de quien ha buscado y que ha buscado a que hora
                                         await self.send(cl_to_agent_json)
+                                        
+                                        inform_log = 'requested dataframe of coil definition in the system'
+                                        inform_log_json = opf.inform_log(my_full_name,inform_log,agent).to_json(orient="records")
+                                        inform_log_json_msg = opf.msg_to_log(inform_log_json,my_dir)
+                                        await self.send(inform_log_json_msg)
                             else:
                                contact_list = cl_df.loc[0, 'msg']
                                cl_to_agent = opf.rq_list_la(my_full_name, contact_list).to_json(orient="records")     
@@ -138,9 +144,9 @@ class BrowserAgent(Agent):
                         if column != 'Null':
                             filter = register.loc[register[column] == code_to_search]
                             if len(filter) == 0:
-                                br_search_msg = f'msg_body: error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
+                                br_search_msg = f'error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
                             else:
-                                br_search_msg = f'msg_body:code to search: {code_to_search}, agent requested search: {agent_search_request}'
+                                br_search_msg = f'code to search: {code_to_search}, agent requested search: {agent_search_request}'
                             br_msg_search_json = opf.inform_search(br_search_msg)
                             inform_search_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(inform_search_log)
