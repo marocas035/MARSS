@@ -68,13 +68,13 @@ class BrowserAgent(Agent):
                                     cl_to_agent_json = opf.contact_list_la_json(cl_to_agent, my_dir)    
                                     await self.send(cl_to_agent_json) 
                                 else:
-                                    if agent_df.loc[0, 'purpose2'] == "contact_list":
+                                    if agent_df.loc[0, 'from'] == "cl":
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent,agent, my_dir)
                                         print(cl_to_agent_json)
                                         await self.send(cl_to_agent_json)
-                                    elif agent_df.loc[0, 'purpose2'] == "active_coil_df":
+                                    elif agent_df.loc[0, 'from'] == "acd":
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name,active_coil_df, agent).to_json(orient="records")
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent, agent, my_dir)
