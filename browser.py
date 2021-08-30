@@ -73,12 +73,14 @@ class BrowserAgent(Agent):
                                         cl_to_agent = opf.rec_list(my_full_name, contact_list,agent).to_json(orient="records")    
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent,agent, my_dir)
                                         print(cl_to_agent_json)
+                                        #faltaria dos funciones para informar al log de quien ha buscado y que ha buscado a que hora 
                                         await self.send(cl_to_agent_json)
                                     elif agent_df.loc[0, 'purpose2'] == "active_coil_df":
                                         agent = agent_df.loc[0, 'id']
                                         cl_to_agent = opf.rec_list(my_full_name,active_coil_df, agent).to_json(orient="records")
                                         cl_to_agent_json = opf.contact_list_json(cl_to_agent, agent, my_dir)
                                         print(cl_to_agent_json)
+                                         #faltaria dos funciones para informar al log de quien ha buscado y que ha buscado a que hora
                                         await self.send(cl_to_agent_json)
                             else:
                                contact_list = cl_df.loc[0, 'msg']
