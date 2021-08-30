@@ -493,7 +493,7 @@ def rq_aa_br(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'contact_list'
-    df.loc[0, 'purpose2'] = 'contact_list'
+    df.loc[0, 'from'] = 'cl'
     df.loc[0, 'msg'] = msg   
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
@@ -502,7 +502,7 @@ def rq_cd_br(my_full_name, msg):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'contact_list'
-    df.loc[0, 'purpose2'] = 'active_coil_df'
+    df.loc[0, 'from'] = 'acd'
     df.loc[0, 'msg'] = msg   
     df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
     return df
