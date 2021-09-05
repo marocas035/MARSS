@@ -59,7 +59,7 @@ class LogAgent(Agent):
                     else:
                         print('not valid verbosity')
                     
-                    """TRead msg purpose"""
+                    """Read msg purpose"""
                     msg_2 = pd.read_json(msg.body)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
