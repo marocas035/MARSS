@@ -26,7 +26,6 @@ class LogAgent(Agent):
         async def run(self):
             global wait_msg_time, logger, log_status_var, active_agents, ip_machine, active_coil_agents
             self.presence.on_subscribe = self.on_subscribe
-            self.presence.on_subscribed = self.on_subscribed
             if log_status_var == "on":
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
