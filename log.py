@@ -158,10 +158,8 @@ class LogAgent(Agent):
             
         async def run(self):
             self.presence.set_available()
-            self.presence.on_subscribe = self.on_subscribe
-            self.presence.on_available = self.on_available   
+            self.presence.on_subscribe = self.on_subscribe 
             
-
 
     async def setup(self):
         b = self.LogBehav()
