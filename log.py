@@ -22,7 +22,7 @@ import getpass
 
 
 class LogAgent(Agent):
-    class LogBehav(CyclicBehaviour):            
+    class LogBehav(CyclicBehaviour):
         async def run(self):
             global wait_msg_time, logger, log_status_var, active_agents, ip_machine, active_coil_agents
             self.presence.on_subscribe = self.on_subscribe
@@ -34,10 +34,10 @@ class LogAgent(Agent):
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
                     agent_type = opf.aa_type(msg_sender_jid2)
-                    
+
                     '''Suscribe agents to contact list'''
                     self.presence.subscribe(msg_sender_jid0)
-                    
+
                     """Log file"""
                     fileh = logging.FileHandler(f'{my_dir}/{my_name}.log')
                     formatter = logging.Formatter(f'%(asctime)s;%(levelname)s;{agent_type};%(pathname)s;%(message)s')
@@ -58,43 +58,45 @@ class LogAgent(Agent):
                         logger.setLevel(logging.CRITICAL)
                     else:
                         print('not valid verbosity')
-                    
+
                     """Read msg purpose"""
                     msg_2 = pd.read_json(msg.body)
                     if msg_2.loc[0, 'purpose'] == 'inform error':
                         logger.warning(msg.body)
-                    elif 'IP' in msg_2:  
+                    elif 'IP' in msg_2:
                         logger.debug(msg.body)
-                    elif  msg_2.loc[0, 'purpose'] == 'new_coil':
+                    elif msg_2.loc[0, 'purpose'] == 'new_coil':
                         self.counter += 1
                         counter = int(self.counter)
                         """Active coil agents register"""
                         coil_id = msg_2.loc[0, 'coil_code']
                         coil_agent_name = msg_2.loc[0, 'agent_name']
                         coil_location = msg_2.loc[0, 'coil_location']
-                        coil_register_df = [{'coil_id': coil_id , 'coil_agent_name': coil_agent_name, 'coil_jid': msg_sender_jid2 ,'coil_location': coil_location}]
-                        if (counter == 2):   
-                            active_coil_agents= pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
+                        coil_register_df = [
+                            {'coil_id': coil_id, 'coil_agent_name': coil_agent_name, 'coil_jid': msg_sender_jid2,
+                             'coil_location': coil_location}]
+                        if (counter == 2):
+                            active_coil_agents = pd.DataFrame([], columns=['coil_id', 'coil_agent_name', 'coil_jid',
+                                                                           'coil_location'])
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
                         else:
                             active_coil_agents = active_coil_agents.append(coil_register_df, ignore_index=True)
-                            active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-                      
-                        '''elif msg_2.loc[0, 'purpose'] == 'coil_df_list':
-                            coil_df_list = active_coil_agents.to_json(orient="records")
-                            print(type(coil_df_list))'''
+                            active_coil_agents = active_coil_agents.drop_duplicates(['coil_id', 'coil_agent_name'],
+                                                                                    keep='first')
+
                     elif msg_2.loc[0, 'purpose'] == 'contact_list':
                         contacts = self.agent.presence.get_contacts()
                         cl_msg = f"Contact list: {contacts}"
                         counter = int(self.counter)
                         if counter != 1:
                             coil_df_list = active_coil_agents.to_json(orient="records")
-                            rq_contact_list = opf.rec_list_br(my_full_name, cl_msg, coil_df_list).to_json(orient="records")
+                            rq_contact_list = opf.rec_list_br(my_full_name, cl_msg, coil_df_list).to_json(
+                                orient="records")
                         else:
                             rq_contact_list = opf.rq_list_br(my_full_name, cl_msg).to_json(orient="records")
                         rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
                         await self.send(rq_contact_list_json)
-                        #elif  msg_2.loc[0, 'status'] == 'ended':                          # TODO
+                        # elif  msg_2.loc[0, 'status'] == 'ended':                          # TODO
                         #   self.presence.unsubscribe(msg_sender_jid0)
                     elif 'active_coils' in msg_2:
                         logger.critical(msg.body)
@@ -114,13 +116,13 @@ class LogAgent(Agent):
                             logger.info(updated_coil)
                     elif msg_sender_jid == "launcher":
                         launcher_df = pd.read_json(msg.body)
-                        if 'order_code' in launcher_df:   # Save order
+                        if 'order_code' in launcher_df:  # Save order
                             opf.save_order(msg.body)
                             order_code = launcher_df.loc[0, 'order_code']
                             ack_msg = f"New order successfully saved. Order code: {order_code}"
                             ack_msg_json = opf.inform_new_order(my_full_name, ack_msg).to_json(orient="records")
                             logger.info(ack_msg_json)
-                            
+
                 else:
                     msg = f"Log_agent didn't receive any msg in the last {wait_msg_time}s"
                     msg = opf.inform_error(msg)
@@ -139,27 +141,18 @@ class LogAgent(Agent):
                 status_log = opf.log_status(my_full_name, log_status_var, ip_machine)
                 logger.debug(status_log)
 
-
         async def on_end(self):
-            active_coil_agents.to_csv('coil_situation.csv', header=True, index=False)  
-            self.presence.unsubscribe()
+            active_coil_agents.to_csv('coil_situation.csv', header=True, index=False)
             await self.agent.stop()
 
         async def on_start(self):
             self.counter = 1
             self._contacts = {}
-            
-            
+
         async def on_subscribe(self, jid):
             #print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
             self.presence.approve(jid)
             self.presence.subscribe(jid)
-            
-            
-        async def run(self):
-            self.presence.set_available()
-            self.presence.on_subscribe = self.on_subscribe 
-            
 
     async def setup(self):
         b = self.LogBehav()
@@ -185,12 +178,12 @@ class LogAgent(Agent):
             logger.setLevel(logging.CRITICAL)
         else:
             print('not valid verbosity')
-            
+
         "IP"
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(("8.8.8.8", 80))
         ip_machine = s.getsockname()[0]
-        start_msg = opf.send_activation_finish(my_full_name, ip_machine, 'start') 
+        start_msg = opf.send_activation_finish(my_full_name, ip_machine, 'start')
         logger.debug(start_msg)
 
 
