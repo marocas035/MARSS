@@ -58,7 +58,6 @@ def order_to_log(order_body,agent_directory):
     agents_df = agents_df.loc[agents_df['Name'] == "log"]
     log_jid = agents_df['User name'].iloc[-1]
     order_msg = Message(to=log_jid)
-    print(f'msg_body:{order_body}')
     order_msg.body = order_body
     order_msg.set_metadata("performative", "inform")
     return order_msg
