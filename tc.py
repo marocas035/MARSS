@@ -23,6 +23,7 @@ class TransportAgent(Agent):
             wh_activation_json = opf.activation_df(my_full_name, tr_status_started_at)
             wh_msg_log = opf.msg_to_log(wh_activation_json, my_dir)
             await self.send(wh_msg_log)
+            
             "Ask browser to search" 
             if (tr_search != "No")&(datetime.datetime.now() < searching_time):
                 msg_to_search = 'Search:' + tr_search + ':' + my_full_name
@@ -49,8 +50,18 @@ class TransportAgent(Agent):
                 r = 'Request contact list'
                 rq_contact_list = opf.rq_cd_br(my_full_name, r).to_json(orient="records")  
                 rq_contact_list_json = opf.contact_list_br_json(rq_contact_list, my_dir)
-                await self.send(rq_contact_list_json)    
-  
+                await self.send(rq_contact_list_json) 
+                
+            msg = await self.receive(timeout=wait_msg_time)
+            if msg:
+                msg_df = pd.read_json(msg.body)
+                if msg_df.loc[0, 'purpose'] =="search_requested":
+                    order_searched = msg_df.loc[0, 'msg']  
+                    print(order_searched)
+                elif msg_df.loc[0, 'purpose'] =="contact_list":
+                    request = msg_df.loc[0, 'msg']  
+                    print(request)
+              
             if tr_status_var == "on":
                 """inform log of status"""
                 wh_inform_json = opf.inform_log_df(my_full_name, tr_status_started_at, tr_status_var).to_json()
@@ -58,28 +69,20 @@ class TransportAgent(Agent):
                 await self.send(wh_msg_log)
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 5 seconds
                 if msg:
-                    msg_df = pd.read_json(msg.body)
-                    if msg_df.loc[0, 'purpose'] =="search_requested":
-                        order_searched = msg_df.loc[0, 'msg']  
-                        print(order_searched)
-                    elif msg_df.loc[0, 'purpose'] =="contact_list":
-                        request = msg_df.loc[0, 'msg']  
-                        print(request)    
-                    else:
-                        ca_data_df = pd.read_json(msg.body)
-                        if ca_data_df.loc[0, 'action'] == "pre-book":
-                            """Prepare reply to ca of availability"""
-                            tr_msg_ca = opf.msg_to_sender(msg)
-                            """Read when tr is needed"""
-                            slot_range = opf.slot_to_minutes(ca_data_df)
-                            tr_msg_ca.body = opf.tr_check_availability(my_dir, my_full_name, slot_range)  # Returns message of availability
-                            await self.send(tr_msg_ca)
-                            if tr_msg_ca.body == "positive":  # if negative, nothing, ca will send a list of the asked tr and the booked one to log. That way we can trace if tr_x was available or not.
-                                """Append pre-booking"""
-                                tr_msg_log_body = opf.tr_append_booking(my_dir, my_full_name, ca_data_df, slot_range)  # Returns booking info
-                                """inform log"""
-                                tr_msg_log = opf.msg_to_log(tr_msg_log_body, my_dir)
-                                await self.send(tr_msg_log)
+                    ca_data_df = pd.read_json(msg.body)
+                    if ca_data_df.loc[0, 'action'] == "pre-book":
+                        """Prepare reply to ca of availability"""
+                        tr_msg_ca = opf.msg_to_sender(msg)
+                        """Read when tr is needed"""
+                        slot_range = opf.slot_to_minutes(ca_data_df)
+                        tr_msg_ca.body = opf.tr_check_availability(my_dir, my_full_name, slot_range)  # Returns message of availability
+                        await self.send(tr_msg_ca)
+                        if tr_msg_ca.body == "positive":  # if negative, nothing, ca will send a list of the asked tr and the booked one to log. That way we can trace if tr_x was available or not.
+                            """Append pre-booking"""
+                            tr_msg_log_body = opf.tr_append_booking(my_dir, my_full_name, ca_data_df, slot_range)  # Returns booking info
+                            """inform log"""
+                            tr_msg_log = opf.msg_to_log(tr_msg_log_body, my_dir)
+                            await self.send(tr_msg_log)
                         elif ca_data_df.loc[0, 'action'] == "booked":
                             """Append booking"""
                             slot_range = opf.slot_to_minutes(ca_data_df)
