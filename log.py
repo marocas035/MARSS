@@ -149,21 +149,16 @@ class LogAgent(Agent):
             self.counter = 1
             self._contacts = {}
             
-            '''
+            
         async def on_subscribe(self, jid):
-            print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
+            #print("[{}] Agent {} asked for subscription. Let's aprove it.".format(self.agent.name, jid.split("@")[0]))
             self.presence.approve(jid)
             self.presence.subscribe(jid)
             
-        async def on_subscribed(self, jid):
-            print("[{}] Agent {} has accepted the subscription.".format(self.agent.name, jid.split("@")[0]))
-            print("[{}] Contacts List: {}".format(self.agent.name, self.agent.presence.get_contacts()))
-            '''
             
         async def run(self):
             self.presence.set_available()
             self.presence.on_subscribe = self.on_subscribe
-            self.presence.on_subscribed = self.on_subscribed
             self.presence.on_available = self.on_available   
             
 
