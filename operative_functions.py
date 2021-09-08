@@ -225,7 +225,7 @@ def msg_aa_to_br(msg_body, agent_directory):
     msg_br.set_metadata("performative", "inform")
     return msg_br
 
-def delete_order(code):
+def delete_order(code):    #not operative
     with open('RegisterOrders.csv', 'rt') as inp:
         data = list(csv.reader(inp))  
     with open('new.csv','wb') as out:
@@ -352,44 +352,6 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
             time.sleep(5)
             j = j + 1
 
-def change_warehouseeeee(launcher_df, my_dir, list_id_coil_agents, *args):
-    ca = list_id_coil_agents.split(',')    
-    va = launcher_df.loc[0, 'list_ware'].split(',')
-    lc = launcher_df.loc[0, 'list_coils'].split(',')
-    wait_time = int(launcher_df.loc[0, 'wait_time'])
-    if args:
-        active_coil_str = str(args)
-        active_coil_split = active_coil_str.split("'")
-        active_coil_list = json.loads(active_coil_split[1])
-        active_coil_df = pd.DataFrame([], columns = ['coil_id', 'coil_agent_name', 'coil_jid' ,'coil_location'])
-        active_coil_df = active_coil_df.append(active_coil_list, ignore_index=True)
-        active_coil_df = active_coil_df.drop_duplicates(['coil_id', 'coil_agent_name'], keep='first')
-    #df = pd.read_csv('agents.csv', header=0, delimiter=",", engine='python')
-    j = 0
-    my_dir = os.getcwd()
-    for z in lc:
-        number = 1
-        name = 'coil_00' + str(number)
-        df = pd.read_csv(f'agents.csv', header=0, delimiter=",", engine='python')
-        for i in range(30):
-            if df.loc[df.Name == name, 'Code'].isnull().any().any():   
-                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
-                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                df.loc[df.Name == name, 'Code'] = z
-                df.loc[df.Name == name, 'Location'] = va[j]
-                df.to_csv('agents.csv', index = False)
-                break
-            elif df.loc[df.Name == name, 'Code'].values == z:
-                cmd = f'python3 coil.py -an {str(number)} -l {va[j]} -c {z} -w{wait_time}'
-                subprocess.Popen(cmd, stdout=None, stdin=None, stderr=None, close_fds=True, shell=True)
-                df.loc[df.Name == name, 'Location'] = va[j]
-                df.to_csv('agents.csv', index = False)
-                break
-            else:
-                number = number + 1
-                name = 'coil_00' + str(number)
-        time.sleep(5)
-        j = j + 1
 
 
 def change_jid(my_dir, my_full_name):
