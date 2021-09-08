@@ -653,7 +653,7 @@ def send_to_va_msg(my_full_name, bid, to, level):
 def send_activation_finish(my_full_name, ip_machine, level):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name
-    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'purpose'] = 'inform status'
     df.loc[0, 'msg'] = 'change status'
     if level == 'start':
         df.loc[0, 'status'] = 'started'
