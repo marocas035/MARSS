@@ -125,7 +125,7 @@ class LogAgent(Agent):
 
                 else:
                     msg = f"Log_agent didn't receive any msg in the last {wait_msg_time}s"
-                    msg = opf.inform_error(msg)
+                    msg = opf.inform_error(my_full_name, msg)
                     logger.debug(msg)
             elif log_status_var == "stand-by":
                 status_log = opf.log_status(my_full_name, log_status_var, ip_machine)
