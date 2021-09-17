@@ -510,7 +510,7 @@ def inform_search(msg):
 def inform_log(my_full_name, msg, agent):
     df = pd.DataFrame()
     df.loc[0, 'purpose'] = 'inform log'
-    df.loc[0, 'from'] = my_full_name    
+    df.loc[0, 'id'] = my_full_name    
     df.loc[0, 'to'] =  agent  
     df.loc[0, 'msg'] = msg
     return df
@@ -520,28 +520,28 @@ def search_br(my_full_name, msg):
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'search'
     df.loc[0, 'msg'] = msg
-    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser'
     return df
 
 
 def br_msg_search_json(msg, agent):
     df = pd.DataFrame()
+    df.loc[0, 'id'] = 'browser'    
     df.loc[0, 'purpose'] = 'search_requested'
     df.loc[0, 'msg'] = msg
-    df.loc[0, 'to'] = agent
-    df.loc[0, 'from'] = 'browser@apiict03.etsii.upm.es'    
+    df.loc[0, 'to'] = agent    
     return df
  
 def order_to_erase_json(my_full_name, msg):
     df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name    
     df.loc[0, 'purpose'] = 'erase_order'
-    df.loc[0, 'msg'] = msg
-    df.loc[0, 'from'] = my_full_name  
+    df.loc[0, 'msg'] = msg 
     return df
         
 def request_browser(df, seq, list):
     df.loc[:, 'id':'request_type']
-    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser'
     df.loc[0, 'msg'] = seq
     df.loc[0, 'coils'] = str(list)
     df = df[['id', 'purpose', 'request_type', 'msg', 'to']]
@@ -559,8 +559,8 @@ def answer_va(df_br, sender, df_va, coils, location):
     return df
 
 def answer_coil(df, sender, seq_df):
+    df.loc[0, "id"] = 'browser'    
     df.loc[0, 'msg'] = seq_df.loc[0, 'msg']
-    df.loc[0, "id"] = 'browser'
     df.loc[0, "purpose"] = 'answer'
     df.loc[0, "to"] = sender
     df = df[['id', 'purpose', 'msg','location', 'to']]
@@ -587,14 +587,14 @@ def send_coil(my_full_name, seq):
     df.loc[0, 'purpose'] = 'request'
     df.loc[0, 'request_type'] = 'my location'
     df.loc[0, 'msg'] = seq
-    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser'
     return df
 
 def send_br_log(df, df_br, my_full_name):
     df.loc[0, 'id'] = my_full_name
     df.loc[0, 'purpose'] = 'answer'
     df.loc[0, 'msg'] = df_br.loc[0, 'msg']
-    df.loc[0, 'to'] = 'browser@apiict03.etsii.upm.es'
+    df.loc[0, 'to'] = 'browser'
     df = df[['id', 'purpose', 'msg', 'location', 'to']]
     return df.to_json(orient="records")
 
@@ -624,15 +624,17 @@ def send_activation_finish(my_full_name, ip_machine, level):
     df.loc[0, 'IP'] = ip_machine
     return df.to_json(orient="records")
 
-def inform_error(msg):
+def inform_error(my_full_name, msg):
     df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name    
     df.loc[0, 'purpose'] = 'inform error'
     df.loc[0, 'msg'] = msg
     return df.to_json(orient="records")
 
-def inform_finish(msg):
+def inform_finish(my_full_name, msg):
     df = pd.DataFrame()
-    df.loc[0, 'purpose'] = 'inform'
+    df.loc[0, 'id'] = my_full_name      
+    df.loc[0, 'purpose'] = 'inform'   
     df.loc[0, 'msg'] = msg
     return df.to_json(orient="records")
 
