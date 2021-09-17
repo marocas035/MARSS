@@ -99,7 +99,7 @@ class TransportAgent(Agent):
                 else:
                     """inform log"""
                     tr_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s'
-                    tr_msg_log_json = opf.inform_error(tr_msg_log_body)
+                    tr_msg_log_json = opf.inform_error(my_full_name,tr_msg_log_body)
                     tr_msg_log = opf.msg_to_log(tr_msg_log_json, my_dir)
                     await self.send(tr_msg_log)
                     
