@@ -197,7 +197,7 @@ class BrowserAgent(Agent):
                 else:
                     """inform log"""
                     br_msg_log_body = f'{my_name} did not receive a message in the last {wait_msg_time}s'
-                    br_msg_log_body = opf.inform_error(br_msg_log_body)
+                    br_msg_log_body = opf.inform_error(my_full_name,br_msg_log_body)
                     br_msg_log = opf.msg_to_log(br_msg_log_body, my_dir)
                     await self.send(br_msg_log)
             elif br_status_var == "stand-by":  # stand-by status for BR is not very useful, just in case we need the agent to be alive, but not operative. At the moment, it won      t change to stand-by.
