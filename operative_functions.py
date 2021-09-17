@@ -353,7 +353,6 @@ def change_warehouse(launcher_df, my_dir, list_id_coil_agents, counter, *args):
             j = j + 1
 
 
-
 def change_jid(my_dir, my_full_name):
     df = agents_data()
     df.loc[df.Name == my_full_name, 'Code'] = ''
@@ -402,14 +401,9 @@ def req_coil_loc(agent_df, *args):
         coil_request_df.at[0, 'request_type'] = "my location"
     return coil_request_df.to_json()
 
-def inform_register_aa(msg):     #quitar
-    df = pd.DataFrame()
-    df.loc[0, 'purpose'] = 'inform register of agent'
-    df.loc[0, 'msg'] = msg
-    return df.to_json(orient="records")
-
 def update_coil_status(msg):
     df = pd.DataFrame()
+    df.loc[0, 'id'] = 'log'
     df.loc[0, 'purpose'] = 'inform coil status updated'
     df.loc[0, 'msg'] = msg
     return df.to_json(orient="records")                                                
@@ -491,7 +485,7 @@ def inform_coil_activation(my_full_name, code, agent_name, location):
     df.loc[0, 'coil_code'] = code
     df.loc[0, 'agent_name'] = agent_name
     df.loc[0, 'coil_location'] = location    
-    df.loc[0, 'to'] = 'log@apiict03.etsii.upm.es'
+    df.loc[0, 'to'] = 'log'
     return df
 
 def inform_new_order(my_full_name, msg):
@@ -501,16 +495,17 @@ def inform_new_order(my_full_name, msg):
     df.loc[0, 'msg'] = msg
     return df
 
-def inform_search(msg):
+def inform_search(my_full_name, msg):
     df = pd.DataFrame()
+    df.loc[0, 'id'] = my_full_name     
     df.loc[0, 'purpose'] = 'inform search'
     df.loc[0, 'msg'] = msg
     return df.to_json(orient="records")
 
 def inform_log(my_full_name, msg, agent):
     df = pd.DataFrame()
-    df.loc[0, 'purpose'] = 'inform log'
-    df.loc[0, 'id'] = my_full_name    
+    df.loc[0, 'id'] = my_full_name     
+    df.loc[0, 'purpose'] = 'inform log'   
     df.loc[0, 'to'] =  agent  
     df.loc[0, 'msg'] = msg
     return df
@@ -549,19 +544,19 @@ def request_browser(df, seq, list):
 
 def answer_va(df_br, sender, df_va, coils, location):
     df = pd.DataFrame()
+    df.loc[0, "id"] = 'browser' 
+    df.loc[0, "purpose"] = 'answer'    
     df.loc[0, 'msg'] = df_va.loc[0, 'seq']
-    df.loc[0, "id"] = 'browser'
     df.loc[0, "coils"] = coils
     df.loc[0, "location"] = location
-    df.loc[0, "purpose"] = 'answer'
     df.loc[0, "to"] = sender
     df = df[['id', 'purpose', 'msg', 'coils', 'location', 'to']]
     return df
 
 def answer_coil(df, sender, seq_df):
-    df.loc[0, "id"] = 'browser'    
+    df.loc[0, "id"] = 'browser' 
+    df.loc[0, "purpose"] = 'answer'    
     df.loc[0, 'msg'] = seq_df.loc[0, 'msg']
-    df.loc[0, "purpose"] = 'answer'
     df.loc[0, "to"] = sender
     df = df[['id', 'purpose', 'msg','location', 'to']]
     return df
