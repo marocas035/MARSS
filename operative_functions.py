@@ -505,7 +505,7 @@ def inform_search(my_full_name, msg):
 def inform_log(my_full_name, msg, agent):
     df = pd.DataFrame()
     df.loc[0, 'id'] = my_full_name     
-    df.loc[0, 'purpose'] = 'inform log'   
+    df.loc[0, 'purpose'] = 'inform'   
     df.loc[0, 'to'] =  agent  
     df.loc[0, 'msg'] = msg
     return df
