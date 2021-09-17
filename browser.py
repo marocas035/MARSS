@@ -147,7 +147,7 @@ class BrowserAgent(Agent):
                                 br_search_msg = f'error,search requested not found: code to search: {code_to_search}, agent requested search: {agent_search_request}'
                             else:
                                 br_search_msg = f'code to search: {code_to_search}, agent requested search: {agent_search_request}'
-                            br_msg_search_json = opf.inform_search(br_search_msg)
+                            br_msg_search_json = opf.inform_search(agent_search_request, br_search_msg)
                             inform_search_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(inform_search_log)
                             searched = filter.to_json()
