@@ -101,7 +101,7 @@ class WarehouseAgent(Agent):
                     """inform log"""
                     time.sleep(5)
                     wh_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {wh_status_var}'
-                    wh_msg_log_json = opf.inform_error(wh_msg_log_body)
+                    wh_msg_log_json = opf.inform_error(my_full_name, wh_msg_log_body)
                     wh_msg_log = opf.msg_to_log(wh_msg_log_json, my_dir)
                     await self.send(wh_msg_log)
                     
