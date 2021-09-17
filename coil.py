@@ -243,7 +243,7 @@ class CoilAgent(Agent):
                                                         """inform log of issue"""
                                                         ca_id = ca_coil_msg_df.loc[0, 'id']
                                                         coil_msg_log_body = f'{my_full_name} did not accept to process in {ca_id} in final acceptance'
-                                                        coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                                                        coil_msg_log_body = opf.inform_error(my_full_name,coil_msg_log_body)
                                                         coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                         await self.send(coil_msg_log)
                                                 else:
@@ -252,13 +252,13 @@ class CoilAgent(Agent):
                                                     ca_bid_status = ca_coil_msg_df.at[0, 'bid_status']
                                                     ca_auction_level = ca_coil_msg_df.at[0, 'auction_level']
                                                     coil_msg_log_body = f'{my_full_name} received wrong message from {ca_id} in final acceptance. ca_auction_level: {ca_auction_level}!= 3 or ca_bid_status: {ca_bid_status} != accepted'                                                    
-                                                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                                                    coil_msg_log_body = opf.inform_error(my_full_name,coil_msg_log_body)
                                                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                     await self.send(coil_msg_log)
                                             else:
                                                 """inform log of issue"""
                                                 coil_msg_log_body = f'incorrect sender'
-                                                coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                                                coil_msg_log_body = opf.inform_error(my_full_name, coil_msg_log_body)
                                                 coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                                 await self.send(coil_msg_log)
                                                 
@@ -271,13 +271,13 @@ class CoilAgent(Agent):
                                 else:
                                     """inform log of issue"""
                                     coil_msg_log_body = f'incorrect sender'
-                                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                                    coil_msg_log_body = opf.inform_error(my_full_name, coil_msg_log_body)
                                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                     await self.send(coil_msg_log)
                             else:
                                 """inform log"""
                                 coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var} at last auction level'
-                                coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                                coil_msg_log_body = opf.inform_error(my_full_name, coil_msg_log_body)
                                 coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                                 await self.send(coil_msg_log)
                         else:
@@ -286,13 +286,13 @@ class CoilAgent(Agent):
                             ca_id = ca_coil_msg_df.loc[0, 'id']
                             not_entered_auctions += int(1)
                             entered_auction_str = f'{my_full_name} did not enter {ca_id} auction because Temp difference was too high. Not_entered auction number: {not_entered_auctions}'
-                            coil_msg_log_body = opf.inform_error(entered_auction_str)
+                            coil_msg_log_body = opf.inform_error(my_full_name,entered_auction_str)
                             coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                             await self.send(coil_msg_log)
                 else:
                     """inform log"""
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var}'
-                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                    coil_msg_log_body = opf.inform_error(my_full_name,coil_msg_log_body)
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
                     
@@ -316,14 +316,14 @@ class CoilAgent(Agent):
                         """inform log"""
                         time.sleep(5)
                         coil_msg_log_body = f'{my_full_name} receive msg at {coil_status_var}, but not from browser'
-                        coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                        coil_msg_log_body = opf.inform_error(my_full_name, coil_msg_log_body)
                         coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                         await self.send(coil_msg_log)
                 else:
                     """inform log"""
                     time.sleep(10)
                     coil_msg_log_body = f'{my_full_name} did not receive any msg in the last {wait_msg_time}s at {coil_status_var}'
-                    coil_msg_log_body = opf.inform_error(coil_msg_log_body)
+                    coil_msg_log_body = opf.inform_error(my_full_name, coil_msg_log_body)
                     coil_msg_log = opf.msg_to_log(coil_msg_log_body, my_dir)
                     await self.send(coil_msg_log)
                     now_time = datetime.datetime.now()
