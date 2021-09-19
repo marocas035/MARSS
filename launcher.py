@@ -26,6 +26,7 @@ class LaunchAgent(Agent):
                 la_inform_log = opf.order_file(my_full_name, order_code, steel_grade, thickness, width_coils,
                                                     num_coils, list_coils, each_coil_price, list_ware, string_operations, wait_msg_time)
                 la_inform_log_json = la_inform_log.to_json(orient="records")
+                print(la_inform_log_json)
                 la_order_log = opf.order_to_log(la_inform_log_json, my_dir)
                 await self.send(la_order_log)
                 
@@ -36,6 +37,7 @@ class LaunchAgent(Agent):
                 await self.send(rq_contact_list_json)
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
+                    print('order succesfully saved')
                     agent_df = pd.read_json(msg_cl.body)
                     list_id_coil_agent = ""
                     counter = 1
