@@ -37,7 +37,9 @@ class LaunchAgent(Agent):
                 await self.send(rq_contact_list_json)
                 msg_cl = await self.receive(timeout=wait_msg_time) # wait for a message for 5 seconds
                 if msg_cl:
+                    
                     print('order succesfully saved')
+                    
                     agent_df = pd.read_json(msg_cl.body)
                     list_id_coil_agent = ""
                     counter = 1
