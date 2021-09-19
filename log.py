@@ -29,6 +29,10 @@ class LogAgent(Agent):
             if log_status_var == "on":
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
+
+                    print(f"received msg number {self.counter}")
+                    self.counter += 1
+                    
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
