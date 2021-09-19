@@ -29,10 +29,6 @@ class LogAgent(Agent):
             if log_status_var == "on":
                 msg = await self.receive(timeout=wait_msg_time)  # wait for a message for 20 seconds
                 if msg:
-
-                    print(f"received msg number {self.counter}")
-                    self.counter += 1
-                    
                     msg_sender_jid0 = str(msg.sender)
                     msg_sender_jid = msg_sender_jid0[:-31]
                     msg_sender_jid2 = msg_sender_jid0[:-9]
@@ -119,6 +115,7 @@ class LogAgent(Agent):
                             updated_coil = opf.update_coil_status(updated_coil)
                             logger.info(updated_coil)
                     elif msg_sender_jid == "launcher":
+                        print('new msg')
                         launcher_df = pd.read_json(msg.body)
                         if 'order_code' in launcher_df:  # Save order
                             opf.save_order(msg.body)
