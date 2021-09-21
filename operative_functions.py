@@ -361,7 +361,7 @@ def change_jid(my_dir, my_full_name):
 def req_active_users_loc_times(agent_df, seq, list, *args):
     """Returns msg body to send to browser as a json"""
     va_request_df = agent_df #.loc[:, 'id':'time']
-    #va_request_df = va_request_df.astype(str)
+    va_request_df = va_request_df.astype(str)
     va_request_df.at[0, 'purpose'] = "request"
     this_time = datetime.datetime.now()
     va_request_df.at[0, 'time'] = this_time
@@ -868,7 +868,7 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
         df = agents_df.loc[agents_df['Name'] == agent_name]
         df = df.reset_index(drop=True)
         #agent_data.at[0, 'location'] = df.loc[0, 'Location']
-    agent_data.to_csv(f'{agent_directory}''/'f'{agent_full_name}.csv', index=False, header=True)
+    #agent_data.to_csv(f'{agent_directory}''/'f'{agent_full_name}.csv', index=False, header=True)
     return agent_data ###    
 
 """Agent-specific Functions"""
