@@ -843,7 +843,7 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
     agents_df = agents_data()
     agents_df = agents_df.loc[agents_df['Name'] == agent_full_name]
     agents_df = agents_df.reset_index(drop=True)
-    if agent_name == 'ca':
+    if (agent_name == 'ca') or (agent_name=='va'):
         agent_data = agent_data.reindex(columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'T1', 'T2', 'T3', 'T4', 'T5', 'q'])
         agent_data = ca_parameters(agent_data, agents_df, agent_name)
     elif agent_name == "wh":
@@ -864,9 +864,9 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
         agents_df = agents_data()
         df = agents_df.loc[agents_df['Name'] == agent_name]
         df = df.reset_index(drop=True)
-        agent_data.at[0, 'location'] = df.loc[0, 'Location']
+        #agent_data.at[0, 'location'] = df.loc[0, 'Location']
     agent_data.to_csv(f'{agent_directory}''/'f'{agent_full_name}.csv', index=False, header=True)
-
+    return agent_data ###    
 
 """Agent-specific Functions"""
 
