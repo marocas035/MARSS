@@ -895,6 +895,14 @@ def ca_parameters(agent_data, agents_df, agent_name):
     agent_data.at[0, 'q'] = 0.5 + (rn / 10)  # between 05-0.6
     return agent_data
 
+def va_parameters(agent_data, agents_df, agent_name):
+    """Sets pseudo random parameters"""
+    rn = random()
+    agent_data.at[0, 'ancho'] = 5 + (rn * 10)  # between 5-15
+    agent_data.at[0, 'largo'] = 6 + (rn * 10)  # between 6-16
+    agent_data.at[0, 'espesor'] = 7 + (rn * 10)  # between 7-17
+    return agent_data
+
 
 def coil_parameters(agent_data, agents_df, agent_name):
     """Sets pseudo random parameters"""
