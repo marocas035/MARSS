@@ -156,7 +156,7 @@ class BrowserAgent(Agent):
                             br_inform_log = opf.msg_to_log(br_msg_search_json, my_dir)
                             await self.send(br_msg_search)      
                     else:
-                        if msg_sender_jid == 'ca':
+                        if msg_sender_jid == 'va':
                             print(f'ca_br_msg: {msg.body}')
                             ca_data_df = pd.read_json(msg.body)
                             """Prepare reply"""
