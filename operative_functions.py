@@ -361,7 +361,7 @@ def change_jid(my_dir, my_full_name):
 def req_active_users_loc_times(agent_df, seq, list, *args):
     """Returns msg body to send to browser as a json"""
     va_request_df = agent_df #.loc[:, 'id':'time']
-    va_request_df = va_request_df.astype(str)
+    #va_request_df = va_request_df.astype(str)
     va_request_df.at[0, 'purpose'] = "request"
     this_time = datetime.datetime.now()
     va_request_df.at[0, 'time'] = this_time
