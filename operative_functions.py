@@ -847,7 +847,7 @@ def set_agent_parameters(agent_directory, agent_name, agent_full_name):
         agent_data = agent_data.reindex(columns=['id', 'agent_type', 'location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'T1', 'T2', 'T3', 'T4', 'T5', 'q'])
         agent_data = ca_parameters(agent_data, agents_df, agent_name)
     elif (agent_name=='va'):
-        agent_data = agent_data.reindex(columns=['id', 'agent_type', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'ancho', 'largo', 'espesor']) #Los valores ya existentes, se mantienen
+        agent_data = agent_data.reindex(columns=['id', 'agent_type','location_1', 'location_2', 'location', 'purpose', 'request_type', 'time', 'activation_time', 'setup_speed', 'ancho', 'largo', 'espesor']) #Los valores ya existentes, se mantienen
         agent_data = va_parameters(agent_data, agents_df, agent_name)
     elif agent_name == "wh":
         agent_data.at[0, 'location'] = agents_df.loc[0, 'Location']
